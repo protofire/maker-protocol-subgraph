@@ -1,7 +1,9 @@
 import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 
-export let ONE = BigDecimal.fromString('1')
-export let ZERO = BigDecimal.fromString('0')
+export { BigDecimal }
+
+export let ONE = fromNumber(1)
+export let ZERO = fromNumber(0)
 
 let WAD_PRECISION = <u8>18
 let RAY_PRECISION = <u8>27
@@ -25,6 +27,10 @@ let RAD = BigInt.fromI32(10)
 // let RAY_APY = BigInt.fromI32(10)
 //   .pow(RAY_PRECISION * SECONDS_IN_YEAR)
 //   .toBigDecimal()
+
+export function fromNumber(n: number): BigDecimal {
+  return BigDecimal.fromString(n.toString())
+}
 
 export function fromRad(value: BigInt): BigDecimal {
   return value.divDecimal(RAD)

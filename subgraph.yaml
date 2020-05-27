@@ -33,77 +33,77 @@ dataSources:
       eventHandlers:
         ### Administration ###
 
-        # function init(bytes32 ilk)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x3b66319500000000000000000000000000000000000000000000000000000000'
-          handler: handleInit
+          # function init(bytes32 ilk)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0x3b66319500000000000000000000000000000000000000000000000000000000'
+            handler: handleInit
 
-        # function file(bytes32 what, uint256 data)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
-          handler: handleFile
+          # function file(bytes32 what, uint256 data)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
+            handler: handleFile
 
-        # function file(bytes32 ilk, bytes32 what, uint256 data)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x1a0b287e00000000000000000000000000000000000000000000000000000000'
-          handler: handleFile
+          # function file(bytes32 ilk, bytes32 what, uint256 data)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0x1a0b287e00000000000000000000000000000000000000000000000000000000'
+            handler: handleFile
 
-        ### Fungibility ###
+          ### Fungibility ###
 
-        # function slip(bytes32 ilk, address usr, int256 wad)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x7cdd3fde00000000000000000000000000000000000000000000000000000000'
-          handler: handleSlip
+          # function slip(bytes32 ilk, address usr, int256 wad)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0x7cdd3fde00000000000000000000000000000000000000000000000000000000'
+            handler: handleSlip
 
-        # function flux(bytes32 ilk, address src, address dst, uint256 rad)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x6111be2e00000000000000000000000000000000000000000000000000000000'
-          handler: handleFlux
+          # function flux(bytes32 ilk, address src, address dst, uint256 rad)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0x6111be2e00000000000000000000000000000000000000000000000000000000'
+            handler: handleFlux
 
-        # function move(address src, address dst, uint256 rad)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0xbb35783b00000000000000000000000000000000000000000000000000000000'
-          handler: handleMove
+          # function move(address src, address dst, uint256 rad)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0xbb35783b00000000000000000000000000000000000000000000000000000000'
+            handler: handleMove
 
-        ### CDP Manipulation ###
+          ### CDP Manipulation ###
 
-        # function frob(bytes32 i, address u, address v, address w, int256 dink, int256 dart)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x7608870300000000000000000000000000000000000000000000000000000000'
-          handler: handleFrob
+          # function frob(bytes32 i, address u, address v, address w, int256 dink, int256 dart)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0x7608870300000000000000000000000000000000000000000000000000000000'
+            handler: handleFrob
 
-        ### CDP Fungibility ###
+          ### CDP Fungibility ###
 
-        # function fork(bytes32 ilk, address src, address dst, int256 dink, int256 dart)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x870c616d00000000000000000000000000000000000000000000000000000000'
-          handler: handleFork
+          # function fork(bytes32 ilk, address src, address dst, int256 dink, int256 dart)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0x870c616d00000000000000000000000000000000000000000000000000000000'
+            handler: handleFork
 
-        ### CDP Confiscation ###
+          ### CDP Confiscation ###
 
-        # function grab(bytes32 i, address u, address v, address w, int256 dink, int256 dart)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x7bab3f4000000000000000000000000000000000000000000000000000000000'
-          handler: handleGrab
+          # function grab(bytes32 i, address u, address v, address w, int256 dink, int256 dart)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0x7bab3f4000000000000000000000000000000000000000000000000000000000'
+            handler: handleGrab
 
-        ### Settlement ###
+          ### Settlement ###
 
-        # function heal(uint256 rad)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0xf37ac61c00000000000000000000000000000000000000000000000000000000'
-          handler: handleHeal
+          # function heal(uint256 rad)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0xf37ac61c00000000000000000000000000000000000000000000000000000000'
+            handler: handleHeal
 
-        # function suck(address u, address v, uint256 rad)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0xf24e23eb00000000000000000000000000000000000000000000000000000000'
-          handler: handleSuck
+          # function suck(address u, address v, uint256 rad)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0xf24e23eb00000000000000000000000000000000000000000000000000000000'
+            handler: handleSuck
 
-        ### Rates ###
+          ### Rates ###
 
-        # function fold(bytes32 i, address u, int256 rate)
-        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0xb65337df00000000000000000000000000000000000000000000000000000000'
-          handler: handleFold
+          # function fold(bytes32 i, address u, int256 rate)
+          - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+            topic0: '0xb65337df00000000000000000000000000000000000000000000000000000000'
+            handler: handleFold
 
   #  Liaison between the oracles and core contracts
   - name: Spot
@@ -142,6 +142,44 @@ dataSources:
         # event Poke(bytes32 ilk, bytes32 val, uint256 spot)
         - event: Poke(bytes32,bytes32,uint256)
           handler: handlePoke
+
+  #  Liquidation Agent
+  - name: Cat
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Cat
+      address: '0x78f2c2af65126834c51822f56be0d7469d7a523e'
+      startBlock: 8928165
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/modules/core/cat.ts
+      abis:
+        - name: Cat
+          file: ./abis/Cat.json
+      entities:
+        - CollateralType
+        - SystemState
+      eventHandlers:
+        ### Administration ###
+
+        # function file(bytes32 ilk, bytes32 what, uint256 data)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x1a0b287e00000000000000000000000000000000000000000000000000000000'
+          handler: handleFile
+
+        # function file(bytes32 ilk, bytes32 what, address flip)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xebecb39d00000000000000000000000000000000000000000000000000000000'
+          handler: handleFile
+
+        ### CDP Liquidation ###
+
+        # function bite(bytes32 ilk, address urn)
+        - event: Bite(indexed bytes32,indexed address,uint256,uint256,uint256,address,uint256)
+          handler: handleBite
 
   #
   # System Stabilizer Module
@@ -344,3 +382,34 @@ dataSources:
       eventHandlers:
         - event: NewCdp(indexed address,indexed address,indexed uint256)
           handler: handleNewCdp
+
+templates:
+  #  Collateral Auction
+  - name: Flip
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Flipper
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappings/modules/collateral/flip.ts
+      abis:
+        - name: Flipper
+          file: ./abis/Flipper.json
+      entities:
+        - CollateralAuction
+        - CollateralType
+      eventHandlers:
+        ### Admin ###
+
+        # function file(bytes32 what, uint256 data)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
+          handler: handleFile
+
+        ### Auction ###
+
+        - event: Kick(uint256,uint256,uint256,uint256,indexed address,indexed address)
+          handler: handleKick

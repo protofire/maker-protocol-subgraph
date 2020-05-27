@@ -1,3 +1,16 @@
+"""
+Collateral auctions are used to sell collateral from Vaults that have become undercollateralized
+in order to preserve the collateralization of the system
+"""
+type CollateralAuction @entity {
+  id: ID!
+
+  " Collateral type "
+  collateral: CollateralType!
+
+  # TODO
+}
+
 " Particular collateral type registered in the system (Ilk) "
 type CollateralType @entity {
   " Collateral type name "
@@ -17,6 +30,24 @@ type CollateralType @entity {
 
   " Total debt backed by this collateral type [DAI] (Art)"
   totalDebt: BigDecimal!
+
+  " Number of collateral auctions started for this collateral type "
+  auctionCount: BigInt!
+
+  " Maximum auction duration [seconds] "
+  auctionDuration: BigInt!
+
+  " Max bid duration in a collateral auction [seconds] "
+  bidDuration: BigInt!
+
+  " Minimum bid increase in a collateral auction "
+  minimumBidIncrease: BigDecimal!
+
+  " Maximum size of collateral that can be auctioned at once (lump) "
+  liquidationLotSize: BigDecimal!
+
+  " Liquidation penalty (chop) "
+  liquidationPenalty: BigDecimal!
 
   " Min collateralization ratio "
   liquidationRatio: BigDecimal!
@@ -119,11 +150,14 @@ type SystemState @entity {
   totalDebt: BigDecimal!
 
   #
-  # About number of entities registered
+  # About number of entities registered system-wide
   #
 
   " Number of collateral types registered "
   collateralCount: BigInt!
+
+  " Number of collateral auctions started "
+  collateralAuctionCount: BigInt!
 
   " Number of user proxies created "
   proxyCount: BigInt!

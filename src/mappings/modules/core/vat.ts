@@ -16,7 +16,17 @@ export function handleInit(event: LogNote): void {
   collateral.vaultDebtFloor = decimal.ZERO
   collateral.totalDebt = decimal.ZERO
 
+  collateral.auctionCount = integer.ZERO
+  collateral.auctionDuration = integer.fromNumber(172800) // 2 days
+  collateral.bidDuration = integer.fromNumber(10800) // 3 hours
+  collateral.minimumBidIncrease = decimal.fromNumber(1.05) // 5% minimum bid increase
+
+  collateral.liquidationLotSize = decimal.ZERO
+  collateral.liquidationPenalty = decimal.ZERO
   collateral.liquidationRatio = decimal.ZERO
+
+  collateral.rate = decimal.ZERO
+
   collateral.stabilityFee = decimal.ONE
 
   collateral.unmanagedVaultCount = integer.ZERO
