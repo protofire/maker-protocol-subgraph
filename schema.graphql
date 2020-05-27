@@ -1,0 +1,235 @@
+" Particular collateral type registered in the system (Ilk) "
+type CollateralType @entity {
+  " Collateral type name "
+  id: ID!
+
+  " Debt ceiling [DAI] (line) "
+  debtCeiling: BigDecimal!
+
+  " Min debt per vault [DAI] (dust) "
+  vaultDebtFloor: BigDecimal!
+
+  " Current market price [USD] "
+  currentPrice: CollateralPrice
+
+  " Asset/DAI exchange rate (rate) "
+  rate: BigDecimal!
+
+  " Total debt backed by this collateral type [DAI] (Art)"
+  totalDebt: BigDecimal!
+
+  " Min collateralization ratio "
+  liquidationRatio: BigDecimal!
+
+  " Stability fee rate per second "
+  stabilityFee: BigDecimal!
+
+  " Number of vaults NOT opened through the manager (CdpManager) "
+  unmanagedVaultCount: BigInt!
+
+  " Number of vaults opened through the manager (CdpManager) "
+  vaultCount: BigInt!
+
+  " Timestamp of the block in which this collateral type was added [seconds] "
+  addedAt: BigInt!
+
+  " Block number in which this collateral type was added "
+  addedAtBlock: BigInt!
+
+  " Transaction hash in which this collateral type was added "
+  addedAtTransaction: Bytes!
+
+  " Timestamp of the block in which this collateral type was last modified [seconds] "
+  modifiedAt: BigInt
+
+  " Block number in which this collateral type was last modified "
+  modifiedAtBlock: BigInt
+
+  " Transaction hash in which this collateral type was last modified "
+  modifiedAtTransaction: Bytes
+}
+
+" Collateral market price at a given block "
+type CollateralPrice @entity {
+  " Equals to: <block_number>-<ilk>"
+  id: ID!
+
+  " Block number "
+  block: BigInt!
+
+  " Collateral type "
+  collateral: CollateralType!
+
+  " Market price with safety margin (current price less liquidation ratio) [USD] (spot) "
+  spotPrice: BigDecimal!
+
+  " Timestamp in seconds "
+  timestamp: BigInt!
+
+  " Price value "
+  value: BigDecimal!
+}
+
+" Vault owner "
+type User @entity {
+  " Account address "
+  id: ID!
+
+  " Account address "
+  address: Bytes!
+
+  " Up to one per collateral type"
+  proxies: [UserProxy!] @derivedFrom(field: "owner")
+}
+
+" Contract used to execute transactions and sequences of transactions on behalf of a user "
+type UserProxy @entity {
+  " Proxy address "
+  id: ID!
+
+  " Proxy contract address "
+  address: Bytes!
+
+  " Cache contract address "
+  cache: Bytes!
+
+  " User reference "
+  owner: User!
+}
+
+" Provide information about the current system state and parameters "
+type SystemState @entity {
+  " Singleton entity. Equals to 'current' "
+  id: ID!
+
+  " The latest block in which a system parameters was modified "
+  block: BigInt!
+
+  " The latest timestamp in which a system parameters was modified "
+  timestamp: BigInt!
+
+  " The latest transaction hash in which a system parameters was modified "
+  transaction: Bytes!
+
+  #
+  # General protocol stats
+  #
+
+  " Total debt issued [DAI] (Vat.debt)"
+  totalDebt: BigDecimal!
+
+  #
+  # About number of entities registered
+  #
+
+  " Number of collateral types registered "
+  collateralCount: BigInt!
+
+  " Number of user proxies created "
+  proxyCount: BigInt!
+
+  " Number of vaults NOT opened through the manager (CdpManager) "
+  unmanagedVaultCount: BigInt!
+
+  " Number of vaults opened through the manager (CdpManager) "
+  vaultCount: BigInt!
+
+  #
+  # General system parameters
+  #
+
+  " Base rate for stability fee per second "
+  baseStabilityFee: BigDecimal!
+
+  " Dai Savings Rate "
+  savingsRate: BigDecimal!
+
+  " Total Debt Ceiling "
+  totalDebtCeiling: BigDecimal!
+
+  #
+  # Debt auction parameters (flop)
+  #
+
+  " Max bid duration / single bid lifetime [seconds] "
+  debtAuctionBidDuration: BigInt
+
+  " The fixed debt quantity to be covered by any one debt auction [DAI] "
+  debtAuctionBidSize: BigDecimal
+
+  " Debt auction delay [seconds] "
+  debtAuctionDelay: BigInt
+
+  " Maximum auction duration [seconds] "
+  debtAuctionDuration: BigInt
+
+  " The starting amount of MKR offered to cover the lot [MKR] "
+  debtAuctionInitialLotSize: BigDecimal
+
+  " Lot size increase "
+  debtAuctionLotSizeIncrease: BigDecimal
+
+  " Minimum bid increase "
+  debtAuctionMinimumBidIncrease: BigDecimal
+
+  #
+  # Surplus auction parameters (flap)
+  #
+
+  " Max bid duration / bid lifetime [seconds] "
+  surplusAuctionBidDuration: BigInt
+
+  " Surplus buffer, must be exceeded before surplus auctions are possible [DAI] "
+  surplusAuctionBuffer: BigDecimal
+
+  " Maximum auction duration [seconds] "
+  surplusAuctionDuration: BigInt
+
+  " The fixed surplus quantity to be sold by any one surplus auction [DAI] "
+  surplusAuctionLotSize: BigDecimal
+
+  " Minimum bid increase "
+  surplusAuctionMinimumBidIncrease: BigDecimal
+}
+
+" Maker Vault (formerly collateralized debt position or CDPs) "
+type Vault @entity {
+  " Equals to: <urn>-<ilk>"
+  id: ID!
+
+  " CDP ID if this vault was created through the manager (CdpManager) "
+  cdpId: BigInt
+
+  " Collateral type associated to this vault (ilk) "
+  collateralType: CollateralType!
+
+  " Assets locked as collateral (ink) "
+  collateral: BigDecimal!
+
+  " Outstanding debt (art) [DAI] "
+  debt: BigDecimal!
+
+  " Address of this vault's UrnHandler instance "
+  handler: Bytes!
+
+  " Address of vault's owner "
+  owner: Bytes!
+
+  " Timestamp of the block in which this vault was opened [seconds] "
+  openedAt: BigInt!
+
+  " Block number in which this vault was opened "
+  openedAtBlock: BigInt!
+
+  " Transaction hash in which this vault was opened "
+  openedAtTransaction: Bytes!
+
+  " Timestamp of the block in which this vault was last modified [seconds] "
+  modifiedAt: BigInt
+
+  " Block number in which this vault was last modified "
+  modifiedAtBlock: BigInt
+
+  " Transaction hash in which this vault was last modified "
+  modifiedAtTransaction: Bytes
+}
