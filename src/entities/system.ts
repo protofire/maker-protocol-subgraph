@@ -1,9 +1,7 @@
 import { ethereum } from '@graphprotocol/graph-ts'
+import { decimal, integer } from '@protofire/subgraph-toolkit'
 
 import { SystemState } from '../../generated/schema'
-
-import * as decimal from '../utils/decimal'
-import * as integer from '../utils/integer'
 
 export function getSystemState(event: ethereum.Event): SystemState {
   let state = SystemState.load('current')

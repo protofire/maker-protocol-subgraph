@@ -1,12 +1,10 @@
 import { Bytes, DataSourceContext } from '@graphprotocol/graph-ts'
+import { bytes, decimal } from '@protofire/subgraph-toolkit'
 
 import { Bite, LogNote } from '../../../../generated/Cat/Cat'
 import { Flip } from '../../../../generated/templates'
 
 import { CollateralType } from '../../../entities'
-
-import * as bytes from '../../../utils/bytes'
-import * as decimal from '../../../utils/decimal'
 
 export function handleFile(event: LogNote): void {
   let ilk = event.params.arg1.toString()

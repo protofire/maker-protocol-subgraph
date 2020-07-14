@@ -1,14 +1,1 @@
-module.exports = {
-  ...require('@graphprotocol/graph-ts/.prettierrc.json'),
-
-  printWidth: 120,
-
-  overrides: [
-    {
-      files: '*.json',
-      options: {
-        printWidth: 80,
-      },
-    },
-  ],
-}
+module.exports = require('@protofire/subgraph-toolkit/prettier.config.js')

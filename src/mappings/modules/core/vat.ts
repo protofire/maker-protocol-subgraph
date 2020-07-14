@@ -1,13 +1,10 @@
 import { Address, Bytes } from '@graphprotocol/graph-ts'
+import { bytes, integer, decimal } from '@protofire/subgraph-toolkit'
 
 import { LogNote } from '../../../../generated/Vat/Vat'
 import { CollateralType, Vault, UserProxy } from '../../../../generated/schema'
 
 import { getSystemState } from '../../../entities'
-
-import * as bytes from '../../../utils/bytes'
-import * as decimal from '../../../utils/decimal'
-import * as integer from '../../../utils/integer'
 
 // Register a new collateral type
 export function handleInit(event: LogNote): void {

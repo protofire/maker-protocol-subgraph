@@ -1,12 +1,10 @@
 import { Address, dataSource, log } from '@graphprotocol/graph-ts'
+import { integer, decimal } from '@protofire/subgraph-toolkit'
 
 import { DssCdpManager, NewCdp } from '../../../../generated/CdpManager/DssCdpManager'
 import { CollateralType, UserProxy, Vault } from '../../../../generated/schema'
 
 import { getSystemState } from '../../../entities'
-
-import * as decimal from '../../../utils/decimal'
-import * as integer from '../../../utils/integer'
 
 export function handleNewCdp(event: NewCdp): void {
   let manager = DssCdpManager.bind(dataSource.address())

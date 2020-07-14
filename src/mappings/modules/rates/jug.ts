@@ -1,12 +1,10 @@
 import { Bytes } from '@graphprotocol/graph-ts'
+import { bytes, decimal } from '@protofire/subgraph-toolkit'
 
 import { LogNote } from '../../../../generated/Jug/Jug'
 import { CollateralType } from '../../../../generated/schema'
 
 import { getSystemState } from '../../../entities'
-
-import * as bytes from '../../../utils/bytes'
-import * as decimal from '../../../utils/decimal'
 
 // Start stability fee collection for a particular collateral type
 export function handleInit(event: LogNote): void {

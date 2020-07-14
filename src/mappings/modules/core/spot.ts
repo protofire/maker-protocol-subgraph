@@ -1,12 +1,10 @@
 import { Bytes } from '@graphprotocol/graph-ts'
+import { bytes, decimal } from '@protofire/subgraph-toolkit'
 
 import { LogNote, Poke } from '../../../../generated/Spot/Spotter'
 import { CollateralPrice, CollateralType } from '../../../../generated/schema'
 
 import { getSystemState } from '../../../entities'
-
-import * as bytes from '../../../utils/bytes'
-import * as decimal from '../../../utils/decimal'
 
 export function handleFile(event: LogNote): void {
   let ilk = event.params.arg1.toString()

@@ -1,12 +1,9 @@
 import { dataSource } from '@graphprotocol/graph-ts'
+import { bytes, decimal, integer } from '@protofire/subgraph-toolkit'
 
 import { Kick, LogNote } from '../../../../generated/templates/Flip/Flipper'
 
 import { CollateralAuction, CollateralType, getSystemState } from '../../../entities'
-
-import * as bytes from '../../../utils/bytes'
-import * as decimal from '../../../utils/decimal'
-import * as integer from '../../../utils/integer'
 
 export function handleFile(event: LogNote): void {
   let ilk = dataSource.context().getString('collateral')

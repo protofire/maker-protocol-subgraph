@@ -1,9 +1,8 @@
+import { bytes, decimal } from '@protofire/subgraph-toolkit'
+
 import { LogNote } from '../../../../generated/Flap/Flapper'
 
 import { getSystemState } from '../../../entities'
-
-import * as bytes from '../../../utils/bytes'
-import * as decimal from '../../../utils/decimal'
 
 export function handleFile(event: LogNote): void {
   let what = event.params.arg1.toString()
