@@ -46,7 +46,7 @@ export function handlePoke(event: Poke): void {
     price.value = decimal.fromWad(val)
     price.save()
 
-    collateral.currentPrice = price.id
+    collateral.price = price.id
     collateral.save()
   }
 }

@@ -1,7 +1,4 @@
-"""
-Collateral auctions are used to sell collateral from Vaults that have become undercollateralized
-in order to preserve the collateralization of the system
-"""
+" Collateral auctions are used to sell collateral from Vaults that have become undercollateralized "
 type CollateralAuction @entity {
   id: ID!
 
@@ -16,20 +13,38 @@ type CollateralType @entity {
   " Collateral type name "
   id: ID!
 
+  #
+  # Debt
+  #
+
   " Debt ceiling [DAI] (line) "
   debtCeiling: BigDecimal!
-
-  " Min debt per vault [DAI] (dust) "
-  vaultDebtFloor: BigDecimal!
-
-  " Current market price [USD] "
-  currentPrice: CollateralPrice
 
   " Asset/DAI exchange rate (rate) "
   rate: BigDecimal!
 
   " Total debt backed by this collateral type [DAI] (Art)"
   totalDebt: BigDecimal!
+
+  #
+  # Liquidation parameters
+  #
+
+  " Maximum size of collateral that can be auctioned at once (lump) "
+  liquidationLotSize: BigDecimal!
+
+  " Liquidation penalty (chop) "
+  liquidationPenalty: BigDecimal!
+
+  " Min collateralization ratio "
+  liquidationRatio: BigDecimal!
+
+  #
+  # Collateral auctions
+  #
+
+  " Collateral auctions for this collateral type "
+  auctions: [CollateralAuction!] @derivedFrom(field: "collateral")
 
   " Number of collateral auctions started for this collateral type "
   auctionCount: BigInt!
@@ -43,23 +58,42 @@ type CollateralType @entity {
   " Minimum bid increase in a collateral auction "
   minimumBidIncrease: BigDecimal!
 
-  " Maximum size of collateral that can be auctioned at once (lump) "
-  liquidationLotSize: BigDecimal!
-
-  " Liquidation penalty (chop) "
-  liquidationPenalty: BigDecimal!
-
-  " Min collateralization ratio "
-  liquidationRatio: BigDecimal!
+  #
+  # Stability rates
+  #
 
   " Stability fee rate per second "
   stabilityFee: BigDecimal!
 
-  " Number of vaults NOT opened through the manager (CdpManager) "
-  unmanagedVaultCount: BigInt!
+  #
+  # Vaults
+  #
+
+  " Collateral auctions for this collateral type "
+  vaults: [Vault!] @derivedFrom(field: "collateralType")
+
+  " Min debt per vault [DAI] (dust) "
+  vaultDebtFloor: BigDecimal!
 
   " Number of vaults opened through the manager (CdpManager) "
   vaultCount: BigInt!
+
+  " Number of vaults NOT opened through the manager (CdpManager) "
+  unmanagedVaultCount: BigInt!
+
+  #
+  # Asset price
+  #
+
+  " Current market price [USD] "
+  price: CollateralPrice
+
+  " Price history "
+  prices: [CollateralPrice!] @derivedFrom(field: "collateral")
+
+  #
+  # Status fields
+  #
 
   " Timestamp of the block in which this collateral type was added [seconds] "
   addedAt: BigInt!
@@ -103,7 +137,7 @@ type CollateralPrice @entity {
 
 " Vault owner "
 type User @entity {
-  " Account address "
+  " Equals to account address "
   id: ID!
 
   " Account address "
@@ -132,15 +166,6 @@ type UserProxy @entity {
 type SystemState @entity {
   " Singleton entity. Equals to 'current' "
   id: ID!
-
-  " The latest block in which a system parameters was modified "
-  block: BigInt!
-
-  " The latest timestamp in which a system parameters was modified "
-  timestamp: BigInt!
-
-  " The latest transaction hash in which a system parameters was modified "
-  transaction: Bytes!
 
   #
   # General protocol stats
@@ -224,6 +249,19 @@ type SystemState @entity {
 
   " Minimum bid increase "
   surplusAuctionMinimumBidIncrease: BigDecimal
+
+  #
+  # Status fields
+  #
+
+  " The latest block in which a system parameters was modified "
+  block: BigInt!
+
+  " The latest timestamp in which a system parameters was modified "
+  timestamp: BigInt!
+
+  " The latest transaction hash in which a system parameters was modified "
+  transaction: Bytes!
 }
 
 " Maker Vault (formerly collateralized debt position or CDPs) "
