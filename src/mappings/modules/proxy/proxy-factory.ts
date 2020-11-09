@@ -7,6 +7,8 @@ import { getOrCreateUser, getSystemState } from '../../../entities'
 
 export function handleCreated(event: Created): void {
   let user = getOrCreateUser(event.params.owner)
+  user.proxyCount = user.proxyCount.plus(integer.ONE)
+  user.save()
 
   // Register new user proxy
   let proxy = new UserProxy(event.params.proxy.toHexString())

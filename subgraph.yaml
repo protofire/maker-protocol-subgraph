@@ -380,8 +380,14 @@ dataSources:
         - UserProxy
         - Vault
       eventHandlers:
+        # function open(bytes32 ilk, address usr)
         - event: NewCdp(indexed address,indexed address,indexed uint256)
-          handler: handleNewCdp
+          handler: handleOpen
+
+        # function give(uint cdp, address dst)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xfcafcc6800000000000000000000000000000000000000000000000000000000'
+          handler: handleGive
 
 templates:
   #  Collateral Auction

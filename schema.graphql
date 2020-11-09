@@ -143,8 +143,17 @@ type User @entity {
   " Account address "
   address: Bytes!
 
-  " Up to one per collateral type"
+  " Number of user proxies associated to the user "
+  proxyCount: BigInt!
+
+  " Number of vaults opened by the user "
+  vaultCount: BigInt!
+
+  " User proxies. Up to one per collateral type "
   proxies: [UserProxy!] @derivedFrom(field: "owner")
+
+  " User's vaults "
+  vaults: [Vault!] @derivedFrom(field: "owner")
 }
 
 " Contract used to execute transactions and sequences of transactions on behalf of a user "
@@ -285,7 +294,7 @@ type Vault @entity {
   handler: Bytes!
 
   " Address of vault's owner "
-  owner: Bytes!
+  owner: User!
 
   " Timestamp of the block in which this vault was opened [seconds] "
   openedAt: BigInt!
@@ -304,4 +313,67 @@ type Vault @entity {
 
   " Transaction hash in which this vault was last modified "
   modifiedAtTransaction: Bytes
+
+  " Vault action history "
+  logs: [VaultLog!] @derivedFrom(field: "vault")
+}
+
+interface VaultLog {
+  vault: Vault!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type VaultCreationLog implements VaultLog @entity {
+  id: ID!
+  vault: Vault!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type VaultCollateralChangeLog implements VaultLog @entity {
+  id: ID!
+  vault: Vault!
+  collateralBefore: BigDecimal!
+  collateralAfter: BigDecimal!
+  collateralDiff: BigDecimal!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type VaultDebtChangeLog implements VaultLog @entity {
+  id: ID!
+  vault: Vault!
+  debtBefore: BigDecimal!
+  debtAfter: BigDecimal!
+  debtDiff: BigDecimal!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type VaultSplitChangeLog
+  @entity { # implements VaultLog @entity {
+  id: ID!
+  #vault: Vault!
+  src: Bytes!
+  dst: Bytes!
+  collateralToMove: BigDecimal!
+  debtToMove: BigDecimal!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type VaultTransferChangeLog implements VaultLog @entity {
+  id: ID!
+  vault: Vault!
+  previousOwner: User!
+  nextOwner: User!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
 }
