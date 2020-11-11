@@ -20,6 +20,7 @@ export function handleInit(event: LogNote): void {
   collateral.debtCeiling = decimal.ZERO
   collateral.vaultDebtFloor = decimal.ZERO
   collateral.totalDebt = decimal.ZERO
+  collateral.debtNormalized = decimal.ZERO
 
   collateral.auctionCount = integer.ZERO
   collateral.auctionDuration = integer.fromNumber(172800) // 2 days
@@ -30,7 +31,7 @@ export function handleInit(event: LogNote): void {
   collateral.liquidationPenalty = decimal.ZERO
   collateral.liquidationRatio = decimal.ZERO
 
-  collateral.rate = decimal.ZERO
+  collateral.rate = decimal.ONE
 
   collateral.stabilityFee = decimal.ONE
 
@@ -156,6 +157,7 @@ export function handleFrob(event: LogNote): void {
 
       // Update existing Vault
       vault.collateral = vault.collateral.plus(Δcollateral)
+      // We are adding normalized debt values. Not sure whether multiplying by rate works here.
       vault.debt = vault.debt.plus(Δdebt)
 
       vault.modifiedAt = event.block.timestamp
@@ -191,7 +193,10 @@ export function handleFrob(event: LogNote): void {
       }
     }
 
-    collateral.totalDebt = collateral.totalDebt.plus(Δdebt)
+    // Debt normalized should coincide with Ilk.Art
+    collateral.debtNormalized = collateral.debtNormalized.plus(Δdebt)
+    // Total debt is Art * rate (like on DAIStats)
+    collateral.totalDebt = collateral.debtNormalized * collateral.rate
 
     collateral.modifiedAt = event.block.timestamp
     collateral.modifiedAtBlock = event.block.number
@@ -238,7 +243,10 @@ export function handleGrab(event: LogNote): void {
   if (collateral != null) {
     let Δdebt = decimal.fromWad(dart)
 
-    collateral.totalDebt = collateral.totalDebt.plus(Δdebt)
+    // Debt normalized should coincide with Ilk.Art
+    collateral.debtNormalized = collateral.debtNormalized.plus(Δdebt)
+    // Total debt is Art * rate (like on DAIStats)
+    collateral.totalDebt = collateral.debtNormalized * collateral.rate
 
     collateral.save()
   }
