@@ -1,4 +1,4 @@
-import { bytes, decimal } from '@protofire/subgraph-toolkit'
+import { bytes, units } from '@protofire/subgraph-toolkit'
 
 import { LogNote } from '../../../../generated/Pot/Pot'
 
@@ -10,7 +10,7 @@ export function handleFile(event: LogNote): void {
 
   if (what == 'dsr') {
     let system = getSystemState(event)
-    system.savingsRate = decimal.fromRay(data)
+    system.savingsRate = units.fromRay(data)
     system.save()
   }
 }

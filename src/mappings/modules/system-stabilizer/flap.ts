@@ -1,4 +1,4 @@
-import { bytes, decimal } from '@protofire/subgraph-toolkit'
+import { bytes, units } from '@protofire/subgraph-toolkit'
 
 import { LogNote } from '../../../../generated/Flap/Flapper'
 
@@ -11,7 +11,7 @@ export function handleFile(event: LogNote): void {
   let system = getSystemState(event)
 
   if (what == 'beg') {
-    system.surplusAuctionMinimumBidIncrease = decimal.fromWad(data)
+    system.surplusAuctionMinimumBidIncrease = units.fromWad(data)
   } else if (what == 'ttl') {
     system.surplusAuctionBidDuration = data
   } else if (what == 'tau') {

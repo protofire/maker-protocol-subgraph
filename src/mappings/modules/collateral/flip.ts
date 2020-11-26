@@ -1,5 +1,5 @@
 import { dataSource } from '@graphprotocol/graph-ts'
-import { bytes, decimal, integer } from '@protofire/subgraph-toolkit'
+import { bytes, integer, units } from '@protofire/subgraph-toolkit'
 
 import { Kick, LogNote } from '../../../../generated/templates/Flip/Flipper'
 
@@ -14,7 +14,7 @@ export function handleFile(event: LogNote): void {
     let data = bytes.toUnsignedInt(event.params.arg2)
 
     if (what == 'beg') {
-      collateral.minimumBidIncrease = decimal.fromWad(data)
+      collateral.minimumBidIncrease = units.fromWad(data)
     } else if (what == 'ttl') {
       collateral.bidDuration = data
     } else if (what == 'tau') {

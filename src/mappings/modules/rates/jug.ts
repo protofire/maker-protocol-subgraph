@@ -1,5 +1,5 @@
 import { Bytes } from '@graphprotocol/graph-ts'
-import { bytes, decimal } from '@protofire/subgraph-toolkit'
+import { bytes, decimal, units } from '@protofire/subgraph-toolkit'
 
 import { LogNote } from '../../../../generated/Jug/Jug'
 import { CollateralType } from '../../../../generated/schema'
@@ -33,7 +33,7 @@ export function handleFile(event: LogNote): void {
       let collateral = CollateralType.load(ilk)
 
       if (collateral) {
-        collateral.stabilityFee = decimal.fromRay(data)
+        collateral.stabilityFee = units.fromRay(data)
 
         collateral.save()
         system.save()
@@ -44,7 +44,7 @@ export function handleFile(event: LogNote): void {
     let data = bytes.toUnsignedInt(event.params.arg2)
 
     if (what == 'base') {
-      system.baseStabilityFee = decimal.fromRay(data)
+      system.baseStabilityFee = units.fromRay(data)
       system.save()
     }
   }

@@ -1,5 +1,5 @@
 import { Bytes } from '@graphprotocol/graph-ts'
-import { bytes, integer, decimal } from '@protofire/subgraph-toolkit'
+import { bytes, integer, decimal, units } from '@protofire/subgraph-toolkit'
 
 import { LogNote } from '../../../../generated/Vat/Vat'
 
@@ -60,7 +60,7 @@ export function handleFile(event: LogNote): void {
     let data = bytes.toUnsignedInt(event.params.arg2)
 
     if (what == 'Line') {
-      system.totalDebtCeiling = decimal.fromRad(data)
+      system.totalDebtCeiling = units.fromRad(data)
     }
   } else if (signature == '0x1a0b287e') {
     let ilk = event.params.arg1.toString()
@@ -73,9 +73,9 @@ export function handleFile(event: LogNote): void {
       if (what == 'spot') {
         // Spot price is stored on the current price object
       } else if (what == 'line') {
-        collateral.debtCeiling = decimal.fromRad(data)
+        collateral.debtCeiling = units.fromRad(data)
       } else if (what == 'dust') {
-        collateral.vaultDebtFloor = decimal.fromRad(data)
+        collateral.vaultDebtFloor = units.fromRad(data)
       }
 
       collateral.modifiedAt = event.block.timestamp
@@ -116,8 +116,8 @@ export function handleFrob(event: LogNote): void {
   if (collateral != null) {
     let system = getSystemState(event)
 
-    let Δdebt = decimal.fromWad(dart)
-    let Δcollateral = decimal.fromWad(dink)
+    let Δdebt = units.fromWad(dart)
+    let Δcollateral = units.fromWad(dink)
 
     let vault = Vault.load(urn.toHexString() + '-' + collateral.id)
 
@@ -219,8 +219,8 @@ export function handleFork(event: LogNote): void {
   let log = new VaultSplitChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-3')
   log.src = src
   log.dst = dst
-  log.collateralToMove = decimal.fromWad(dink)
-  log.debtToMove = decimal.fromWad(dart)
+  log.collateralToMove = units.fromWad(dink)
+  log.debtToMove = units.fromWad(dart)
 
   log.block = event.block.number
   log.timestamp = event.block.timestamp
@@ -241,7 +241,7 @@ export function handleGrab(event: LogNote): void {
   // TODO: Reset Vault
 
   if (collateral != null) {
-    let Δdebt = decimal.fromWad(dart)
+    let Δdebt = units.fromWad(dart)
 
     // Debt normalized should coincide with Ilk.Art
     collateral.debtNormalized = collateral.debtNormalized.plus(Δdebt)
@@ -254,7 +254,7 @@ export function handleGrab(event: LogNote): void {
 
 // Create/destroy equal quantities of stablecoin and system debt
 export function handleHeal(event: LogNote): void {
-  let rad = decimal.fromRad(bytes.toUnsignedInt(event.params.arg1))
+  let rad = units.fromRad(bytes.toUnsignedInt(event.params.arg1))
 
   let system = getSystemState(event)
   system.totalDebt = system.totalDebt.minus(rad)
@@ -263,7 +263,7 @@ export function handleHeal(event: LogNote): void {
 
 // Mint unbacked stablecoin
 export function handleSuck(event: LogNote): void {
-  let rad = decimal.fromRad(bytes.toUnsignedInt(event.params.arg3))
+  let rad = units.fromRad(bytes.toUnsignedInt(event.params.arg3))
 
   let system = getSystemState(event)
   system.totalDebt = system.totalDebt.plus(rad)
@@ -273,7 +273,7 @@ export function handleSuck(event: LogNote): void {
 // Modify the debt multiplier, creating/destroying corresponding debt
 export function handleFold(event: LogNote): void {
   let ilk = event.params.arg1.toString()
-  let rate = decimal.fromRay(bytes.toSignedInt(event.params.arg3))
+  let rate = units.fromRay(bytes.toSignedInt(event.params.arg3))
 
   let collateral = CollateralType.load(ilk)
 

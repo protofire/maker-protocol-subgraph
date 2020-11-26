@@ -1,5 +1,6 @@
+import { bytes, units } from '@protofire/subgraph-toolkit'
+
 import { LogNote } from '../../../../generated/Vow/Vow'
-import { bytes, decimal } from '@protofire/subgraph-toolkit'
 
 import { getSystemState } from '../../../entities'
 
@@ -12,13 +13,13 @@ export function handleFile(event: LogNote): void {
   if (what == 'wait') {
     system.debtAuctionDelay = data
   } else if (what == 'bump') {
-    system.surplusAuctionLotSize = decimal.fromRad(data)
+    system.surplusAuctionLotSize = units.fromRad(data)
   } else if (what == 'sump') {
-    system.debtAuctionBidSize = decimal.fromRad(data)
+    system.debtAuctionBidSize = units.fromRad(data)
   } else if (what == 'dump') {
-    system.debtAuctionInitialLotSize = decimal.fromWad(data)
+    system.debtAuctionInitialLotSize = units.fromWad(data)
   } else if (what == 'hump') {
-    system.surplusAuctionBuffer = decimal.fromRad(data)
+    system.surplusAuctionBuffer = units.fromRad(data)
   }
 
   system.save()

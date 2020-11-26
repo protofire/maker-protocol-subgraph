@@ -18,9 +18,9 @@ export function handleFile(event: LogNote): void {
       let data = bytes.toUnsignedInt(<Bytes>event.params.data.subarray(68, 100))
 
       if (what == 'chop') {
-        collateral.liquidationPenalty = decimal.fromRay(data)
+        collateral.liquidationPenalty = units.fromRay(data)
       } else if (what == 'lump') {
-        collateral.liquidationLotSize = decimal.fromWad(data)
+        collateral.liquidationLotSize = units.fromWad(data)
       }
 
       collateral.save()

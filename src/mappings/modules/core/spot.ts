@@ -1,5 +1,5 @@
 import { Bytes } from '@graphprotocol/graph-ts'
-import { bytes, decimal } from '@protofire/subgraph-toolkit'
+import { bytes, units } from '@protofire/subgraph-toolkit'
 
 import { LogNote, Poke } from '../../../../generated/Spot/Spotter'
 import { CollateralPrice, CollateralType } from '../../../../generated/schema'
@@ -15,7 +15,7 @@ export function handleFile(event: LogNote): void {
     let collateral = CollateralType.load(ilk)
 
     if (collateral != null) {
-      collateral.liquidationRatio = decimal.fromRay(data)
+      collateral.liquidationRatio = units.fromRay(data)
 
       collateral.modifiedAt = event.block.timestamp
       collateral.modifiedAtBlock = event.block.number
@@ -39,9 +39,9 @@ export function handlePoke(event: Poke): void {
     let price = new CollateralPrice(event.block.number.toString() + '-' + ilk)
     price.block = event.block.number
     price.collateral = collateral.id
-    price.spotPrice = decimal.fromRay(event.params.spot)
+    price.spotPrice = units.fromRay(event.params.spot)
     price.timestamp = event.block.timestamp
-    price.value = decimal.fromWad(val)
+    price.value = units.fromWad(val)
     price.save()
 
     collateral.price = price.id
