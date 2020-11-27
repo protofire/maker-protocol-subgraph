@@ -23,6 +23,9 @@ type CollateralType @entity {
   " Asset/DAI exchange rate (rate) "
   rate: BigDecimal!
 
+  " Total assets locked as collateral"
+  totalCollateral: BigDecimal!
+
   " Total debt backed by this collateral type [DAI] (Ilk.Art * rate)"
   totalDebt: BigDecimal!
 

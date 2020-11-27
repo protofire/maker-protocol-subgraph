@@ -22,6 +22,8 @@ export function handleInit(event: LogNote): void {
   collateral.totalDebt = decimal.ZERO
   collateral.debtNormalized = decimal.ZERO
 
+  collateral.totalCollateral = decimal.ZERO
+
   collateral.auctionCount = integer.ZERO
   collateral.auctionDuration = integer.fromNumber(172800) // 2 days
   collateral.bidDuration = integer.fromNumber(10800) // 3 hours
@@ -159,6 +161,8 @@ export function handleFrob(event: LogNote): void {
       vault.collateral = vault.collateral.plus(Δcollateral)
       // We are adding normalized debt values. Not sure whether multiplying by rate works here.
       vault.debt = vault.debt.plus(Δdebt)
+
+      collateral.totalCollateral = collateral.totalCollateral.plus(Δcollateral)
 
       vault.modifiedAt = event.block.timestamp
       vault.modifiedAtBlock = event.block.number
