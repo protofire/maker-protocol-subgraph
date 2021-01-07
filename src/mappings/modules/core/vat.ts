@@ -19,6 +19,7 @@ export function handleInit(event: LogNote): void {
   let collateral = new CollateralType(event.params.arg1.toString())
   collateral.debtCeiling = decimal.ZERO
   collateral.vaultDebtFloor = decimal.ZERO
+  collateral.totalCollateral = decimal.ZERO
   collateral.totalDebt = decimal.ZERO
   collateral.debtNormalized = decimal.ZERO
 
@@ -157,6 +158,7 @@ export function handleFrob(event: LogNote): void {
 
       // Update existing Vault
       vault.collateral = vault.collateral.plus(Δcollateral)
+
       // We are adding normalized debt values. Not sure whether multiplying by rate works here.
       vault.debt = vault.debt.plus(Δdebt)
 
@@ -193,8 +195,12 @@ export function handleFrob(event: LogNote): void {
       }
     }
 
+    // Track total collateral
+    collateral.totalCollateral = collateral.totalCollateral + Δcollateral
+
     // Debt normalized should coincide with Ilk.Art
-    collateral.debtNormalized = collateral.debtNormalized.plus(Δdebt)
+    collateral.debtNormalized = collateral.debtNormalized + Δdebt
+
     // Total debt is Art * rate (like on DAIStats)
     collateral.totalDebt = collateral.debtNormalized * collateral.rate
 
@@ -245,6 +251,7 @@ export function handleGrab(event: LogNote): void {
 
     // Debt normalized should coincide with Ilk.Art
     collateral.debtNormalized = collateral.debtNormalized.plus(Δdebt)
+
     // Total debt is Art * rate (like on DAIStats)
     collateral.totalDebt = collateral.debtNormalized * collateral.rate
 

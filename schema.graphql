@@ -20,14 +20,17 @@ type CollateralType @entity {
   " Debt ceiling [DAI] (line) "
   debtCeiling: BigDecimal!
 
+  " Debt backed by this collateral type [DAI] (Art)"
+  debtNormalized: BigDecimal!
+
   " Asset/DAI exchange rate (rate) "
   rate: BigDecimal!
 
+  " Total assets locked as collateral"
+  totalCollateral: BigDecimal!
+
   " Total debt backed by this collateral type [DAI] (Ilk.Art * rate)"
   totalDebt: BigDecimal!
-
-  " Debt backed by this collateral type [DAI] (Art)"
-  debtNormalized: BigDecimal!
 
   #
   # Liquidation parameters
