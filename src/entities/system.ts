@@ -15,7 +15,7 @@ export function getSystemState(event: ethereum.Event): SystemState {
     // Entities counters
     state.collateralCount = integer.ZERO
     state.collateralAuctionCount = integer.ZERO
-    state.proxyCount = integer.ZERO
+    state.userProxyCount = integer.ZERO
     state.unmanagedVaultCount = integer.ZERO
     state.vaultCount = integer.ZERO
 

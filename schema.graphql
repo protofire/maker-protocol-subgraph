@@ -200,7 +200,7 @@ type SystemState @entity {
   collateralAuctionCount: BigInt!
 
   " Number of user proxies created "
-  proxyCount: BigInt!
+  userProxyCount: BigInt!
 
   " Number of vaults NOT opened through the manager (CdpManager) "
   unmanagedVaultCount: BigInt!

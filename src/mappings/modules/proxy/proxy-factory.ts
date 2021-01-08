@@ -19,6 +19,6 @@ export function handleCreated(event: Created): void {
 
   // Update system state
   let system = getSystemState(event)
-  system.proxyCount = system.proxyCount.plus(integer.ONE)
+  system.userProxyCount = system.userProxyCount.plus(integer.ONE)
   system.save()
 }
