@@ -264,7 +264,7 @@ export function handleHeal(event: LogNote): void {
   let rad = units.fromRad(bytes.toUnsignedInt(event.params.arg1))
 
   let system = getSystemState(event)
-  system.totalDebt = system.totalDebt.minus(rad)
+  //system.totalDebt = system.totalDebt.minus(rad)
   system.save()
 }
 
@@ -273,7 +273,7 @@ export function handleSuck(event: LogNote): void {
   let rad = units.fromRad(bytes.toUnsignedInt(event.params.arg3))
 
   let system = getSystemState(event)
-  system.totalDebt = system.totalDebt.plus(rad)
+  //system.totalDebt = system.totalDebt.plus(rad)
   system.save()
 }
 
@@ -291,7 +291,7 @@ export function handleFold(event: LogNote): void {
     collateral.save()
 
     let system = getSystemState(event)
-    system.totalDebt = system.totalDebt.plus(rad)
+    //system.totalDebt = system.totalDebt.plus(rad)
     system.save()
   }
 }

@@ -1,15 +1,16 @@
-import { ethereum } from '@graphprotocol/graph-ts'
-import { decimal, integer } from '@protofire/subgraph-toolkit'
+import { ethereum, Address } from '@graphprotocol/graph-ts'
+import { decimal, integer, units } from '@protofire/subgraph-toolkit'
 
 import { SystemState } from '../../generated/schema'
+import { Vat } from '../../generated/Vat/Vat'
 
 export function getSystemState(event: ethereum.Event): SystemState {
+  let vatContract = Vat.bind(Address.fromString('0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'));
   let state = SystemState.load('current')
 
   if (state == null) {
     state = new SystemState('current')
 
-    // Protocol-wide stats
     state.totalDebt = decimal.ZERO
 
     // Entities counters
@@ -25,6 +26,9 @@ export function getSystemState(event: ethereum.Event): SystemState {
     state.totalDebtCeiling = decimal.ZERO
   }
 
+  // Hotfix for totalDebt
+  let debt = vatContract.try_debt();
+  state.totalDebt = debt.reverted ? state.totalDebt : units.fromRad(debt.value);
   state.block = event.block.number
   state.timestamp = event.block.timestamp
   state.transaction = event.transaction.hash
