@@ -121,6 +121,8 @@ dataSources:
       abis:
         - name: Spotter
           file: ./abis/Spotter.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - CollateralPrice
         - CollateralType
@@ -159,6 +161,8 @@ dataSources:
       abis:
         - name: Cat
           file: ./abis/Cat.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - CollateralType
         - SystemState
@@ -201,6 +205,8 @@ dataSources:
       abis:
         - name: Flapper
           file: ./abis/Flapper.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - SystemState
       eventHandlers:
@@ -227,6 +233,8 @@ dataSources:
       abis:
         - name: Flopper
           file: ./abis/Flopper.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - SystemState
       eventHandlers:
@@ -253,6 +261,8 @@ dataSources:
       abis:
         - name: Vow
           file: ./abis/Vow.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - SystemState
       eventHandlers:
@@ -283,6 +293,8 @@ dataSources:
       abis:
         - name: Jug
           file: ./abis/Jug.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - CollateralType
         - SystemState
@@ -320,6 +332,8 @@ dataSources:
       abis:
         - name: Pot
           file: ./abis/Pot.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - SystemState
       eventHandlers:
@@ -350,6 +364,8 @@ dataSources:
       abis:
         - name: DSProxyFactory
           file: ./abis/DSProxyFactory.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - SystemState
         - User
@@ -374,6 +390,8 @@ dataSources:
       abis:
         - name: DssCdpManager
           file: ./abis/DssCdpManager.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - CollateralType
         - SystemState
@@ -404,6 +422,8 @@ templates:
       abis:
         - name: Flipper
           file: ./abis/Flipper.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - CollateralAuction
         - CollateralType

@@ -1,5 +1,5 @@
 import { Bytes, DataSourceContext } from '@graphprotocol/graph-ts'
-import { bytes, decimal } from '@protofire/subgraph-toolkit'
+import { bytes, decimal, units } from '@protofire/subgraph-toolkit'
 
 import { Bite, LogNote } from '../../../../generated/Cat/Cat'
 import { Flip } from '../../../../generated/templates'
