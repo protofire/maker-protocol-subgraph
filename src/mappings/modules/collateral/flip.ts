@@ -32,6 +32,12 @@ export function handleKick(event: Kick): void {
   if (collateral != null) {
     // TODO: Save new auction data
     let bid = new CollateralAuction(event.params.id.toString())
+    bid.number = event.params.id
+    bid.lot = event.params.lot
+    bid.bid = event.params.bid
+    bid.tab = event.params.tab
+    bid.usr = event.params.usr
+    bid.gal = event.params.gal
     bid.collateral = collateral.id
 
     collateral.auctionCount = collateral.auctionCount.plus(integer.ONE)

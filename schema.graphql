@@ -2,6 +2,15 @@
 type CollateralAuction @entity {
   id: ID!
 
+  " Auction Number as Int "
+  number: BigInt!
+
+  lot: BigInt!
+  bid: BigInt!
+  tab: BigInt!
+  usr: Bytes!
+  gal: Bytes!
+
   " Collateral type "
   collateral: CollateralType!
 
