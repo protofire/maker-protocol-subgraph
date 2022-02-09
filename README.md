@@ -11,7 +11,9 @@ This subgraph aims to track the status of the Multi-Collateral DAI (MCD) trough 
 
 ___
 
+TODO: graph-ts & graph-cli version bump
 TODO: unit testing
+TODO: add docs
 
 ## Data sources
 
