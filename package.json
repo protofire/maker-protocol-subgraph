@@ -5,17 +5,15 @@
   "license": "GPL-3.0-only",
   "author": "Sebastián Galiano <sgaliano@gmail.com>",
   "scripts": {
-    "auth": "graph auth https://api.thegraph.com/deploy/",
-    "build": "graph build",
+    "auth": "npx graph auth https://api.thegraph.com/deploy/",
+    "build": "npx graph build",
     "codegen": "npx graph codegen",
-    "create-local": "graph create --node http://localhost:8020/ protofire/maker-protocol",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ protofire/maker-protocol",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 protofire/maker-protocol",
-    "remove-local": "graph remove --node http://localhost:8020/ protofire/maker-protocol"
+    "deploy": "npx graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ protofire/maker-protocol"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.19.0",
-    "@graphprotocol/graph-ts": "0.19.0",
-    "@protofire/subgraph-toolkit": "0.1.1"
+    "@graphprotocol/graph-cli": "0.23.2",
+    "@graphprotocol/graph-ts": "0.23.1",
+    "@protofire/subgraph-toolkit": "0.1.2",
+    "matchstick-as": "0.2.0"
   }
 }
