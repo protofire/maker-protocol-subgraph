@@ -92,17 +92,17 @@ export function handleFile(event: LogNote): void {
 
 // Modify a user's collateral balance
 export function handleSlip(event: LogNote): void {
-  // TODO
+  // TODO: handleSlip
 }
 
 // Transfer collateral between users
 export function handleFlux(event: LogNote): void {
-  // TODO
+  // TODO: handleFlux
 }
 
 // Transfer stablecoin between users
 export function handleMove(event: LogNote): void {
-  // TODO
+  // TODO: handleMove
 }
 
 // Create or modify a Vault
