@@ -6,7 +6,7 @@
   "author": "Sebastián Galiano <sgaliano@gmail.com>",
   "scripts": {
     "auth": "npx graph auth https://api.thegraph.com/deploy/",
-    "test": "rm -rf ./tests/.bin && npx graph test index",
+    "test": "rm -rf ./tests/.bin && npx graph test",
     "build": "npx graph build",
     "codegen": "npx graph codegen",
     "deploy": "npx graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ protofire/maker-protocol"
