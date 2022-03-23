@@ -256,10 +256,9 @@
   resolved "https://registry.yarnpkg.com/@protofire/subgraph-prettier-config/-/subgraph-prettier-config-0.1.1.tgz#da616048f8d77f27446ac0298d8fdd9bbc4eb16a"
   integrity sha512-XJNXRYotEcywkCMsUMsbpzbC5xZUwQGwdk2NS+NNMhwNhm24i3SSO2dqJgnWYscmBGwpVZJTGVYK6f8g/Gn16g==
 
-"@protofire/subgraph-toolkit@0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@protofire/subgraph-toolkit/-/subgraph-toolkit-0.1.2.tgz#1cbe96518b1d5e9b31ce878d8e37f0e4b43489e8"
-  integrity sha512-OyXa44LDjG766izmTLkkamfqw1tJbnQZTFL2/5S/0WbyhSxaPyO7xO+748dTvgdmlx2OWib5K7f7FcB2RtjZGQ==
+"@protofire/subgraph-toolkit@https://github.com/protofire/subgraph-toolkit.git":
+  version "0.1.3"
+  resolved "https://github.com/protofire/subgraph-toolkit.git#b8697efb7945f6839ef2a6b0ce8cd5681728bf26"
   dependencies:
     "@protofire/subgraph-prettier-config" "^0.1.1"
 
