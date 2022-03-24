@@ -1,3 +1,10 @@
 {
-  "extends": "./node_modules/assemblyscript/src/tsconfig.json"
+  "extends": "assemblyscript/std/assembly.json",
+  "include": [
+    "./**/*.ts",
+    "../**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
