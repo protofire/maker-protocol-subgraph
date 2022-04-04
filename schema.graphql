@@ -8,6 +8,21 @@ type CollateralAuction @entity {
   # TODO
 }
 
+" Collateral tokens (Gem)"
+type Collateral @entity {
+  " Collateral tokens (Gem) : ${user.id}-${collateralType.id}"
+  id: ID!
+
+  "Collateral type "
+  type: CollateralType!
+
+  "Account that owns this Collateral"
+  owner: User!
+
+  "Amount of collateral"
+  amount: BigDecimal!
+}
+
 " Particular collateral type registered in the system (Ilk) "
 type CollateralType @entity {
   " Collateral type name "
@@ -303,13 +318,13 @@ type Vault @entity {
   owner: User!
 
   " Timestamp of the block in which this vault was opened [seconds] "
-  openedAt: BigInt!
+  openedAt: BigInt
 
   " Block number in which this vault was opened "
-  openedAtBlock: BigInt!
+  openedAtBlock: BigInt
 
   " Transaction hash in which this vault was opened "
-  openedAtTransaction: Bytes!
+  openedAtTransaction: Bytes
 
   " Timestamp of the block in which this vault was last modified [seconds] "
   modifiedAt: BigInt
