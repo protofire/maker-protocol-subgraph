@@ -11,8 +11,6 @@ This subgraph aims to track the status of the Multi-Collateral DAI (MCD) trough 
 
 ___
 
-TODO: graph-ts & graph-cli version bump
-TODO: unit testing
 TODO: add docs
 
 ## Data sources
@@ -33,13 +31,21 @@ Dai Join :
 
 ### 1.  Core Module:
 
-Vault Engine (vat)
+#### Vault Engine (vat)
 
 	address: 0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b
 
 	TODO: handleSlip
 	TODO: handleFlux
 	TODO: handleMove
+
+1. **handleGrab:** Vault liquidation
+
+	_It's also referred as "*CDP Confiscation*"_
+
+	This function modifies
+
+
   
 
 Liaison between the oracles and core contracts (spot)

@@ -12,7 +12,7 @@ import {
   VaultSplitChangeLog,
 } from '../../../../generated/schema'
 
-import { getOrCreateUser, getSystemState } from '../../../entities'
+import { collaterals, collateralTypes, users, getSystemState, vaults } from '../../../entities'
 
 // Register a new collateral type
 export function handleInit(event: LogNote): void {
@@ -123,7 +123,7 @@ export function handleFrob(event: LogNote): void {
     let vault = Vault.load(urn.toHexString() + '-' + collateral.id)
 
     if (vault == null) {
-      let owner = getOrCreateUser(urn)
+      let owner = users.getOrCreateUser(urn)
       owner.vaultCount = owner.vaultCount.plus(integer.ONE)
       owner.save()
 
@@ -237,26 +237,37 @@ export function handleFork(event: LogNote): void {
 
 // Liquidate a Vault
 export function handleGrab(event: LogNote): void {
-  let ilk = event.params.arg1.toString()
-  // let urn = bytes.toAddress(event.params.arg2)
-  // let dink = bytes.toSignedInt(<Bytes>event.params.data.subarray(132, 164))
+  let ilkAddress = bytes.toAddress(event.params.arg1)
+  let urnAddress = bytes.toAddress(event.params.arg2)
+  let userAddress = bytes.toAddress(event.params.arg3)
+  // dink: amount of collateral to exchange.
+  let dink = bytes.toSignedInt(<Bytes>event.params.data.subarray(132, 164))
+  let collateralAmount = units.fromWad(dink)
   let dart = bytes.toSignedInt(<Bytes>event.params.data.subarray(164, 196))
+  let debtAmount = units.fromWad(dart)
 
-  let collateral = CollateralType.load(ilk)
+
+  let user = users.getOrCreateUser(userAddress)
+  user.save()
+
+  let vault = vaults.loadOrCreateVault(urnAddress, ilkAddress.toHexString(), user.id)
+  vault = vaults.mutators.increaseIlkAmount(vault, collateralAmount)
+  vault = vaults.mutators.decreaseArtAmount(vault, debtAmount)
+
+  vault.save()
+
+  let collateralType = collateralTypes.loadOrCreateCollateralType(ilkAddress.toHexString())
+  collateralType = collateralTypes.mutators.increaseArtAmount(collateralType, debtAmount)
+  // todo dta // Total debt is Art * rate (like on DAIStats)
+  collateralType.save()
+
+  let collateral = collaterals.loadOrCreateCollateral(vault.id, user.id)
+  collateral = collaterals.mutators.decreaseCollateralAmount(collateral, collateralAmount)
+
 
   // TODO: Reset Vault
 
-  if (collateral != null) {
-    let Δdebt = units.fromWad(dart)
 
-    // Debt normalized should coincide with Ilk.Art
-    collateral.debtNormalized = collateral.debtNormalized.plus(Δdebt)
-
-    // Total debt is Art * rate (like on DAIStats)
-    collateral.totalDebt = collateral.debtNormalized * collateral.rate
-
-    collateral.save()
-  }
 }
 
 // Create/destroy equal quantities of stablecoin and system debt

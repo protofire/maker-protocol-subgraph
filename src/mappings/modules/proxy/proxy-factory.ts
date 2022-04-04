@@ -3,10 +3,10 @@ import { integer } from '@protofire/subgraph-toolkit'
 import { Created } from '../../../../generated/ProxyFactory/DSProxyFactory'
 import { UserProxy } from '../../../../generated/schema'
 
-import { getOrCreateUser, getSystemState } from '../../../entities'
+import { users, getSystemState } from '../../../entities'
 
 export function handleCreated(event: Created): void {
-  let user = getOrCreateUser(event.params.owner)
+  let user = users.getOrCreateUser(event.params.owner)
   user.proxyCount = user.proxyCount.plus(integer.ONE)
   user.save()
 
