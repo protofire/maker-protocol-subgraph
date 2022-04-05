@@ -18,11 +18,4 @@ export namespace collaterals {
 		return entity as Collateral
 	}
 
-	export namespace mutators {
-
-		export function decreaseCollateralAmount(collateral: Collateral, amount: BigDecimal): Collateral {
-			collateral.amount = collateral.amount.minus(amount)
-			return collateral
-		}
-	}
 }

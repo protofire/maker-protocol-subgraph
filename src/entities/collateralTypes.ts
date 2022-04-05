@@ -33,12 +33,4 @@ export namespace collateralTypes {
 		return entity as CollateralType
 	}
 
-
-	export namespace mutators {
-		export function increaseArtAmount(collateral: CollateralType, amount: BigDecimal): CollateralType {
-			collateral.debtNormalized = collateral.debtNormalized.plus(amount)
-			return collateral
-		}
-
-	}
 }

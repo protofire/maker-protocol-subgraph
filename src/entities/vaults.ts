@@ -21,15 +21,4 @@ export namespace vaults {
 		}
 		return entity as Vault
 	}
-
-	export namespace mutators {
-		export function increaseIlkAmount(vault: Vault, amount: BigDecimal): Vault {
-			vault.collateral = vault.collateral = vault.collateral.plus(amount)
-			return vault
-		}
-		export function decreaseArtAmount(vault: Vault, amount: BigDecimal): Vault {
-			vault.collateral = vault.debt = vault.debt.minus(amount)
-			return vault
-		}
-	}
 }
