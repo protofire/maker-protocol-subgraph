@@ -106,3 +106,305 @@ TODO: Flash mint support
 ### 6. templates:
 
 Collateral Auction (flip)
+
+## Entities
+
+### 1. Vault
+
+Collateralized debt position or CDPs
+
+```graphql
+type Vault @entity {
+  " Equals to: <urn>-<ilk>"
+  id: ID!
+
+  " CDP ID if this vault was created through the manager (CdpManager) "
+  cdpId: BigInt
+
+  " Collateral type associated to this vault (ilk) "
+  collateralType: CollateralType!
+
+  " Assets locked as collateral (ink) "
+  collateral: BigDecimal!
+
+  " Outstanding debt (art) [DAI] "
+  debt: BigDecimal!
+
+  " Address of this vault's UrnHandler instance "
+  handler: Bytes!
+
+  " Address of vault's owner "
+  owner: User!
+
+  " Timestamp of the block in which this vault was opened [seconds] "
+  openedAt: BigInt!
+
+  " Block number in which this vault was opened "
+  openedAtBlock: BigInt!
+
+  " Transaction hash in which this vault was opened "
+  openedAtTransaction: Bytes!
+
+  " Timestamp of the block in which this vault was last modified [seconds] "
+  modifiedAt: BigInt
+
+  " Block number in which this vault was last modified "
+  modifiedAtBlock: BigInt
+
+  " Transaction hash in which this vault was last modified "
+  modifiedAtTransaction: Bytes
+
+  " Vault action history "
+  logs: [VaultLog!] @derivedFrom(field: "vault")
+}
+```
+
+### 2. CollateralType
+
+Particular collateral type registered in the system (Ilk)
+
+```graphql
+type CollateralType @entity {
+  " Collateral type name "
+  id: ID!
+
+  #
+  # Debt
+  #
+
+  " Debt ceiling [DAI] (line) "
+  debtCeiling: BigDecimal!
+
+  " Debt backed by this collateral type [DAI] (Art)"
+  debtNormalized: BigDecimal!
+
+  " Asset/DAI exchange rate (rate) "
+  rate: BigDecimal!
+
+  " Total assets locked as collateral"
+  totalCollateral: BigDecimal!
+
+  " Total debt backed by this collateral type [DAI] (Ilk.Art * rate)"
+  totalDebt: BigDecimal!
+
+  #
+  # Liquidation parameters
+  #
+
+  " Maximum size of collateral that can be auctioned at once (lump) "
+  liquidationLotSize: BigDecimal!
+
+  " Liquidation penalty (chop) "
+  liquidationPenalty: BigDecimal!
+
+  " Min collateralization ratio "
+  liquidationRatio: BigDecimal!
+
+  #
+  # Collateral auctions
+  #
+
+  " Collateral auctions for this collateral type "
+  auctions: [CollateralAuction!] @derivedFrom(field: "collateral")
+
+  " Number of collateral auctions started for this collateral type "
+  auctionCount: BigInt!
+
+  " Maximum auction duration [seconds] "
+  auctionDuration: BigInt!
+
+  " Max bid duration in a collateral auction [seconds] "
+  bidDuration: BigInt!
+
+  " Minimum bid increase in a collateral auction "
+  minimumBidIncrease: BigDecimal!
+
+  #
+  # Stability rates
+  #
+
+  " Stability fee rate per second "
+  stabilityFee: BigDecimal!
+
+  #
+  # Vaults
+  #
+
+  " Collateral auctions for this collateral type "
+  vaults: [Vault!] @derivedFrom(field: "collateralType")
+
+  " Min debt per vault [DAI] (dust) "
+  vaultDebtFloor: BigDecimal!
+
+  " Number of vaults opened through the manager (CdpManager) "
+  vaultCount: BigInt!
+
+  " Number of vaults NOT opened through the manager (CdpManager) "
+  unmanagedVaultCount: BigInt!
+
+  #
+  # Asset price
+  #
+
+  " Current market price [USD] "
+  price: CollateralPrice
+
+  " Price history "
+  prices: [CollateralPrice!] @derivedFrom(field: "collateral")
+
+  #
+  # Status fields
+  #
+
+  " Timestamp of the block in which this collateral type was added [seconds] "
+  addedAt: BigInt!
+
+  " Block number in which this collateral type was added "
+  addedAtBlock: BigInt!
+
+  " Transaction hash in which this collateral type was added "
+  addedAtTransaction: Bytes!
+
+  " Timestamp of the block in which this collateral type was last modified [seconds] "
+  modifiedAt: BigInt
+
+  " Block number in which this collateral type was last modified "
+  modifiedAtBlock: BigInt
+
+  " Transaction hash in which this collateral type was last modified "
+  modifiedAtTransaction: Bytes
+}
+```
+
+### 3. User
+
+Vault owner
+
+```graphql
+type User @entity {
+  " Equals to account address "
+  id: ID!
+
+  " Account address "
+  address: Bytes!
+
+  " Number of user proxies associated to the user "
+  proxyCount: BigInt!
+
+  " Number of vaults opened by the user "
+  vaultCount: BigInt!
+
+  " User proxies. Up to one per collateral type "
+  proxies: [UserProxy!] @derivedFrom(field: "owner")
+
+  " User's vaults "
+  vaults: [Vault!] @derivedFrom(field: "owner")
+}
+```
+
+### 4. SystemState
+
+Provide information about the current system state and parameters
+
+```graphql
+type SystemState @entity {
+  " Singleton entity. Equals to 'current' "
+  id: ID!
+
+  #
+  # General protocol stats
+  #
+
+  " Total debt issued [DAI] (Vat.debt)"
+  totalDebt: BigDecimal!
+
+  #
+  # About number of entities registered system-wide
+  #
+
+  " Number of collateral types registered "
+  collateralCount: BigInt!
+
+  " Number of collateral auctions started "
+  collateralAuctionCount: BigInt!
+
+  " Number of user proxies created "
+  userProxyCount: BigInt!
+
+  " Number of vaults NOT opened through the manager (CdpManager) "
+  unmanagedVaultCount: BigInt!
+
+  " Number of vaults opened through the manager (CdpManager) "
+  vaultCount: BigInt!
+
+  #
+  # General system parameters
+  #
+
+  " Base rate for stability fee per second "
+  baseStabilityFee: BigDecimal!
+
+  " Dai Savings Rate "
+  savingsRate: BigDecimal!
+
+  " Total Debt Ceiling "
+  totalDebtCeiling: BigDecimal!
+
+  #
+  # Debt auction parameters (flop)
+  #
+
+  " Max bid duration / single bid lifetime [seconds] "
+  debtAuctionBidDuration: BigInt
+
+  " The fixed debt quantity to be covered by any one debt auction [DAI] "
+  debtAuctionBidSize: BigDecimal
+
+  " Debt auction delay [seconds] "
+  debtAuctionDelay: BigInt
+
+  " Maximum auction duration [seconds] "
+  debtAuctionDuration: BigInt
+
+  " The starting amount of MKR offered to cover the lot [MKR] "
+  debtAuctionInitialLotSize: BigDecimal
+
+  " Lot size increase "
+  debtAuctionLotSizeIncrease: BigDecimal
+
+  " Minimum bid increase "
+  debtAuctionMinimumBidIncrease: BigDecimal
+
+  #
+  # Surplus auction parameters (flap)
+  #
+
+  " Max bid duration / bid lifetime [seconds] "
+  surplusAuctionBidDuration: BigInt
+
+  " Surplus buffer, must be exceeded before surplus auctions are possible [DAI] "
+  surplusAuctionBuffer: BigDecimal
+
+  " Maximum auction duration [seconds] "
+  surplusAuctionDuration: BigInt
+
+  " The fixed surplus quantity to be sold by any one surplus auction [DAI] "
+  surplusAuctionLotSize: BigDecimal
+
+  " Minimum bid increase "
+  surplusAuctionMinimumBidIncrease: BigDecimal
+
+  #
+  # Status fields
+  #
+
+  " The latest block in which a system parameters was modified "
+  block: BigInt!
+
+  " The latest timestamp in which a system parameters was modified "
+  timestamp: BigInt!
+
+  " The latest transaction hash in which a system parameters was modified "
+  transaction: Bytes!
+}
+```

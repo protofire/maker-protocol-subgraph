@@ -109,9 +109,8 @@ export function handleMove(event: LogNote): void {
 export function handleFrob(event: LogNote): void {
   let ilk = event.params.arg1.toString()
   let urn = bytes.toAddress(event.params.arg2)
-  let dink = bytes.toSignedInt(<Bytes>event.params.data.subarray(132, 164))
-  let dart = bytes.toSignedInt(<Bytes>event.params.data.subarray(164, 196))
-
+  let dink = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(132, 164)))
+  let dart = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(164, 196)))
   let collateral = CollateralType.load(ilk)
 
   if (collateral != null) {
