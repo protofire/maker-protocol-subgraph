@@ -1,5 +1,6 @@
 export * from './system'
 export * from './collaterals'
 export * from './collateralTypes'
+export * from './systemDebts'
 export * from './users'
 export * from './vaults'

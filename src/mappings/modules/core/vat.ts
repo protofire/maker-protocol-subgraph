@@ -12,7 +12,7 @@ import {
   VaultSplitChangeLog,
 } from '../../../../generated/schema'
 
-import { collaterals, collateralTypes, users, getSystemState, vaults } from '../../../entities'
+import { collaterals, collateralTypes, users, getSystemState, vaults, systemDebts } from '../../../entities'
 
 // Register a new collateral type
 export function handleInit(event: LogNote): void {
@@ -239,30 +239,38 @@ export function handleFork(event: LogNote): void {
 export function handleGrab(event: LogNote): void {
   let ilkAddress = bytes.toAddress(event.params.arg1)
   let urnAddress = bytes.toAddress(event.params.arg2)
-  let userAddress = bytes.toAddress(event.params.arg3)
-  // dink: amount of collateral to exchange.
-  let dink = bytes.toSignedInt(<Bytes>event.params.data.subarray(132, 164))
+  let liquidatorAddress = bytes.toAddress(event.params.arg3) //  dog's milk.clip
+  let vowAddress = bytes.toAddress(<Bytes>event.params.data.subarray(100, 132))
+  let dink = bytes.toSignedInt(<Bytes>event.params.data.subarray(132, 164)) // dink: amount of collateral to exchange.
   let collateralAmount = units.fromWad(dink)
   let dart = bytes.toSignedInt(<Bytes>event.params.data.subarray(164, 196))
   let debtAmount = units.fromWad(dart)
 
 
-  let user = users.getOrCreateUser(userAddress)
+  let user = users.getOrCreateUser(urnAddress)
   user.save()
 
-  let vault = vaults.loadOrCreateVault(urnAddress, ilkAddress.toHexString(), user.id)
-  vault = vaults.mutators.increaseIlkAmount(vault, collateralAmount)
-  vault = vaults.mutators.decreaseArtAmount(vault, debtAmount)
-
-  vault.save()
+  let liquidator = users.getOrCreateUser(liquidatorAddress)
+  liquidator.save()
 
   let collateralType = collateralTypes.loadOrCreateCollateralType(ilkAddress.toHexString())
-  collateralType = collateralTypes.mutators.increaseArtAmount(collateralType, debtAmount)
-  // todo dta // Total debt is Art * rate (like on DAIStats)
+  collateralType.debtNormalized = collateralType.debtNormalized.plus(debtAmount)
+  let totalDebt = collateralType.debtNormalized.times(collateralType.rate)
+  collateralType.totalDebt = totalDebt
   collateralType.save()
 
-  let collateral = collaterals.loadOrCreateCollateral(vault.id, user.id)
-  collateral = collaterals.mutators.decreaseCollateralAmount(collateral, collateralAmount)
+  let vault = vaults.loadOrCreateVault(urnAddress, collateralType.id, user.id)
+  vault.collateral = vault.collateral.plus(collateralAmount) // dink its a negative number
+  vault.collateral = vault.debt.plus(debtAmount) // dart its a negative number
+  vault.save()
+
+
+  let collateral = collaterals.loadOrCreateCollateral(collateralType.id, liquidator.id)
+  collateral.amount = collateral.amount.minus(collateralAmount) // adds since dink is negative
+  collateral.save()
+
+  let sin = systemDebts.loadOrCreateSystemDebt(vowAddress.toHexString())
+  sin.amount = sin.amount.minus(totalDebt) // adds since totalDebt is negative
 
 
   // TODO: Reset Vault
