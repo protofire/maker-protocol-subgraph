@@ -43,7 +43,7 @@ Dai Join :
 
 	_It's also referred as "*CDP Confiscation*"_
 
-	This function modifies
+	This function is executed by the Liquidation module trough the "Bark method" and modifies
 
 
   

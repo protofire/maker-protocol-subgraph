@@ -216,6 +216,11 @@ type SystemState @entity {
   " Total debt issued [DAI] (Vat.debt)"
   totalDebt: BigDecimal!
 
+    "Total unbacked debt DAI (Vat.vice)"
+  totalSystemDebt: BigDecimal!
+
+  systemDebt: [SystemDebt!]  # TODO relate sins with system state 
+
   #
   # About number of entities registered system-wide
   #
