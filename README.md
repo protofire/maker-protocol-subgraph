@@ -41,9 +41,55 @@ Dai Join :
 
 1. **handleGrab:** Vault liquidation
 
-	_It's also referred as "*CDP Confiscation*"_
+>function grab(bytes32 i, address u, address v, address w, int dink, int dart)
 
-	This function is executed by the Liquidation module trough the "Bark method" and modifies
+
+_It's also referred as "*CDP Confiscation*"_
+
+This function is executed by the Liquidation module trough the "Bark method" and modifies following entities:
+
+1. User: the user is created with the urnAddress<function param arg2 "u">
+
+2. User: the liquidator is created with the  liquidatorAddress<function param arg3 "v">
+
+3. CollateralType: the ilk is loaded with the ilkAddress<function param arg1 "i"> and modified as follows:
+	- the "debtNormalized" attr<art> is decreased by adding the "dart" value (negative signed float number)
+
+			ilk.Art = _add(ilk.Art, dart); // vat.sol ln213
+
+
+	- the "totalDebt" attr<dtab> ir re calculated by multipliying the "debtNormalized" times the 
+	"colalteralType's rate"
+
+			int dtab = _mul(ilk.rate, dart); // vat.sol ln215
+
+4. Vault: the urn is loaded with the urnAddress<function param arg2 "u"> and modified as follows:
+
+	- the "collateral" attr<ink> is decreased by adding the "dink" value (negative signed float number)
+
+			urn.ink = _add(urn.ink, dink); // vat.sol ln211
+
+	- the "debt" attr<art> is decreased by adding the "dart" value (negative signed float number)
+			
+			urn.art = _add(urn.art, dart); // vat.sol ln212
+
+5. Collateral: the gem is created or loaded with the composition of the CollateralType ilkAddress<function param arg1 "i"> and the User liquidatorAddress<function param arg3 "v">
+
+	- the "amount" is increased by substracting the "dink" value (negative signed float number)
+		
+			gem[i][v] = _sub(gem[i][v], dink); // vat.sol ln217
+
+6. SystemDebt: the sin is created or loaded with the vowAddres<function param arg3 "w">
+
+	- the "amount" is increased by substracting the "dtab" value (negative signed float number)
+	
+			sin[w]    = _sub(sin[w],    dtab); // vat.sol ln218
+
+7. SystemState: the systemState is loaded with it's singleton id.
+
+	-	the "totalSystemDebt" attr<vice> is increased by substracting the "dtab" value (negative signed float number)
+
+			vice      = _sub(vice,      dtab); // vat.sol ln219
 
 
   
