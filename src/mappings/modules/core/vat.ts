@@ -12,7 +12,7 @@ import {
   VaultSplitChangeLog,
 } from '../../../../generated/schema'
 
-import { collaterals, collateralTypes, users, system, vaults, systemDebts } from '../../../entities'
+import { collaterals, collateralTypes, users, system as systemModule, vaults, systemDebts } from '../../../entities'
 
 // Register a new collateral type
 export function handleInit(event: LogNote): void {
@@ -46,7 +46,7 @@ export function handleInit(event: LogNote): void {
   collateral.save()
 
   // Update system state
-  let state = system.getSystemState(event)
+  let state = systemModule.getSystemState(event)
   state.collateralCount = state.collateralCount.plus(integer.ONE)
   state.save()
 }
@@ -54,7 +54,7 @@ export function handleInit(event: LogNote): void {
 // Modify collateral type parameters
 export function handleFile(event: LogNote): void {
   let signature = event.params.sig.toHexString()
-  let system = system.getSystemState(event)
+  let system = systemModule.getSystemState(event)
 
   if (signature == '0x29ae8114') {
     let what = event.params.arg1.toString()
@@ -115,7 +115,7 @@ export function handleFrob(event: LogNote): void {
   let collateral = CollateralType.load(ilk)
 
   if (collateral != null) {
-    let system = system.getSystemState(event)
+    let system = systemModule.getSystemState(event)
 
     let Δdebt = units.fromWad(dart)
     let Δcollateral = units.fromWad(dink)
@@ -272,11 +272,11 @@ export function handleGrab(event: LogNote): void {
   let sin = systemDebts.loadOrCreateSystemDebt(vowAddress.toHexString())
   sin.amount = sin.amount.minus(totalDebt) // adds since totalDebt is negative
 
-  let systemState = system.getSystemState(event)
+  let systemState = systemModule.getSystemState(event)
   systemState.totalSystemDebt = systemState.totalSystemDebt.minus(totalDebt) // adds since totalDebt is negative
   systemState.save()
 
-  // FIXME Tracking : emit Bark(ilk, urn, dink, dart, due, milk.clip, id) will make this handler unnecesary
+  // FIXME Indexing : emit Bark(ilk, urn, dink, dart, due, milk.clip, id) will make this handler unnecesary
 
 }
 
@@ -284,7 +284,7 @@ export function handleGrab(event: LogNote): void {
 export function handleHeal(event: LogNote): void {
   let rad = units.fromRad(bytes.toUnsignedInt(event.params.arg1))
 
-  let system = getSystemState(event)
+  let system = systemModule.getSystemState(event)
   //system.totalDebt = system.totalDebt.minus(rad)
   system.save()
 }
@@ -293,7 +293,7 @@ export function handleHeal(event: LogNote): void {
 export function handleSuck(event: LogNote): void {
   let rad = units.fromRad(bytes.toUnsignedInt(event.params.arg3))
 
-  let system = getSystemState(event)
+  let system = systemModule.getSystemState(event)
   //system.totalDebt = system.totalDebt.plus(rad)
   system.save()
 }
@@ -311,7 +311,7 @@ export function handleFold(event: LogNote): void {
     collateral.rate = collateral.rate.plus(rate)
     collateral.save()
 
-    let system = getSystemState(event)
+    let system = systemModule.getSystemState(event)
     //system.totalDebt = system.totalDebt.plus(rad)
     system.save()
   }
