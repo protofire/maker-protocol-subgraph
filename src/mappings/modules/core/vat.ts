@@ -237,7 +237,7 @@ export function handleFork(event: LogNote): void {
 
 // Liquidate a Vault
 export function handleGrab(event: LogNote): void {
-  let ilkAddress = bytes.toAddress(event.params.arg1)
+  let ilkIndex = bytes.toSignedInt(event.params.arg1)
   let urnAddress = bytes.toAddress(event.params.arg2)
   let liquidatorAddress = bytes.toAddress(event.params.arg3) //  dog's milk.clip
   let vowAddress = bytes.toAddress(<Bytes>event.params.data.subarray(100, 132))
@@ -253,7 +253,7 @@ export function handleGrab(event: LogNote): void {
   let liquidator = users.getOrCreateUser(liquidatorAddress)
   liquidator.save()
 
-  let collateralType = collateralTypes.loadOrCreateCollateralType(ilkAddress.toHexString())
+  let collateralType = collateralTypes.loadOrCreateCollateralType(ilkIndex.toHexString())
   collateralType.debtNormalized = collateralType.debtNormalized.plus(debtAmount)
   let totalDebt = collateralType.debtNormalized.times(collateralType.rate)
   collateralType.totalDebt = totalDebt
