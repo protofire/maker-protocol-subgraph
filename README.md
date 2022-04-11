@@ -92,7 +92,24 @@ This function is executed by the Liquidation module trough the "Bark method" and
 			vice      = _sub(vice,      dtab); // vat.sol ln219
 
 
+1. **handleInit:** CollateralType registration
+
+>function init(bytes32 ilk)
+
+This function modifies the following entities:
+
+1. CollateralType: It is created with the ilk<function param arg1 "ilk"> and modified as follows:
   
+  - the "rate" attr<rate> is set to 1 in RAY format
+
+    ilks[ilk].rate = 10 ** 27;
+
+  - the "auctionDuration" attr<auctionDuration> is set to 2 days
+  - the "bidDuration" attr<bidDuration> is set to 3 hours
+  - the "minimumBidIncrease" attr<minimumBidIncrease> is set to 1.05, 5% minimum bid increase
+
+2. SystemState:
+  - the "collateralCount" is increased by 1
 
 Liaison between the oracles and core contracts (spot)
 
