@@ -91,13 +91,13 @@ This function is executed by the Liquidation module trough the "Bark method" and
 			vice      = _sub(vice,      dtab); // vat.sol ln219
 
 
-1. **handleInit:** CollateralType registration
+2. **handleInit:** CollateralType registration
 
->function init(bytes32 ilk)
+> function init(bytes32 ilk)
 
 This function modifies the following entities:
 
-1. CollateralType: It is created with the ilk<function param arg1 "ilk"> and modified as follows:
+- CollateralType: It is created with the ilk<function param arg1 "ilk"> and modified as follows:
   
   - the "rate" attr<rate> is set to 1 in RAY format
 
@@ -107,11 +107,11 @@ This function modifies the following entities:
   - the "bidDuration" attr<bidDuration> is set to 3 hours
   - the "minimumBidIncrease" attr<minimumBidIncrease> is set to 1.05, 5% minimum bid increase
 
-2. SystemState:
+- SystemState:
   - the "collateralCount" is increased by 1
 
 
-4. **handleFrob:** Vault creation / modification
+3. **handleFrob:** Vault creation / modification
 
 > function frob(bytes32 i, address u, address v, address w, int dink, int dart)
 
@@ -144,6 +144,35 @@ Modified entities:
     - "debtBefore"
     - "debtAfter"
     - "debtDiff"
+
+4. **handleFile:** CollateralType updates
+
+This mapping handles 2 contract functions with the same name but different params by the use of an anonymous event that has a signature hash that depends on the params provided. We use this signature hash to split the logic for each contract function.
+
+> function file(bytes32 what, uint data)
+
+> function file(bytes32 ilk, bytes32 what, uint data)
+
+If the signature matches the first function and the `what` param is "Line" then it updates the `totalDebtCeiling` on the `SystemState` Entity.
+In the other hand if the signature matches the second function, we use the `ilk` param to load the `CollateralType` then we look at the `what` param to know what to update. ("line" means `Debt Ceiling` while "dust" means `Debt Floor`)
+
+Entities modified:
+
+- SystemState
+  - the "totalDebtCeiling" attr<totalDebtCeiling> is updated with the data <function param arg2 "data">
+
+      if (what == "Line") Line = data;
+
+- CollateralType: 
+It is loaded from the ilk <function param arg1 "ilk"> and modified as follows:
+  - the "debtCeiling" attr<debtCeiling> is updated with the data <function param arg2 "data">
+
+      > else if (what == "line") ilks[ilk].line = data;
+
+  - the "vaultDebtFloor" attr<vaultDebtFloor> is updated with the data <function param arg2 "data">
+
+      > else if (what == "dust") ilks[ilk].dust = data;
+
 
 Liaison between the oracles and core contracts (spot)
 
