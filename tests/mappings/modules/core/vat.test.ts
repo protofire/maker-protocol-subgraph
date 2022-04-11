@@ -5,6 +5,9 @@ import { LogNote } from '../../../../generated/Vat/Vat';
 import { tests } from '../../../../src/mappings/modules/tests'
 import { integer, decimal } from '@protofire/subgraph-toolkit';
 import { CollateralType, Vault } from "../../../../generated/schema";
+import { handleGrabTest } from "./handleGrab.test"
+
+test("Vat # handleGrab : Liquidates a Vault", handleGrabTest)
 
 test(
   "Vat#handleInit creates initial CollateralType and updates SystemState",

@@ -1,3 +1,9 @@
+type SystemDebt @ entity {
+  id: ID!
+  owner: User
+  amount: BigDecimal!
+}
+
 " Collateral auctions are used to sell collateral from Vaults that have become undercollateralized "
 type CollateralAuction @entity {
   id: ID!
@@ -6,6 +12,21 @@ type CollateralAuction @entity {
   collateral: CollateralType!
 
   # TODO
+}
+
+" Collateral tokens (Gem)"
+type Collateral @entity {
+  " Collateral tokens (Gem) : ${user.id}-${collateralType.id}"
+  id: ID!
+
+  "Collateral type "
+  type: CollateralType!
+
+  "Account that owns this Collateral"
+  owner: User!
+
+  "Amount of collateral"
+  amount: BigDecimal!
 }
 
 " Particular collateral type registered in the system (Ilk) "
@@ -39,11 +60,17 @@ type CollateralType @entity {
   " Maximum size of collateral that can be auctioned at once (lump) "
   liquidationLotSize: BigDecimal!
 
-  " Liquidation penalty (chop) "
+  " Liquidation penalty (chop [wad]) "
   liquidationPenalty: BigDecimal!
 
   " Min collateralization ratio "
   liquidationRatio: BigDecimal!
+
+  # TODO check Dog and Vat Ilk definitions
+  # TODO : clip;  // Liquidator
+  # TODO : clip;  // Liquidator
+  # TODO: uint256 hole;  // Max DAI needed to cover debt+fees of active auctions per ilk [rad]
+  # TODO: uint256 dirt;  // Amt DAI needed to cover debt+fees of active auctions per ilk [rad]
 
   #
   # Collateral auctions
@@ -189,6 +216,11 @@ type SystemState @entity {
   " Total debt issued [DAI] (Vat.debt)"
   totalDebt: BigDecimal!
 
+    "Total unbacked debt DAI (Vat.vice)"
+  totalSystemDebt: BigDecimal!
+
+  systemDebt: [SystemDebt!]  # TODO relate sins with system state 
+
   #
   # About number of entities registered system-wide
   #
@@ -303,13 +335,13 @@ type Vault @entity {
   owner: User!
 
   " Timestamp of the block in which this vault was opened [seconds] "
-  openedAt: BigInt!
+  openedAt: BigInt
 
   " Block number in which this vault was opened "
-  openedAtBlock: BigInt!
+  openedAtBlock: BigInt
 
   " Transaction hash in which this vault was opened "
-  openedAtTransaction: Bytes!
+  openedAtTransaction: Bytes
 
   " Timestamp of the block in which this vault was last modified [seconds] "
   modifiedAt: BigInt

@@ -12,7 +12,7 @@ import {
   VaultSplitChangeLog,
 } from '../../../../generated/schema'
 
-import { getOrCreateUser, getSystemState } from '../../../entities'
+import { collaterals, collateralTypes, users, system as systemModule, vaults, systemDebts } from '../../../entities'
 
 // Register a new collateral type
 export function handleInit(event: LogNote): void {
@@ -46,7 +46,7 @@ export function handleInit(event: LogNote): void {
   collateral.save()
 
   // Update system state
-  let state = getSystemState(event)
+  let state = systemModule.getSystemState(event)
   state.collateralCount = state.collateralCount.plus(integer.ONE)
   state.save()
 }
@@ -54,7 +54,7 @@ export function handleInit(event: LogNote): void {
 // Modify collateral type parameters
 export function handleFile(event: LogNote): void {
   let signature = event.params.sig.toHexString()
-  let system = getSystemState(event)
+  let system = systemModule.getSystemState(event)
 
   if (signature == '0x29ae8114') {
     let what = event.params.arg1.toString()
@@ -114,7 +114,7 @@ export function handleFrob(event: LogNote): void {
   let collateral = CollateralType.load(ilk)
 
   if (collateral != null) {
-    let system = getSystemState(event)
+    let system = systemModule.getSystemState(event)
 
     let Δdebt = units.fromWad(dart)
     let Δcollateral = units.fromWad(dink)
@@ -122,7 +122,7 @@ export function handleFrob(event: LogNote): void {
     let vault = Vault.load(urn.toHexString() + '-' + collateral.id)
 
     if (vault == null) {
-      let owner = getOrCreateUser(urn)
+      let owner = users.getOrCreateUser(urn)
       owner.vaultCount = owner.vaultCount.plus(integer.ONE)
       owner.save()
 
@@ -236,33 +236,54 @@ export function handleFork(event: LogNote): void {
 
 // Liquidate a Vault
 export function handleGrab(event: LogNote): void {
-  let ilk = event.params.arg1.toString()
-  // let urn = bytes.toAddress(event.params.arg2)
-  // let dink = bytes.toSignedInt(<Bytes>event.params.data.subarray(132, 164))
+  let ilkIndex = bytes.toSignedInt(event.params.arg1)
+  let urnAddress = bytes.toAddress(event.params.arg2)
+  let liquidatorAddress = bytes.toAddress(event.params.arg3) //  dog's milk.clip
+  let vowAddress = bytes.toAddress(<Bytes>event.params.data.subarray(100, 132))
+  let dink = bytes.toSignedInt(<Bytes>event.params.data.subarray(132, 164)) // dink: amount of collateral to exchange.
+  let collateralAmount = units.fromWad(dink)
   let dart = bytes.toSignedInt(<Bytes>event.params.data.subarray(164, 196))
+  let debtAmount = units.fromWad(dart)
 
-  let collateral = CollateralType.load(ilk)
 
-  // TODO: Reset Vault
+  let user = users.getOrCreateUser(urnAddress)
+  user.save()
 
-  if (collateral != null) {
-    let Δdebt = units.fromWad(dart)
+  let liquidator = users.getOrCreateUser(liquidatorAddress)
+  liquidator.save()
 
-    // Debt normalized should coincide with Ilk.Art
-    collateral.debtNormalized = collateral.debtNormalized.plus(Δdebt)
+  let collateralType = collateralTypes.loadOrCreateCollateralType(ilkIndex.toHexString())
+  collateralType.debtNormalized = collateralType.debtNormalized.plus(debtAmount)
+  let totalDebt = collateralType.debtNormalized.times(collateralType.rate)
+  collateralType.totalDebt = totalDebt
+  collateralType.save()
 
-    // Total debt is Art * rate (like on DAIStats)
-    collateral.totalDebt = collateral.debtNormalized * collateral.rate
+  let vault = vaults.loadOrCreateVault(urnAddress, collateralType.id, user.id)
+  vault.collateral = vault.collateral.plus(collateralAmount) // dink its a negative number
+  vault.collateral = vault.debt.plus(debtAmount) // dart its a negative number
+  vault.save()
 
-    collateral.save()
-  }
+
+  let collateral = collaterals.loadOrCreateCollateral(collateralType.id, liquidator.id)
+  collateral.amount = collateral.amount.minus(collateralAmount) // adds since dink is negative
+  collateral.save()
+
+  let sin = systemDebts.loadOrCreateSystemDebt(vowAddress.toHexString())
+  sin.amount = sin.amount.minus(totalDebt) // adds since totalDebt is negative
+
+  let systemState = systemModule.getSystemState(event)
+  systemState.totalSystemDebt = systemState.totalSystemDebt.minus(totalDebt) // adds since totalDebt is negative
+  systemState.save()
+
+  // FIXME Indexing : emit Bark(ilk, urn, dink, dart, due, milk.clip, id) will make this handler unnecesary
+
 }
 
 // Create/destroy equal quantities of stablecoin and system debt
 export function handleHeal(event: LogNote): void {
   let rad = units.fromRad(bytes.toUnsignedInt(event.params.arg1))
 
-  let system = getSystemState(event)
+  let system = systemModule.getSystemState(event)
   //system.totalDebt = system.totalDebt.minus(rad)
   system.save()
 }
@@ -271,7 +292,7 @@ export function handleHeal(event: LogNote): void {
 export function handleSuck(event: LogNote): void {
   let rad = units.fromRad(bytes.toUnsignedInt(event.params.arg3))
 
-  let system = getSystemState(event)
+  let system = systemModule.getSystemState(event)
   //system.totalDebt = system.totalDebt.plus(rad)
   system.save()
 }
@@ -289,7 +310,7 @@ export function handleFold(event: LogNote): void {
     collateral.rate = collateral.rate.plus(rate)
     collateral.save()
 
-    let system = getSystemState(event)
+    let system = systemModule.getSystemState(event)
     //system.totalDebt = system.totalDebt.plus(rad)
     system.save()
   }
