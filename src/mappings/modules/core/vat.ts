@@ -10,6 +10,7 @@ import {
   VaultCollateralChangeLog,
   VaultDebtChangeLog,
   VaultSplitChangeLog,
+  DaiMoveLog,
 } from '../../../../generated/schema'
 
 import { collaterals, collateralTypes, users, system as systemModule, vaults, systemDebts } from '../../../entities'
@@ -102,7 +103,27 @@ export function handleFlux(event: LogNote): void {
 
 // Transfer stablecoin between users
 export function handleMove(event: LogNote): void {
-  // TODO: handleMove
+  let srcAddress = bytes.toAddress(event.params.arg1)
+  let dstAddress = bytes.toAddress(event.params.arg2)
+  let amount = units.fromWad(bytes.toSignedInt(Bytes.fromUint8Array(event.params.arg3)))
+
+  let srcUser = users.getOrCreateUser(srcAddress)
+  let dstUser = users.getOrCreateUser(dstAddress)
+  srcUser.dai = srcUser.dai.minus(amount)
+  dstUser.dai = dstUser.dai.plus(amount)
+  srcUser.save()
+  dstUser.save()
+
+  let log = new DaiMoveLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-4')
+  log.src = srcAddress
+  log.dst = dstAddress
+  log.amount = amount
+
+  log.block = event.block.number
+  log.timestamp = event.block.timestamp
+  log.transaction = event.transaction.hash
+
+  log.save()
 }
 
 // Create or modify a Vault
