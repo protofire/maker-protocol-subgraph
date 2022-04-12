@@ -3,7 +3,7 @@ import { decimal } from "@protofire/subgraph-toolkit"
 import { Collateral } from "../../generated/schema"
 
 export namespace collaterals {
-	function getGemId(ilk: string, user: string) {
+	function getGemId(ilk: string, user: string): string {
 		return `${user}-${ilk}`
 	}
 
