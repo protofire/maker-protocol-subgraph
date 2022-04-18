@@ -176,7 +176,7 @@ type User @entity {
   " Account address "
   address: Bytes!
 
-  " User's DAI"
+  " User's DAI "
   dai: BigDecimal!
 
   " Number of user proxies associated to the user "
