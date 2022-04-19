@@ -37,7 +37,6 @@ Dai Join :
 
 	TODO: handleSlip
 	TODO: handleFlux
-	TODO: handleMove
 
 1. **handleGrab:** Vault liquidation
 
@@ -115,6 +114,25 @@ Liaison between the oracles and core contracts (spot)
 
 	address:
 	0x65c79fcb50ca1594b025960e539ed7a9a6d434a3
+
+
+1. **handleMove** Transfer Stablecoin
+
+>function move(address src, address dst, uint256 rad)
+
+This function moves the DAI Stablecoin from address to another. It modifies or creates the following entities:
+
+1. User: It loads the user with the src <function param arg1 "src"> address.
+
+  - The field DAI is decreased by substracting the <function param arg3 "rad"> (as wad) from the DAI field.
+
+    dai[src] = _sub(dai[src], rad);
+
+2. User: It loads the user with the dst <function param arg2 "dst"> address and adds the . 
+
+  - The field DAI is increased by adding the <function param arg3 "rad"> (as wad) to the DAI field
+
+    dai[dst] = _add(dai[dst], rad);
 
 
 Liquidation Agent (cat) 
@@ -356,6 +374,9 @@ type User @entity {
 
   " Account address "
   address: Bytes!
+
+  " User's DAI "
+  dai: BigDecimal!
 
   " Number of user proxies associated to the user "
   proxyCount: BigInt!

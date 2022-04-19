@@ -176,6 +176,9 @@ type User @entity {
   " Account address "
   address: Bytes!
 
+  " User's DAI "
+  dai: BigDecimal!
+
   " Number of user proxies associated to the user "
   proxyCount: BigInt!
 
@@ -411,6 +414,16 @@ type VaultTransferChangeLog implements VaultLog @entity {
   vault: Vault!
   previousOwner: User!
   nextOwner: User!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type DaiMoveLog @entity {
+  id: ID!
+  src: Bytes!
+  dst: Bytes!
+  amount: BigDecimal!
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!

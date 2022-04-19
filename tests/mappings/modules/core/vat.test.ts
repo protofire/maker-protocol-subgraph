@@ -1,6 +1,6 @@
 import { test, clearStore, assert } from "matchstick-as";
 import { Address, Bytes, ethereum, TypedMap, BigInt, Value, BigDecimal } from '@graphprotocol/graph-ts';
-import { handleInit, handleFile, handleFrob } from '../../../../src/mappings/modules/core/vat';
+import { handleInit, handleFile, handleFrob, handleMove } from '../../../../src/mappings/modules/core/vat';
 import { LogNote } from '../../../../generated/Vat/Vat';
 import { tests } from '../../../../src/mappings/modules/tests'
 import { integer, decimal } from '@protofire/subgraph-toolkit';
@@ -170,6 +170,34 @@ test(
     assert.fieldEquals("CollateralType", collateralTypeId, "modifiedAtTransaction", event.transaction.hash.toHexString());
 
     clearStore();
+  }
+)
+
+test(
+  "Vat#handleMove moves dai from src to dst if users do not exist and amount is zero", () => {
+    let signature = "0xbb35783b"
+    let src = "0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b"
+    let dst = "0x9759a6ac90977b93b58547b4a71c78317f391a28"
+    let amount = "3687669050000000000000000"
+
+    let sig = tests.helpers.params.getBytes("sig", Bytes.fromHexString(signature))
+    let arg1 = tests.helpers.params.getBytes("arg1", Address.fromString(src))
+    let arg2 = tests.helpers.params.getBytes("arg2", Address.fromString(dst))
+    let arg3 = tests.helpers.params.getBytes("arg3", strRadToBytes(amount))
+
+    let event = changetype<LogNote>(tests.helpers.events.getNewEvent([
+      sig,
+      arg1,
+      arg2,
+      arg3,
+    ]))
+    
+    handleMove(event)
+
+    assert.fieldEquals("User", src, "dai", "-3687669.05")
+    assert.fieldEquals("User", dst, "dai", "3687669.05")
+
+    clearStore()
   }
 )
 

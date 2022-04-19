@@ -1,4 +1,4 @@
-import { Address } from '@graphprotocol/graph-ts'
+import { Address, BigDecimal } from '@graphprotocol/graph-ts'
 import { integer } from '@protofire/subgraph-toolkit'
 
 import { User, UserProxy } from '../../generated/schema'
@@ -17,6 +17,7 @@ export namespace users {
 			} else {
 				user = new User(id)
 				user.address = address
+				user.dai = BigDecimal.zero()
 				user.proxyCount = integer.ZERO
 				user.vaultCount = integer.ZERO
 			}
