@@ -1,4 +1,4 @@
-type SystemDebt @ entity {
+type SystemDebt @entity {
   id: ID!
   owner: User
   amount: BigDecimal!

@@ -241,6 +241,19 @@ This functions modifies the following entities:
       - "totalDebt"
       - "totalSystemDebt"
     
+2. **handleFold** Modify the debt multiplier, creating/destroying corresponding debt
+
+> function fold(bytes32 i, address u, int rate)
+
+This function modifies the following entities:
+
+  - CollateralType
+    - "rate"
+  - User
+    - "dai"
+  - SystemState
+    - "totalDebt"
+
 Liquidation Agent (cat) 
 TODO: remove, deprecated
 
