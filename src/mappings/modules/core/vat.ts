@@ -14,6 +14,7 @@ import {
 } from '../../../../generated/schema'
 
 import { collaterals, collateralTypes, users, system as systemModule, vaults, systemDebts } from '../../../entities'
+import { tests } from '../tests'
 
 // Register a new collateral type
 export function handleInit(event: LogNote): void {
@@ -239,20 +240,30 @@ export function handleFork(event: LogNote): void {
   let ilk = event.params.arg1.toString()
   let src = bytes.toAddress(event.params.arg2)
   let dst = bytes.toAddress(event.params.arg3)
-  let dink = bytes.toSignedInt(<Bytes>event.params.data.subarray(100, 132))
-  let dart = bytes.toSignedInt(<Bytes>event.params.data.subarray(132, 164))
+  let dink = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(100, 132)))
+  let dart = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(132, 164)))
 
-  let log = new VaultSplitChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-3')
-  log.src = src
-  log.dst = dst
-  log.collateralToMove = units.fromWad(dink)
-  log.debtToMove = units.fromWad(dart)
+  let vault1 = Vault.load(src.toHexString().concat("-").concat(ilk))
+  let vault2 = Vault.load(dst.toHexString().concat("-").concat(ilk))
 
-  log.block = event.block.number
-  log.timestamp = event.block.timestamp
-  log.transaction = event.transaction.hash
+  if (vault1 && vault2) {
+    vault1.collateral = vault1.collateral.minus(units.fromWad(dink))
+    vault1.debt = vault1.debt.minus(units.fromWad(dart))
+    vault2.collateral = vault2.collateral.plus(units.fromWad(dink))
+    vault2.debt = vault2.debt.plus(units.fromWad(dart))
+    vault1.save()
+    vault2.save()
 
-  log.save()
+    let log = new VaultSplitChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-3')
+    log.src = src
+    log.dst = dst
+    log.collateralToMove = units.fromWad(dink)
+    log.debtToMove = units.fromWad(dart)
+    log.block = event.block.number
+    log.timestamp = event.block.timestamp
+    log.transaction = event.transaction.hash
+    log.save()
+  }
 }
 
 // Liquidate a Vault
