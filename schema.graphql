@@ -16,17 +16,38 @@ type CollateralAuction @entity {
 
 " Collateral tokens (Gem)"
 type Collateral @entity {
-  " Collateral tokens (Gem) : ${user.id}-${collateralType.id}"
+  " Collateral tokens (Gem) : ${user.id}-${collateralType.id} "
   id: ID!
 
-  "Collateral type "
+  " Collateral type "
   type: CollateralType!
 
-  "Account that owns this Collateral"
+  " Account that owns this Collateral "
   owner: User!
 
-  "Amount of collateral"
+  " Amount of collateral "
   amount: BigDecimal!
+
+  " Timestamp of the block in which this collateral was created [seconds] "
+  createdAt: BigInt
+
+  " Block number in which this collateral was created "
+  createdAtBlock: BigInt
+
+  " Transaction hash in which this collateral was created "
+  createdAtTransaction: Bytes
+
+  " Timestamp of the block in which this collateral was last modified [seconds] "
+  modifiedAt: BigInt
+
+  " Block number in which this collateral was last modified "
+  modifiedAtBlock: BigInt
+
+  " Transaction hash in which this collateral was last modified "
+  modifiedAtTransaction: Bytes
+
+  " UserCollateral action history "
+  logs: [CollateralLog!] @derivedFrom(field: "collateral")
 }
 
 " Particular collateral type registered in the system (Ilk) "
@@ -192,43 +213,7 @@ type User @entity {
   vaults: [Vault!] @derivedFrom(field: "owner")
 
   " User's collaterals "
-  collaterals: [UserCollateral!] @derivedFrom(field: "owner")
-}
-
-" User's Collateral "
-type UserCollateral @entity {
-  " Equals to: <usr>-<ilk>"
-  id: ID!
-
-  " Collateral type associated to this vault (ilk) "
-  collateralType: CollateralType!
-
-  " Assets locked as collateral (ink) "
-  collateral: BigDecimal!
-
-  " Address of collateral owner "
-  owner: User!
-
-  " Timestamp of the block in which this collateral was opened [seconds] "
-  openedAt: BigInt
-
-  " Block number in which this collateral was opened "
-  openedAtBlock: BigInt
-
-  " Transaction hash in which this collateral was opened "
-  openedAtTransaction: Bytes
-
-  " Timestamp of the block in which this collateral was last modified [seconds] "
-  modifiedAt: BigInt
-
-  " Block number in which this collateral was last modified "
-  modifiedAtBlock: BigInt
-
-  " Transaction hash in which this collateral was last modified "
-  modifiedAtTransaction: Bytes
-
-  " UserCollateral action history "
-  logs: [UserCollateralLog!] @derivedFrom(field: "collateral")
+  collaterals: [Collateral!] @derivedFrom(field: "owner")
 }
 
 " Contract used to execute transactions and sequences of transactions on behalf of a user "
@@ -458,17 +443,17 @@ type VaultTransferChangeLog implements VaultLog @entity {
   transaction: Bytes!
 }
 
-interface UserCollateralLog {
+interface CollateralLog {
   id: ID!
-  collateral: UserCollateral!
+  collateral: Collateral!
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!
 }
 
-type UserCollateralChangeLog implements UserCollateralLog @entity{
+type CollateralChangeLog implements CollateralLog @entity{
   id: ID!
-  collateral: UserCollateral!
+  collateral: Collateral!
   collateralBefore: BigInt!
   collateralAfter: BigInt!
   block: BigInt!

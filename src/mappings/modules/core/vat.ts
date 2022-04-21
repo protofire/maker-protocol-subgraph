@@ -285,7 +285,7 @@ export function handleGrab(event: LogNote): void {
   vault.save()
 
 
-  let collateral = collaterals.loadOrCreateCollateral(collateralType.id, liquidator.id)
+  let collateral = collaterals.loadOrCreateCollateral(event, collateralType.id, liquidator.id)
   collateral.amount = collateral.amount.minus(collateralAmount) // adds since dink is negative
   collateral.save()
 
