@@ -11,6 +11,7 @@ import {
   VaultDebtChangeLog,
   VaultSplitChangeLog,
   DaiMoveLog,
+  CollateralChangeLog,
 } from '../../../../generated/schema'
 
 import { collaterals, collateralTypes, users, system as systemModule, vaults, systemDebts } from '../../../entities'
@@ -93,7 +94,37 @@ export function handleFile(event: LogNote): void {
 
 // Modify a user's collateral balance
 export function handleSlip(event: LogNote): void {
-  // TODO: handleSlip
+  let ilk = event.params.arg1.toString()
+  let usr = bytes.toAddress(event.params.arg2)
+  let wad = units.fromWad(bytes.toSignedInt(Bytes.fromUint8Array(event.params.arg3)))
+
+  let collateralType = CollateralType.load(ilk)
+  if (collateralType == null){
+    return
+  }
+  let owner = users.getOrCreateUser(usr)
+  let collateral = collaterals.loadOrCreateCollateral(event, ilk, owner.id)
+
+  let amountBefore = collateral.amount
+  collateral.amount = collateral.amount.plus(wad)
+  collateral.modifiedAt = event.block.timestamp
+  collateral.modifiedAtBlock = event.block.number
+  collateral.modifiedAtTransaction = event.transaction.hash
+  collateral.save()
+
+  let log = new CollateralChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
+  log.block = event.block.number
+  log.collateral = collateral.id
+  log.collateralAfter = collateral.amount
+  log.collateralBefore = amountBefore
+  log.save()
+
+
+  collateralType.totalCollateral.plus(wad)
+  collateralType.modifiedAt = event.block.timestamp
+  collateralType.modifiedAtBlock = event.block.number
+  collateralType.modifiedAtTransaction = event.transaction.hash
+  collateralType.save()
 }
 
 // Transfer collateral between users

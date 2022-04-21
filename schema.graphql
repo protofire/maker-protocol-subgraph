@@ -454,8 +454,8 @@ interface CollateralLog {
 type CollateralChangeLog implements CollateralLog @entity{
   id: ID!
   collateral: Collateral!
-  collateralBefore: BigInt!
-  collateralAfter: BigInt!
+  collateralBefore: BigDecimal!
+  collateralAfter: BigDecimal!
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!

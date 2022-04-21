@@ -18,7 +18,7 @@ export namespace collaterals {
 			entity.createdAtTransaction = event.transaction.hash
 			entity.modifiedAt = event.block.timestamp
 			entity.modifiedAtBlock = event.block.number
-			entity.modifiedAtTransaction
+			entity.modifiedAtTransaction = event.transaction.hash
 		}
 		return entity as Collateral
 	}
