@@ -190,6 +190,45 @@ type User @entity {
 
   " User's vaults "
   vaults: [Vault!] @derivedFrom(field: "owner")
+
+  " User's collaterals "
+  collaterals: [UserCollateral!] @derivedFrom(field: "owner")
+}
+
+" User's Collateral "
+type UserCollateral @entity {
+  " Equals to: <usr>-<ilk>"
+  id: ID!
+
+  " Collateral type associated to this vault (ilk) "
+  collateralType: CollateralType!
+
+  " Assets locked as collateral (ink) "
+  collateral: BigDecimal!
+
+  " Address of collateral owner "
+  owner: User!
+
+  " Timestamp of the block in which this collateral was opened [seconds] "
+  openedAt: BigInt
+
+  " Block number in which this collateral was opened "
+  openedAtBlock: BigInt
+
+  " Transaction hash in which this collateral was opened "
+  openedAtTransaction: Bytes
+
+  " Timestamp of the block in which this collateral was last modified [seconds] "
+  modifiedAt: BigInt
+
+  " Block number in which this collateral was last modified "
+  modifiedAtBlock: BigInt
+
+  " Transaction hash in which this collateral was last modified "
+  modifiedAtTransaction: Bytes
+
+  " UserCollateral action history "
+  logs: [UserCollateralLog!] @derivedFrom(field: "collateral")
 }
 
 " Contract used to execute transactions and sequences of transactions on behalf of a user "
@@ -414,6 +453,24 @@ type VaultTransferChangeLog implements VaultLog @entity {
   vault: Vault!
   previousOwner: User!
   nextOwner: User!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+interface UserCollateralLog {
+  id: ID!
+  collateral: UserCollateral!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type UserCollateralChangeLog implements UserCollateralLog @entity{
+  id: ID!
+  collateral: UserCollateral!
+  collateralBefore: BigInt!
+  collateralAfter: BigInt!
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!
