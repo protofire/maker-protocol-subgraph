@@ -35,7 +35,6 @@ Dai Join :
 
 	address: 0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b
 
-	TODO: handleSlip
 	TODO: handleFlux
 
 1. **handleGrab:** Vault liquidation
@@ -178,6 +177,19 @@ Liaison between the oracles and core contracts (spot)
 
 	address:
 	0x65c79fcb50ca1594b025960e539ed7a9a6d434a3
+
+
+1. **handleSlip** Modify a user's collateral balance
+
+>function slip(bytes32 ilk, address usr, int256 wad)
+
+This function is executed e.g. by the join contract and modifies a user's collateral balance. It creates or modifies the following entity:
+
+1. Collateral: It loads or creates a collateral <function param arg1 "ilk"> for a certain user <function param arg2 "usr">
+
+  - The field amount is increased or decreased by adding <function param arg3 "wad"> (as wad)
+
+    gem[ilk][usr] = add(gem[ilk][usr], wad);
 
 
 1. **handleMove** Transfer Stablecoin
@@ -560,5 +572,46 @@ type SystemState @entity {
 
   " The latest transaction hash in which a system parameters was modified "
   transaction: Bytes!
+}
+```
+
+### 5. Collateral
+
+Provide information about the user's current collateral (gem)
+```graphql
+" Collateral tokens (Gem)"
+type Collateral @entity {
+  " Collateral tokens (Gem) : ${user.id}-${collateralType.id} "
+  id: ID!
+
+  " Collateral type "
+  type: CollateralType!
+
+  " Account that owns this Collateral "
+  owner: User!
+
+  " Amount of collateral "
+  amount: BigDecimal!
+
+  " Timestamp of the block in which this collateral was created [seconds] "
+  createdAt: BigInt
+
+  " Block number in which this collateral was created "
+  createdAtBlock: BigInt
+
+  " Transaction hash in which this collateral was created "
+  createdAtTransaction: Bytes
+
+  " Timestamp of the block in which this collateral was last modified [seconds] "
+  modifiedAt: BigInt
+
+  " Block number in which this collateral was last modified "
+  modifiedAtBlock: BigInt
+
+  " Transaction hash in which this collateral was last modified "
+  modifiedAtTransaction: Bytes
+
+  " UserCollateral action history "
+  logs: [CollateralLog!] @derivedFrom(field: "collateral")
 }
 ```

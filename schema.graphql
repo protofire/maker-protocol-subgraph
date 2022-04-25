@@ -16,17 +16,38 @@ type CollateralAuction @entity {
 
 " Collateral tokens (Gem)"
 type Collateral @entity {
-  " Collateral tokens (Gem) : ${user.id}-${collateralType.id}"
+  " Collateral tokens (Gem) : ${user.id}-${collateralType.id} "
   id: ID!
 
-  "Collateral type "
+  " Collateral type "
   type: CollateralType!
 
-  "Account that owns this Collateral"
+  " Account that owns this Collateral "
   owner: User!
 
-  "Amount of collateral"
+  " Amount of collateral "
   amount: BigDecimal!
+
+  " Timestamp of the block in which this collateral was created [seconds] "
+  createdAt: BigInt
+
+  " Block number in which this collateral was created "
+  createdAtBlock: BigInt
+
+  " Transaction hash in which this collateral was created "
+  createdAtTransaction: Bytes
+
+  " Timestamp of the block in which this collateral was last modified [seconds] "
+  modifiedAt: BigInt
+
+  " Block number in which this collateral was last modified "
+  modifiedAtBlock: BigInt
+
+  " Transaction hash in which this collateral was last modified "
+  modifiedAtTransaction: Bytes
+
+  " UserCollateral action history "
+  logs: [CollateralLog!] @derivedFrom(field: "collateral")
 }
 
 " Particular collateral type registered in the system (Ilk) "
@@ -190,6 +211,9 @@ type User @entity {
 
   " User's vaults "
   vaults: [Vault!] @derivedFrom(field: "owner")
+
+  " User's collaterals "
+  collaterals: [Collateral!] @derivedFrom(field: "owner")
 }
 
 " Contract used to execute transactions and sequences of transactions on behalf of a user "
@@ -414,6 +438,24 @@ type VaultTransferChangeLog implements VaultLog @entity {
   vault: Vault!
   previousOwner: User!
   nextOwner: User!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+interface CollateralLog {
+  id: ID!
+  collateral: Collateral!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type CollateralChangeLog implements CollateralLog @entity{
+  id: ID!
+  collateral: Collateral!
+  collateralBefore: BigDecimal!
+  collateralAfter: BigDecimal!
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!
