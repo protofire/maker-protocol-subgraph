@@ -514,7 +514,7 @@ type SystemState @entity {
 ### 5. Collateral
 
 Provide information about the user's current collateral (gem)
-```
+```graphql
 " Collateral tokens (Gem)"
 type Collateral @entity {
   " Collateral tokens (Gem) : ${user.id}-${collateralType.id} "
