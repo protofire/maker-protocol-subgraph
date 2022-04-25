@@ -110,6 +110,41 @@ This function modifies the following entities:
 2. SystemState:
   - the "collateralCount" is increased by 1
 
+
+4. **handleFrob:** Vault creation / modification
+
+> function frob(bytes32 i, address u, address v, address w, int dink, int dart)
+
+Modified entities:
+
+  - Vault
+    - "collateralType"
+    - "collateral"
+    - "debt"
+    - "handler"
+    - "owner"
+  - CollateralType
+    - "unmanagedVaultCount"
+    - "totalCollateral"
+    - "debtNormalized"
+    - "totalDebt"
+  - User
+    - "vaultCount"
+  - SystemState
+    - "unmanagedVaultCount"
+  - VaultCreationLog
+    - "vault"
+  - VaultCollateralChangeLog
+    - "vault"
+    - "collateralBefore"
+    - "collateralAfter"
+    - "collateralDiff"
+  - VaultDebtChangeLog
+    - "vault"
+    - "debtBefore"
+    - "debtAfter"
+    - "debtDiff"
+
 Liaison between the oracles and core contracts (spot)
 
 	address:
