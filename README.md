@@ -211,6 +211,21 @@ This function moves the DAI Stablecoin from address to another. It modifies or c
     dai[dst] = _add(dai[dst], rad);
 
 
+3. **handleFork** Split a Vault - binary approval or splitting/merging Vaults
+
+> function fork(bytes32 ilk, address src, address dst, int dink, int dart)
+
+This function modifies the following entities:
+
+  - Vault
+    - "collateral"
+    - "debt"
+  - VaultSplitChangeLog
+    - "src"
+    - "dst"
+    - "collateralToMove"
+    - "debtToMove"
+
 Liquidation Agent (cat) 
 TODO: remove, deprecated
 
