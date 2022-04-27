@@ -226,6 +226,21 @@ This function modifies the following entities:
     - "collateralToMove"
     - "debtToMove"
 
+5. **handleSuck** Mint unbacked stablecoin
+
+> function suck(address u, address v, uint rad)
+
+This functions modifies the following entities:
+
+    - User
+      - "dai"
+    - SystemDebt
+      - "amount"
+      - "owner"
+    - SystemStatus
+      - "totalDebt"
+      - "totalSystemDebt"
+    
 Liquidation Agent (cat) 
 TODO: remove, deprecated
 

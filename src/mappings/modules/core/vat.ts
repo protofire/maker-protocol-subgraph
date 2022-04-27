@@ -12,10 +12,11 @@ import {
   VaultSplitChangeLog,
   DaiMoveLog,
   CollateralChangeLog,
+  User,
+  SystemDebt,
 } from '../../../../generated/schema'
 
 import { collaterals, collateralTypes, users, system as systemModule, vaults, systemDebts } from '../../../entities'
-import { tests } from '../tests'
 
 // Register a new collateral type
 export function handleInit(event: LogNote): void {
@@ -100,7 +101,7 @@ export function handleSlip(event: LogNote): void {
   let wad = units.fromWad(bytes.toSignedInt(Bytes.fromUint8Array(event.params.arg3)))
 
   let collateralType = CollateralType.load(ilk)
-  if (collateralType == null){
+  if (collateralType == null) {
     return
   }
   let owner = users.getOrCreateUser(usr)
@@ -353,10 +354,33 @@ export function handleHeal(event: LogNote): void {
 
 // Mint unbacked stablecoin
 export function handleSuck(event: LogNote): void {
+  let userAddress1 = bytes.toAddress(event.params.arg1)
+  let userAddress2 = bytes.toAddress(event.params.arg2)
   let rad = units.fromRad(bytes.toUnsignedInt(event.params.arg3))
 
+  let user1 = User.load(userAddress1.toHexString())
+  let user2 = User.load(userAddress2.toHexString())
+
+  if (user1) {
+    let systemDebt = SystemDebt.load(userAddress1.toHexString())
+
+    if (!systemDebt) {
+      systemDebt = new SystemDebt(userAddress1.toHexString())
+    }
+
+    systemDebt.owner = user1.id
+    systemDebt.amount = rad
+    systemDebt.save()
+  }
+
+  if (user2) {
+    user2.dai = user2.dai.plus(rad)
+    user2.save()
+  }
+
   let system = systemModule.getSystemState(event)
-  //system.totalDebt = system.totalDebt.plus(rad)
+  system.totalDebt = system.totalDebt.plus(rad)
+  system.totalSystemDebt = system.totalSystemDebt.plus(rad)
   system.save()
 }
 
