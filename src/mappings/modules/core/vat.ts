@@ -387,18 +387,23 @@ export function handleSuck(event: LogNote): void {
 // Modify the debt multiplier, creating/destroying corresponding debt
 export function handleFold(event: LogNote): void {
   let ilk = event.params.arg1.toString()
-  let rate = units.fromRay(bytes.toSignedInt(event.params.arg3))
+  let userAddress = bytes.toAddress(event.params.arg2)
+  let rate = units.fromRad(bytes.toSignedInt(event.params.arg3))
 
   let collateral = CollateralType.load(ilk)
+  let user = User.load(userAddress.toHexString())
 
-  if (collateral != null) {
+  if (collateral && user) {
     let rad = collateral.totalDebt.times(rate)
 
     collateral.rate = collateral.rate.plus(rate)
     collateral.save()
 
+    user.dai = user.dai.plus(rad)
+    user.save()
+
     let system = systemModule.getSystemState(event)
-    //system.totalDebt = system.totalDebt.plus(rad)
+    system.totalDebt = system.totalDebt.plus(rad)
     system.save()
   }
 }
