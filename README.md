@@ -230,7 +230,7 @@ This function modifies the following entities:
 
 > function suck(address u, address v, uint rad)
 
-This functions modifies the following entities:
+This function modifies the following entities:
 
     - User
       - "dai"
@@ -253,6 +253,21 @@ This function modifies the following entities:
     - "dai"
   - SystemState
     - "totalDebt"
+
+6. **handleHeal** Create/destroy equal quantities of stablecoin and system debt
+
+> function heal(uint rad)
+
+This function modifies the following entities:
+
+    - User
+      - "dai"
+    - SystemDebt
+      - "amount"
+      - "owner"
+    - SystemStatus
+      - "totalDebt"
+      - "totalSystemDebt"
 
 Liquidation Agent (cat) 
 TODO: remove, deprecated
