@@ -4,7 +4,7 @@ import { bytes, integer, decimal } from '@protofire/subgraph-toolkit'
 import { DssCdpManager, NewCdp, LogNote } from '../../../../generated/CdpManager/DssCdpManager'
 import { CollateralType, Vault, VaultCreationLog, VaultTransferChangeLog } from '../../../../generated/schema'
 
-import { getOrCreateUser, getSystemState } from '../../../entities'
+import { users, system as systemModule } from '../../../entities'
 
 // Open a new CDP for a given user
 export function handleOpen(event: NewCdp): void {
@@ -15,7 +15,7 @@ export function handleOpen(event: NewCdp): void {
   let collateral = CollateralType.load(ilk.toString())
 
   if (collateral != null) {
-    let owner = getOrCreateUser(event.params.own)
+    let owner = users.getOrCreateUser(event.params.own)
     owner.vaultCount = owner.vaultCount.plus(integer.ONE)
     owner.save()
 
@@ -50,7 +50,7 @@ export function handleOpen(event: NewCdp): void {
   }
 
   // Update system state
-  let system = getSystemState(event)
+  let system = systemModule.getSystemState(event)
   system.vaultCount = system.vaultCount.plus(integer.ONE)
   system.save()
 }
@@ -67,8 +67,8 @@ export function handleGive(event: LogNote): void {
   let vault = Vault.load(urn.toHexString() + '-' + ilk.toString())
 
   if (vault != null) {
-    let previousOwner = getOrCreateUser(Address.fromString(vault.owner))
-    let nextOwner = getOrCreateUser(dst)
+    let previousOwner = users.getOrCreateUser(Address.fromString(vault.owner))
+    let nextOwner = users.getOrCreateUser(dst)
 
     // Transfer ownership
     vault.owner = nextOwner.id

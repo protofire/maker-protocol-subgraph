@@ -1,9 +1,10 @@
 import { dataSource } from '@graphprotocol/graph-ts'
 import { bytes, integer, units } from '@protofire/subgraph-toolkit'
+import { CollateralAuction, CollateralType } from '../../../../generated/schema'
 
 import { Kick, LogNote } from '../../../../generated/templates/Flip/Flipper'
 
-import { CollateralAuction, CollateralType, getSystemState } from '../../../entities'
+import { system as systemModule } from '../../../entities'
 
 export function handleFile(event: LogNote): void {
   let ilk = dataSource.context().getString('collateral')
@@ -40,7 +41,7 @@ export function handleKick(event: Kick): void {
     collateral.save()
 
     // Update system state
-    let state = getSystemState(event)
+    let state = systemModule.getSystemState(event)
     state.collateralAuctionCount = state.collateralAuctionCount.plus(integer.ONE)
     state.save()
   }

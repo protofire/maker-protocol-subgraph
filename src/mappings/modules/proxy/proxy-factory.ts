@@ -3,7 +3,7 @@ import { integer } from '@protofire/subgraph-toolkit'
 import { Created } from '../../../../generated/ProxyFactory/DSProxyFactory'
 import { UserProxy } from '../../../../generated/schema'
 
-import { users, getSystemState } from '../../../entities'
+import { users, system as systemModule } from '../../../entities'
 
 export function handleCreated(event: Created): void {
   let user = users.getOrCreateUser(event.params.owner)
@@ -18,7 +18,7 @@ export function handleCreated(event: Created): void {
   proxy.save()
 
   // Update system state
-  let system = getSystemState(event)
+  let system = systemModule.getSystemState(event)
   system.userProxyCount = system.userProxyCount.plus(integer.ONE)
   system.save()
 }
