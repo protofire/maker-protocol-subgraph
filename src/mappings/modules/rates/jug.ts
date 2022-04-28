@@ -4,12 +4,12 @@ import { bytes, decimal, units } from '@protofire/subgraph-toolkit'
 import { LogNote } from '../../../../generated/Jug/Jug'
 import { CollateralType } from '../../../../generated/schema'
 
-import { getSystemState } from '../../../entities'
+import { system as systemModule } from '../../../entities'
 
 // Start stability fee collection for a particular collateral type
 export function handleInit(event: LogNote): void {
   let ilk = event.params.arg1.toString()
-  let system = getSystemState(event)
+  let system = systemModule.getSystemState(event)
   let collateral = CollateralType.load(ilk)
 
   if (collateral) {
@@ -22,7 +22,7 @@ export function handleInit(event: LogNote): void {
 
 export function handleFile(event: LogNote): void {
   let signature = event.params.sig.toHexString()
-  let system = getSystemState(event)
+  let system = systemModule.getSystemState(event)
 
   if (signature == '0x1a0b287e') {
     let ilk = event.params.arg1.toString()

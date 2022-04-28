@@ -4,7 +4,7 @@ import { bytes, units } from '@protofire/subgraph-toolkit'
 import { LogNote, Poke } from '../../../../generated/Spot/Spotter'
 import { CollateralPrice, CollateralType } from '../../../../generated/schema'
 
-import { getSystemState } from '../../../entities'
+import { system } from '../../../entities'
 
 export function handleFile(event: LogNote): void {
   let ilk = event.params.arg1.toString()
@@ -23,7 +23,7 @@ export function handleFile(event: LogNote): void {
 
       collateral.save()
 
-      let state = getSystemState(event)
+      let state = system.getSystemState(event)
       state.save()
     }
   }
