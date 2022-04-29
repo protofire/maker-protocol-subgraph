@@ -139,7 +139,7 @@ export function handleFlux(event: LogNote): void {
 export function handleMove(event: LogNote): void {
   let srcAddress = bytes.toAddress(event.params.arg1)
   let dstAddress = bytes.toAddress(event.params.arg2)
-  let amount = units.fromWad(bytes.toSignedInt(Bytes.fromUint8Array(event.params.arg3)))
+  let amount = units.fromRad(bytes.toUnsignedInt(event.params.arg3))
 
   let srcUser = users.getOrCreateUser(srcAddress)
   let dstUser = users.getOrCreateUser(dstAddress)
