@@ -1,9 +1,9 @@
 import { Bytes, BigInt, BigDecimal } from "@graphprotocol/graph-ts";
 import { test, assert } from "matchstick-as";
-import { CollateralType, Vault } from "../../../../generated/schema";
-import { LogNote } from "../../../../generated/Vat/Vat";
-import { handleFork } from "../../../../src/mappings/modules/core/vat";
-import { tests } from "../../../../src/mappings/modules/tests";
+import { CollateralType, Vault } from "../../../../../generated/schema";
+import { LogNote } from "../../../../../generated/Vat/Vat";
+import { handleFork } from "../../../../../src/mappings/modules/core/vat";
+import { tests } from "../../../../../src/mappings/modules/tests";
 
 function createEvent(
   signature: string,
