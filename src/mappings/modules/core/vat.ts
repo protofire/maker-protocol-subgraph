@@ -14,6 +14,7 @@ import {
   CollateralChangeLog,
   User,
   SystemDebt,
+  SystemState,
 } from '../../../../generated/schema'
 
 import { collaterals, collateralTypes, users, system as systemModule, vaults, systemDebts } from '../../../entities'
@@ -347,9 +348,29 @@ export function handleGrab(event: LogNote): void {
 export function handleHeal(event: LogNote): void {
   let rad = units.fromRad(bytes.toUnsignedInt(event.params.arg1))
 
-  let system = systemModule.getSystemState(event)
-  //system.totalDebt = system.totalDebt.minus(rad)
-  system.save()
+  let user = User.load(event.address.toHexString())
+
+  if (user) {
+    user.dai = user.dai.minus(rad)
+    user.save()
+
+    let systemDebt = SystemDebt.load(event.address.toHexString())
+
+    if (!systemDebt) {
+      systemDebt = new SystemDebt(event.address.toHexString())
+    }
+    systemDebt.owner = user.id
+    systemDebt.amount = systemDebt.amount.minus(rad)
+    systemDebt.save()
+  }
+
+  let system = SystemState.load("current")
+
+  if (system) {
+    system.totalDebt = system.totalDebt.minus(rad)
+    system.totalSystemDebt = system.totalSystemDebt.minus(rad)
+    system.save()
+  }
 }
 
 // Mint unbacked stablecoin
