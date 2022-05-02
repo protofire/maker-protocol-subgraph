@@ -13,7 +13,7 @@ test(
     let signature = "0xbb35783b"
     let src = "0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b"
     let dst = "0x9759a6ac90977b93b58547b4a71c78317f391a28"
-    let amount = "3687669050000000000000000"
+    let amount = "100500000000000000000000000000000000000000000000"
 
     let sig = tests.helpers.params.getBytes("sig", Bytes.fromHexString(signature))
     let arg1 = tests.helpers.params.getBytes("arg1", Address.fromString(src))
@@ -29,8 +29,8 @@ test(
 
     handleMove(event)
 
-    assert.fieldEquals("User", src, "dai", "-3687669.05")
-    assert.fieldEquals("User", dst, "dai", "3687669.05")
+    assert.fieldEquals("User", src, "dai", "-100.5")
+    assert.fieldEquals("User", dst, "dai", "100.5")
 
     clearStore()
   }
