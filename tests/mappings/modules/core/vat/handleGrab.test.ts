@@ -1,8 +1,9 @@
 import { Bytes } from "@graphprotocol/graph-ts";
-import { LogNote } from "../../../../generated/Vat/Vat";
-import { tests } from "../../../../src/mappings/modules/tests";
+import { test } from "matchstick-as";
+import { LogNote } from "../../../../../generated/Vat/Vat";
+import { tests } from "../../../../../src/mappings/modules/tests";
 
-export function handleGrabTest(): void {
+test("Vat # handleGrab : Liquidates a Vault", () => {
 	let sig = tests.helpers.params.getBytes("sig", Bytes.fromUTF8("sig"));
 	let expectedIlk = tests.helpers.params.getBytes("arg1", Bytes.fromUTF8("ilk_id"));
 	let arg2 = tests.helpers.params.getBytes("arg2", Bytes.fromUTF8("arg2"));
@@ -12,5 +13,4 @@ export function handleGrabTest(): void {
 	let event = changetype<LogNote>(tests.helpers.events.getNewEvent([
 
 	]))
-
-}
+})

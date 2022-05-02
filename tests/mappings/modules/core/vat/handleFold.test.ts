@@ -1,9 +1,9 @@
 import { BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { test, assert } from "matchstick-as";
-import { CollateralType, User } from "../../../../generated/schema";
-import { LogNote } from "../../../../generated/Vat/Vat";
-import { handleFold } from "../../../../src/mappings/modules/core/vat";
-import { tests } from "../../../../src/mappings/modules/tests";
+import { CollateralType, User } from "../../../../../generated/schema";
+import { LogNote } from "../../../../../generated/Vat/Vat";
+import { handleFold } from "../../../../../src/mappings/modules/core/vat";
+import { tests } from "../../../../../src/mappings/modules/tests";
 
 function createEvent(ilk: string, u: string, rate: string): LogNote {
   let sig = tests.helpers.params.getBytes("sig", Bytes.fromHexString("0xa1a2a3a4"));
