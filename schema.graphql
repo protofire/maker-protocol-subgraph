@@ -455,12 +455,17 @@ type CollateralChangeLog implements CollateralLog @entity{
   id: ID!
   collateral: Collateral!
 <<<<<<< HEAD
+<<<<<<< HEAD
   collateralBefore: BigDecimal!
   collateralAfter: BigDecimal!
 =======
   collateralBefore: BigInt!
   collateralAfter: BigInt!
 >>>>>>> ce366b5 (merge UserCollateral with Collateral)
+=======
+  collateralBefore: BigDecimal!
+  collateralAfter: BigDecimal!
+>>>>>>> 79b61fd (implement handleSlip + test)
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!
