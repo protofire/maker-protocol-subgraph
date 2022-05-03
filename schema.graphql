@@ -461,6 +461,17 @@ type CollateralChangeLog implements CollateralLog @entity{
   transaction: Bytes!
 }
 
+type CollateralTransferLog implements CollateralLog @entity{
+  id: ID!
+  src: Bytes!
+  dst: Bytes!
+  amount: BigDecimal!
+  collateral: CollateralType!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
 type DaiMoveLog @entity {
   id: ID!
   src: Bytes!

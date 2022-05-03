@@ -268,6 +268,25 @@ This function modifies the following entities:
     - SystemStatus
       - "totalDebt"
       - "totalSystemDebt"
+      
+1. **handleFlux** Transfer Collateral between Users
+
+>function flux(bytes32 ilk, address src, address dst, uint256 wad)
+
+This function modifies the following entities:
+
+1. Collateral: It loads the Collateral with the helper function loadOrCreateCollateral, which takes the ilk <function param arg1 "ilk"> and the src <function param arg2 "src"> address, as params
+
+  - The field 'amount' is decreased by substracting the <function param data "wad"> from the amount field
+
+2. Collateral: It loads the Collateral with the helper function loadOrCreateCollateral, which takes the ilk <function param arg1 "ilk"> and the src <function param arg3 "dst"> address, as params
+
+  - The field 'amount' is increased by adding the <function param data "wad"> to the amount field
+
+3. CollateralTransferLog: It creates a new CollateralTransferLog and updates it's fields
+
+    > let log = new CollateralTransferLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-5')
+
 
 Liquidation Agent (cat) 
 TODO: remove, deprecated

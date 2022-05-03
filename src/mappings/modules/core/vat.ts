@@ -132,7 +132,38 @@ export function handleSlip(event: LogNote): void {
 
 // Transfer collateral between users
 export function handleFlux(event: LogNote): void {
-  // TODO: handleFlux
+  let ilk = event.params.arg1.toString()
+  let srcAddress = bytes.toAddress(event.params.arg2)
+  let dstAddress = bytes.toAddress(event.params.arg3)
+  let wad = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(100, 132)))
+
+  let Δwad = units.fromWad(wad)
+
+  let srcUser = users.getOrCreateUser(srcAddress)
+  let dstUser = users.getOrCreateUser(dstAddress)
+
+  let srcCollateral = collaterals.loadOrCreateCollateral(event, ilk, srcUser.id)
+  srcCollateral.amount = srcCollateral.amount.minus(Δwad)
+  srcCollateral.modifiedAt = event.block.timestamp
+  srcCollateral.modifiedAtBlock = event.block.number
+  srcCollateral.modifiedAtTransaction = event.transaction.hash
+  srcCollateral.save()
+
+  let dstCollateral = collaterals.loadOrCreateCollateral(event, ilk, dstUser.id)
+  dstCollateral.amount = dstCollateral.amount.plus(Δwad)
+  dstCollateral.modifiedAt = event.block.timestamp
+  dstCollateral.modifiedAtBlock = event.block.number
+  dstCollateral.modifiedAtTransaction = event.transaction.hash
+  dstCollateral.save()
+
+  let log = new CollateralTransferLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-5')
+  log.src = srcAddress
+  log.dst = dstAddress
+  log.amount = Δwad
+  log.collateral = ilk
+  log.block = event.block.number
+  log.timestamp = event.block.timestamp
+  log.transaction = event.transaction.hash 
 }
 
 // Transfer stablecoin between users
