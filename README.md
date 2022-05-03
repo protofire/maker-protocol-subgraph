@@ -268,6 +268,7 @@ This function modifies the following entities:
     - SystemStatus
       - "totalDebt"
       - "totalSystemDebt"
+      
 1. **handleFlux** Transfer Collateral between Users
 
 >function flux(bytes32 ilk, address src, address dst, uint256 wad)
