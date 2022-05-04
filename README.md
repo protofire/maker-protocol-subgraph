@@ -287,6 +287,14 @@ This function modifies the following entities:
 
     > let log = new CollateralTransferLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-5')
 
+7. **handleCage** Set the Vat liveness to false
+
+>function cage()
+
+This function modifies the fllowing entities:
+
+    -LiveChangeLog
+
 
 Liquidation Agent (cat) 
 TODO: remove, deprecated
