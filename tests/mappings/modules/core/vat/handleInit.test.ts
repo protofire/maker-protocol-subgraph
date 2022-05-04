@@ -4,6 +4,7 @@ import { test, clearStore } from "matchstick-as";
 import { LogNote } from "../../../../../generated/Vat/Vat";
 import { handleInit } from "../../../../../src/mappings/modules/core/vat";
 import { tests } from "../../../../../src/mappings/modules/tests";
+import { mockDebt } from "../../../../helpers/mockedFunctions"
 
 test(
   "Vat#handleInit creates initial CollateralType and updates SystemState",
@@ -22,16 +23,7 @@ test(
       data,
     ]));
 
-    let debtResult = BigInt.fromString("100").toI32()
-
-    tests.helpers.contractCalls.mockFunction(
-      Address.fromString("0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b"),
-      'debt',
-      'debt():(uint256)',
-      [],
-      [ethereum.Value.fromI32(debtResult)]
-    )
-
+    mockDebt()
     handleInit(event);
 
     let collateralTypeFields = new TypedMap<string, string>();
