@@ -4,6 +4,7 @@ import { CollateralType } from "../../../../../generated/schema";
 import { LogNote } from "../../../../../generated/Vat/Vat";
 import { handleFile } from "../../../../../src/mappings/modules/core/vat";
 import { tests } from "../../../../../src/mappings/modules/tests";
+import { mockDebt } from "../../../../helpers/mockedFunctions";
 
 
 function strRadToBytes(value: string): Bytes {
@@ -26,6 +27,7 @@ test(
       arg2,
     ]));
 
+    mockDebt()
     handleFile(event);
 
     assert.fieldEquals("SystemState", "current", "totalDebtCeiling", "100.5");

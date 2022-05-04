@@ -2,6 +2,7 @@ import { Bytes } from "@graphprotocol/graph-ts";
 import { test } from "matchstick-as";
 import { LogNote } from "../../../../../generated/Vat/Vat";
 import { tests } from "../../../../../src/mappings/modules/tests";
+import { mockDebt } from "../../../../helpers/mockedFunctions";
 
 test("Vat # handleGrab : Liquidates a Vault", () => {
 	let sig = tests.helpers.params.getBytes("sig", Bytes.fromUTF8("sig"));
@@ -13,4 +14,6 @@ test("Vat # handleGrab : Liquidates a Vault", () => {
 	let event = changetype<LogNote>(tests.helpers.events.getNewEvent([
 
 	]))
+
+	mockDebt()
 })
