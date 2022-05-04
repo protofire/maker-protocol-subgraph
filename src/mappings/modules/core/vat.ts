@@ -16,6 +16,7 @@ import {
   SystemDebt,
   SystemState,
   CollateralTransferLog,
+  LiveChangeLog
 } from '../../../../generated/schema'
 
 import { collaterals, collateralTypes, users, system as systemModule, vaults, systemDebts } from '../../../entities'
