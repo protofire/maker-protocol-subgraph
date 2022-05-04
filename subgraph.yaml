@@ -48,6 +48,11 @@ dataSources:
           topic0: "0x1a0b287e00000000000000000000000000000000000000000000000000000000"
           handler: handleFile
 
+        # function cage()
+        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0x6924500900000000000000000000000000000000000000000000000000000000"
+          handler: handleCage
+
         ### Fungibility ###
 
         # function slip(bytes32 ilk, address usr, int256 wad)

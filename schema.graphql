@@ -481,3 +481,11 @@ type DaiMoveLog @entity {
   timestamp: BigInt!
   transaction: Bytes!
 }
+
+type LiveChangeLog @entity {
+  id: ID!
+  contract: Bytes!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}

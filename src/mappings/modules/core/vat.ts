@@ -96,6 +96,17 @@ export function handleFile(event: LogNote): void {
   system.save()
 }
 
+// Change Liveness of Vat Contract
+export function handleCage(event: LogNote): void{
+  let log = new LiveChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
+  log.contract = event.address
+  log.block = event.block.number
+  log.timestamp = event.block.timestamp
+  log.transaction = event.transaction.hash
+
+  log.save()
+}
+
 // Modify a user's collateral balance
 export function handleSlip(event: LogNote): void {
   let ilk = event.params.arg1.toString()
