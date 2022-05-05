@@ -466,7 +466,9 @@ type CollateralTransferLog implements CollateralLog @entity{
   src: Bytes!
   dst: Bytes!
   amount: BigDecimal!
-  collateral: CollateralType!
+  collateral: Collateral!
+  srcCollateral: Collateral!
+  dstCollateral: Collateral!
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!
