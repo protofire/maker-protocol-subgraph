@@ -174,8 +174,7 @@ export function handleFlux(event: LogNote): void {
   srcLog.dst = dstAddress
   srcLog.amount = Δwad
   srcLog.collateral = srcCollateral.id
-  srcLog.srcCollateral = srcCollateral.id
-  srcLog.dstCollateral = dstCollateral.id
+  srcLog.direction = "OUT"
   srcLog.block = event.block.number
   srcLog.timestamp = event.block.timestamp
   srcLog.transaction = event.transaction.hash 
@@ -186,8 +185,7 @@ export function handleFlux(event: LogNote): void {
   dstLog.dst = dstAddress
   dstLog.amount = Δwad
   dstLog.collateral = dstCollateral.id
-  dstLog.srcCollateral = srcCollateral.id
-  dstLog.dstCollateral = dstCollateral.id
+  dstLog.direction = "IN"
   dstLog.block = event.block.number
   dstLog.timestamp = event.block.timestamp
   dstLog.transaction = event.transaction.hash 
