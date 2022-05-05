@@ -172,13 +172,6 @@ It is loaded from the ilk <function param arg1 "ilk"> and modified as follows:
 
       > else if (what == "dust") ilks[ilk].dust = data;
 
-
-Liaison between the oracles and core contracts (spot)
-
-	address:
-	0x65c79fcb50ca1594b025960e539ed7a9a6d434a3
-
-
 1. **handleSlip** Modify a user's collateral balance
 
 >function slip(bytes32 ilk, address usr, int256 wad)
@@ -303,6 +296,17 @@ TODO: remove, deprecated
 
 TODO: LIQUIDATION 2.0 DOG / CLIP / ABACUS
 
+#### Liaison between the oracles and core contracts (spot)
+
+  address: 0x65c79fcb50ca1594b025960e539ed7a9a6d434a3
+
+1. **handleCage** Set the Spot liveness to false
+
+>function cage()
+
+This function modifies the fllowing entities:
+
+    -LiveChangeLog
 
 ### 2. System Stabilizer Module:
 
