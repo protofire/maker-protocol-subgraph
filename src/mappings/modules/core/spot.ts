@@ -49,7 +49,7 @@ export function handlePoke(event: Poke): void {
   }
 }
 
-// Change Liveness of Vat Contract
+// Change Liveness of Spot Contract
 export function handleCage(event: LogNote): void{
   let log = new LiveChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
   log.contract = event.address
