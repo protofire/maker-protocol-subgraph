@@ -9,7 +9,7 @@ import { system } from '../../../entities'
 export function handleFile(event: LogNote): void {
   let ilk = event.params.arg1.toString()
   let what = event.params.arg2.toString()
-  let data = bytes.toUnsignedInt(<Bytes>event.params.data.subarray(68, 100))
+  let data = bytes.toUnsignedInt(changetype<Bytes>(event.params.data.subarray(68, 100)))
 
   if (what == 'mat') {
     let collateral = CollateralType.load(ilk)
