@@ -130,9 +130,15 @@ dataSources:
       eventHandlers:
         ### Administration ###
 
-        # TODO: file(bytes32 ilk, bytes32 what, address pip_)
+        # file(bytes32 ilk, bytes32 what, address pip_)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0xebecb39d00000000000000000000000000000000000000000000000000000000"
+          handler: handleFile
 
-        # TODO: file(bytes32 what, uint256 data)
+        # file(bytes32 what, uint256 data)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
+          handler: handleFile
 
         # file(bytes32 ilk, bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
