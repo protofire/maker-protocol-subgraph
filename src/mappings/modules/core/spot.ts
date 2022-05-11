@@ -39,6 +39,9 @@ export function handleFile(event: LogNote): void {
 
       collateral.price = price.id
       collateral.save()
+
+      let state = system.getSystemState(event)
+      state.save()
     }
   }else if (what == 'par'){
     let log = new SpotParLog(event.transaction.hash.toHexString())
@@ -47,6 +50,9 @@ export function handleFile(event: LogNote): void {
     log.transaction = event.transaction.hash
     log.par = data
     log.save()
+
+    let state = system.getSystemState(event)
+    state.save()
   }
 }
 
