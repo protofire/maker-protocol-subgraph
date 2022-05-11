@@ -2,7 +2,7 @@ import { Bytes } from '@graphprotocol/graph-ts'
 import { bytes, units } from '@protofire/subgraph-toolkit'
 
 import { LogNote, Poke } from '../../../../generated/Spot/Spotter'
-import { CollateralPrice, CollateralType } from '../../../../generated/schema'
+import { CollateralPrice, CollateralType, SpotParLog } from '../../../../generated/schema'
 
 import { system } from '../../../entities'
 
@@ -26,6 +26,27 @@ export function handleFile(event: LogNote): void {
       let state = system.getSystemState(event)
       state.save()
     }
+  }else if (what == 'pip'){
+    let collateral = CollateralType.load(ilk)
+
+    if (collateral != null){
+      let price = new CollateralPrice(event.block.number.toString() + '-' + ilk)
+      price.block = event.block.number
+      price.timestamp = event.block.timestamp
+      price.collateral = collateral.id
+      price.value = units.fromWad(data)
+      price.save()
+
+      collateral.price = price.id
+      collateral.save()
+    }
+  }else if (what == 'par'){
+    let log = new SpotParLog(event.transaction.hash.toHexString())
+    log.block = event.block.number
+    log.timestamp = event.block.timestamp
+    log.transaction = event.transaction.hash
+    log.par = data
+    log.save()
   }
 }
 

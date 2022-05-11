@@ -481,3 +481,12 @@ type DaiMoveLog @entity {
   timestamp: BigInt!
   transaction: Bytes!
 }
+
+type SpotParLog @entity {
+  id: ID!
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+  " Value of DAI in the reference asset (e.g. $1 per DAI) "
+  par: BigInt!
+}
