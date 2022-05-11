@@ -16,6 +16,7 @@ import {
   SystemDebt,
   SystemState,
   CollateralTransferLog,
+  LiveChangeLog
 } from '../../../../generated/schema'
 
 import { collaterals, collateralTypes, users, system as systemModule, vaults, systemDebts } from '../../../entities'
@@ -96,6 +97,17 @@ export function handleFile(event: LogNote): void {
   system.save()
 }
 
+// Change Liveness of Vat Contract
+export function handleCage(event: LogNote): void{
+  let log = new LiveChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
+  log.contract = event.address
+  log.block = event.block.number
+  log.timestamp = event.block.timestamp
+  log.transaction = event.transaction.hash
+
+  log.save()
+}
+
 // Modify a user's collateral balance
 export function handleSlip(event: LogNote): void {
   let ilk = event.params.arg1.toString()
@@ -157,14 +169,27 @@ export function handleFlux(event: LogNote): void {
   dstCollateral.modifiedAtTransaction = event.transaction.hash
   dstCollateral.save()
 
-  let log = new CollateralTransferLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-5')
-  log.src = srcAddress
-  log.dst = dstAddress
-  log.amount = Δwad
-  log.collateral = ilk
-  log.block = event.block.number
-  log.timestamp = event.block.timestamp
-  log.transaction = event.transaction.hash 
+  let srcLog = new CollateralTransferLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-5.0')
+  srcLog.src = srcAddress
+  srcLog.dst = dstAddress
+  srcLog.amount = Δwad
+  srcLog.collateral = srcCollateral.id
+  srcLog.direction = "OUT"
+  srcLog.block = event.block.number
+  srcLog.timestamp = event.block.timestamp
+  srcLog.transaction = event.transaction.hash 
+  srcLog.save()
+
+  let dstLog = new CollateralTransferLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-5.1')
+  dstLog.src = srcAddress
+  dstLog.dst = dstAddress
+  dstLog.amount = Δwad
+  dstLog.collateral = dstCollateral.id
+  dstLog.direction = "IN"
+  dstLog.block = event.block.number
+  dstLog.timestamp = event.block.timestamp
+  dstLog.transaction = event.transaction.hash 
+  dstLog.save()
 }
 
 // Transfer stablecoin between users

@@ -461,12 +461,18 @@ type CollateralChangeLog implements CollateralLog @entity{
   transaction: Bytes!
 }
 
+enum Direction {
+  IN 
+  OUT
+}
+
 type CollateralTransferLog implements CollateralLog @entity{
   id: ID!
   src: Bytes!
   dst: Bytes!
   amount: BigDecimal!
-  collateral: CollateralType!
+  collateral: Collateral!
+  direction: Direction!
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!
@@ -489,4 +495,12 @@ type SpotParLog @entity {
   transaction: Bytes!
   " Value of DAI in the reference asset (e.g. $1 per DAI) "
   par: BigInt!
+ }
+
+type LiveChangeLog @entity {
+  id: ID!
+  contract: Bytes!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
 }
