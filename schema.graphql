@@ -504,3 +504,13 @@ type LiveChangeLog @entity {
   timestamp: BigInt!
   transaction: Bytes!
 }
+
+type CollateralPriceUpdateLog implements CollateralLog @entity {
+  id: ID!
+  collateral: Collateral!
+  newValue: BigDecimal!
+  newSpotPrice: BigDecimal!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
