@@ -2,30 +2,57 @@ import { Bytes } from '@graphprotocol/graph-ts'
 import { bytes, units } from '@protofire/subgraph-toolkit'
 
 import { LogNote, Poke } from '../../../../generated/Spot/Spotter'
-import { CollateralPrice, CollateralType } from '../../../../generated/schema'
+import { CollateralPrice, CollateralType, SpotParLog } from '../../../../generated/schema'
 
 import { system } from '../../../entities'
 
 export function handleFile(event: LogNote): void {
   let ilk = event.params.arg1.toString()
   let what = event.params.arg2.toString()
-  let data = bytes.toUnsignedInt(<Bytes>event.params.data.subarray(68, 100))
+  let data = bytes.toUnsignedInt(changetype<Bytes>(event.params.data.subarray(68, 100)))
 
   if (what == 'mat') {
-    let collateral = CollateralType.load(ilk)
+    let collateralType = CollateralType.load(ilk)
 
-    if (collateral != null) {
-      collateral.liquidationRatio = units.fromRay(data)
+    if (collateralType != null) {
+      collateralType.liquidationRatio = units.fromRay(data)
 
-      collateral.modifiedAt = event.block.timestamp
-      collateral.modifiedAtBlock = event.block.number
-      collateral.modifiedAtTransaction = event.transaction.hash
+      collateralType.modifiedAt = event.block.timestamp
+      collateralType.modifiedAtBlock = event.block.number
+      collateralType.modifiedAtTransaction = event.transaction.hash
 
-      collateral.save()
+      collateralType.save()
 
       let state = system.getSystemState(event)
       state.save()
     }
+  }else if (what == 'pip'){
+    let collateralType = CollateralType.load(ilk)
+
+    if (collateralType != null){
+      let price = new CollateralPrice(event.block.number.toString() + '-' + ilk)
+      price.block = event.block.number
+      price.timestamp = event.block.timestamp
+      price.collateral = collateralType.id
+      price.value = units.fromWad(data)
+      price.save()
+
+      collateralType.price = price.id
+      collateralType.save()
+
+      let state = system.getSystemState(event)
+      state.save()
+    }
+  }else if (what == 'par'){
+    let log = new SpotParLog(event.transaction.hash.toHexString())
+    log.block = event.block.number
+    log.timestamp = event.block.timestamp
+    log.transaction = event.transaction.hash
+    log.par = data
+    log.save()
+
+    let state = system.getSystemState(event)
+    state.save()
   }
 }
 
