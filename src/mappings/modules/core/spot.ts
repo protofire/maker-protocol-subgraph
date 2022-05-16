@@ -12,33 +12,33 @@ export function handleFile(event: LogNote): void {
   let data = bytes.toUnsignedInt(changetype<Bytes>(event.params.data.subarray(68, 100)))
 
   if (what == 'mat') {
-    let collateral = CollateralType.load(ilk)
+    let collateralType = CollateralType.load(ilk)
 
-    if (collateral != null) {
-      collateral.liquidationRatio = units.fromRay(data)
+    if (collateralType != null) {
+      collateralType.liquidationRatio = units.fromRay(data)
 
-      collateral.modifiedAt = event.block.timestamp
-      collateral.modifiedAtBlock = event.block.number
-      collateral.modifiedAtTransaction = event.transaction.hash
+      collateralType.modifiedAt = event.block.timestamp
+      collateralType.modifiedAtBlock = event.block.number
+      collateralType.modifiedAtTransaction = event.transaction.hash
 
-      collateral.save()
+      collateralType.save()
 
       let state = system.getSystemState(event)
       state.save()
     }
   }else if (what == 'pip'){
-    let collateral = CollateralType.load(ilk)
+    let collateralType = CollateralType.load(ilk)
 
-    if (collateral != null){
+    if (collateralType != null){
       let price = new CollateralPrice(event.block.number.toString() + '-' + ilk)
       price.block = event.block.number
       price.timestamp = event.block.timestamp
-      price.collateral = collateral.id
+      price.collateral = collateralType.id
       price.value = units.fromWad(data)
       price.save()
 
-      collateral.price = price.id
-      collateral.save()
+      collateralType.price = price.id
+      collateralType.save()
 
       let state = system.getSystemState(event)
       state.save()
