@@ -4,6 +4,7 @@ import { CollateralType, User } from "../../../../../generated/schema";
 import { LogNote } from "../../../../../generated/Vat/Vat";
 import { handleFold } from "../../../../../src/mappings/modules/core/vat";
 import { tests } from "../../../../../src/mappings/modules/tests";
+import { mockDebt } from "../../../../helpers/mockedFunctions";
 
 function createEvent(ilk: string, u: string, rate: string): LogNote {
   let sig = tests.helpers.params.getBytes("sig", Bytes.fromHexString("0xa1a2a3a4"));
@@ -45,6 +46,7 @@ test("Vat#handleFold",
       rate,
     )
 
+    mockDebt()
     handleFold(event)
 
     assert.fieldEquals("CollateralType", collateralTypeId, "rate", "0.6");

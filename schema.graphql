@@ -488,9 +488,28 @@ type DaiMoveLog @entity {
   transaction: Bytes!
 }
 
+type SpotParLog @entity {
+  id: ID!
+  timestamp: BigInt!
+  block: BigInt!
+  transaction: Bytes!
+  " Value of DAI in the reference asset (e.g. $1 per DAI) "
+  par: BigInt!
+ }
+
 type LiveChangeLog @entity {
   id: ID!
   contract: Bytes!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type CollateralPriceUpdateLog implements CollateralLog @entity {
+  id: ID!
+  collateral: Collateral!
+  newValue: BigDecimal!
+  newSpotPrice: BigDecimal!
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!

@@ -288,6 +288,23 @@ This function modifies the fllowing entities:
 
     -LiveChangeLog
 
+####Liaison between the oracles and core contracts (spot)
+
+	address:
+	0x65c79fcb50ca1594b025960e539ed7a9a6d434a3
+
+1. **handlePoke** Update the price of a collateral (ilk)
+
+>function poke(bytes32 ilk)
+
+This function modifies the following entities:
+
+1. Collateral: The function checks if a given collateral is already created. If it is, it updates the CollateralPrice field on this collateral
+
+2. CollateralPrice: It creates a new CollateralPrice entity for the given Collateral
+
+3. CollateralPriceUpdateLog: It creates a new CollateralPriceUpdateLog
+
 
 Liquidation Agent (cat) 
 TODO: remove, deprecated
