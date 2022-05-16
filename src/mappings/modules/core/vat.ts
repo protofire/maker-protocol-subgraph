@@ -98,7 +98,7 @@ export function handleFile(event: LogNote): void {
 }
 
 // Change Liveness of Vat Contract
-export function handleCage(event: LogNote): void{
+export function handleCage(event: LogNote): void {
   let log = new LiveChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
   log.contract = event.address
   log.block = event.block.number
@@ -177,7 +177,7 @@ export function handleFlux(event: LogNote): void {
   srcLog.direction = "OUT"
   srcLog.block = event.block.number
   srcLog.timestamp = event.block.timestamp
-  srcLog.transaction = event.transaction.hash 
+  srcLog.transaction = event.transaction.hash
   srcLog.save()
 
   let dstLog = new CollateralTransferLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-5.1')
@@ -188,7 +188,7 @@ export function handleFlux(event: LogNote): void {
   dstLog.direction = "IN"
   dstLog.block = event.block.number
   dstLog.timestamp = event.block.timestamp
-  dstLog.transaction = event.transaction.hash 
+  dstLog.transaction = event.transaction.hash
   dstLog.save()
 }
 
@@ -358,15 +358,15 @@ export function handleFork(event: LogNote): void {
 
 // Liquidate a Vault
 export function handleGrab(event: LogNote): void {
-  let ilkIndex = bytes.toSignedInt(event.params.arg1)
+  let ilkIndex = event.params.arg1.toString()
   let urnAddress = bytes.toAddress(event.params.arg2)
   let liquidatorAddress = bytes.toAddress(event.params.arg3) //  dog's milk.clip
-  let vowAddress = bytes.toAddress(<Bytes>event.params.data.subarray(100, 132))
-  let dink = bytes.toSignedInt(<Bytes>event.params.data.subarray(132, 164)) // dink: amount of collateral to exchange.
-  let collateralAmount = units.fromWad(dink)
-  let dart = bytes.toSignedInt(<Bytes>event.params.data.subarray(164, 196))
-  let debtAmount = units.fromWad(dart)
+  let vowAddress = bytes.toAddress(Bytes.fromUint8Array(event.params.data.subarray(100, 132)))
 
+  let dink = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(132, 164))) // dink: amount of collateral to exchange.
+  let collateralAmount = units.fromWad(dink)
+  let dart = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(164, 196)))
+  let debtAmount = units.fromWad(dart)
 
   let user = users.getOrCreateUser(urnAddress)
   user.save()
@@ -374,17 +374,18 @@ export function handleGrab(event: LogNote): void {
   let liquidator = users.getOrCreateUser(liquidatorAddress)
   liquidator.save()
 
-  let collateralType = collateralTypes.loadOrCreateCollateralType(ilkIndex.toHexString())
+  let collateralType = collateralTypes.loadOrCreateCollateralType(ilkIndex.toString())
   collateralType.debtNormalized = collateralType.debtNormalized.plus(debtAmount)
-  let totalDebt = collateralType.debtNormalized.times(collateralType.rate)
+
+  let totalDebt = debtAmount.times(collateralType.rate)
+
   collateralType.totalDebt = totalDebt
   collateralType.save()
 
   let vault = vaults.loadOrCreateVault(urnAddress, collateralType.id, user.id)
   vault.collateral = vault.collateral.plus(collateralAmount) // dink its a negative number
-  vault.collateral = vault.debt.plus(debtAmount) // dart its a negative number
+  vault.debt = vault.debt.plus(debtAmount) // dart its a negative number
   vault.save()
-
 
   let collateral = collaterals.loadOrCreateCollateral(event, collateralType.id, liquidator.id)
   collateral.amount = collateral.amount.minus(collateralAmount) // adds since dink is negative
@@ -392,13 +393,13 @@ export function handleGrab(event: LogNote): void {
 
   let sin = systemDebts.loadOrCreateSystemDebt(vowAddress.toHexString())
   sin.amount = sin.amount.minus(totalDebt) // adds since totalDebt is negative
+  sin.save()
 
   let systemState = systemModule.getSystemState(event)
   systemState.totalSystemDebt = systemState.totalSystemDebt.minus(totalDebt) // adds since totalDebt is negative
   systemState.save()
 
   // FIXME Indexing : emit Bark(ilk, urn, dink, dart, due, milk.clip, id) will make this handler unnecesary
-
 }
 
 // Create/destroy equal quantities of stablecoin and system debt
