@@ -342,6 +342,14 @@ Balance Sheet (vow)
 	address: 0xa950524441892a31ebddf91d3ceefa04bf454466
 	TODO: heal
 
+1. **handleCage** Set the Vow liveness to false 
+
+>function cage()
+
+This function modifies the fllowing entities:
+
+    -LiveChangeLog
+
 ### 3. Rates Module:
 
 Jug - Accumulation of Stability Fees for collateral types
