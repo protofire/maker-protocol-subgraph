@@ -1,7 +1,7 @@
 import { Bytes, Address } from "@graphprotocol/graph-ts";
 import { test, clearStore, assert } from "matchstick-as";
-import { LogNote } from "../../../../../generated/Vat/Vat";
-import { handleCage } from "../../../../../src/mappings/modules/core/vat";
+import { LogNote } from "../../../../../generated/Vow/Vow";
+import { handleCage } from "../../../../../src/mappings/modules/system-stabilizer/vow";
 import { tests } from "../../../../../src/mappings/modules/tests";
 
 test(
