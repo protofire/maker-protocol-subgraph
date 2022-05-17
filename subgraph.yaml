@@ -155,6 +155,11 @@ dataSources:
         # event Poke(bytes32 ilk, bytes32 val, uint256 spot)
         - event: Poke(bytes32,bytes32,uint256)
           handler: handlePoke
+        
+        # function cage()
+        - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0x6924500900000000000000000000000000000000000000000000000000000000"
+          handler: handleCage
 
   #  Liquidation Agent
   - name: Cat

@@ -3,7 +3,7 @@ import { bytes, units } from '@protofire/subgraph-toolkit'
 
 import { LogNote, Poke } from '../../../../generated/Spot/Spotter'
 
-import { CollateralPrice, CollateralType, SpotParLog, CollateralPriceUpdateLog } from '../../../../generated/schema'
+import { CollateralPrice, CollateralType, SpotParLog, CollateralPriceUpdateLog, LiveChangeLog } from '../../../../generated/schema'
 
 import { system } from '../../../entities'
 
@@ -89,3 +89,15 @@ export function handlePoke(event: Poke): void {
     log.save()
   }
 }
+
+// Change Liveness of Spot Contract
+export function handleCage(event: LogNote): void{
+  let log = new LiveChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
+  log.contract = event.address
+  log.block = event.block.number
+  log.timestamp = event.block.timestamp
+  log.transaction = event.transaction.hash
+
+  log.save()
+}
+
