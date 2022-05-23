@@ -294,6 +294,13 @@ dataSources:
           topic0: "0x6924500900000000000000000000000000000000000000000000000000000000"
           handler: handleCage
 
+        ### Push to debt-queue ###
+
+        # function fess(uint tab)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0x697efb7800000000000000000000000000000000000000000000000000000000"
+          handler: handleFess
+
   #
   # Rates Module
   #
