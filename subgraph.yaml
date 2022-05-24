@@ -294,6 +294,13 @@ dataSources:
           topic0: "0x6924500900000000000000000000000000000000000000000000000000000000"
           handler: handleCage
 
+        ### Pop from debt-queue
+
+        # function flog(uint era)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0x889bcf4400000000000000000000000000000000000000000000000000000000"
+          handler: handleFlog
+
   #
   # Rates Module
   #
