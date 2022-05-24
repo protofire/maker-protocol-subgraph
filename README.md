@@ -320,7 +320,7 @@ This function modifies the fllowing entities:
 
 > function fess(uint tab)
 
-This function modidies the following entities:
+This function modifies the following entities:
 
   1. SystemState: It adds the parameter tab to the systemDebtQueue attribute
 
