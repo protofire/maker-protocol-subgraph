@@ -248,6 +248,8 @@ type SystemState @entity {
 
   systemDebt: [SystemDebt!]  # TODO relate sins with system state 
 
+  systemDebtInQueue: BigDecimal!
+
   #
   # About number of entities registered system-wide
   #
@@ -510,6 +512,22 @@ type CollateralPriceUpdateLog implements CollateralLog @entity {
   collateral: Collateral!
   newValue: BigDecimal!
   newSpotPrice: BigDecimal!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type PushDebtQueueLog @entity {
+  id: ID!
+  amount: BigDecimal!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type PopDebtQueueLog @entity {
+  id: ID!
+  amount: BigDecimal!
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!

@@ -316,6 +316,16 @@ This function modifies the fllowing entities:
 
     - LiveChangeLog
 
+**handleFess:** Pushes debt to the debt-queue
+
+> function fess(uint tab)
+
+This function modifies the following entities:
+
+  1. SystemState: It adds the parameter tab to the systemDebtQueue attribute
+
+  2. PushDebtQueueLog: Creates a Log Event 
+
 ### Rates Module:
 
 Jug - Accumulation of Stability Fees for collateral types
