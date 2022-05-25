@@ -4,9 +4,9 @@ import { LogNote, Vow } from '../../../../generated/Vow/Vow'
 
 import { system as systemModule } from '../../../entities'
 
-import { LiveChangeLog, PopDebtQueueLog } from '../../../../generated/schema'
-
 import { ethereum, Address } from '@graphprotocol/graph-ts'
+
+import { LiveChangeLog, PushDebtQueueLog, PopDebtQueueLog } from '../../../../generated/schema'
 
 export function handleFile(event: LogNote): void {
   let what = event.params.arg1.toString()
@@ -40,6 +40,7 @@ export function handleCage(event: LogNote): void {
   log.save()
 }
 
+
 export function handleFlog(event: LogNote): void {
   let era = bytes.toUnsignedInt(event.params.arg1)
   let system = systemModule.getSystemState(event)
@@ -51,6 +52,21 @@ export function handleFlog(event: LogNote): void {
 
   let log = new PopDebtQueueLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-1')
   log.amount = units.fromRad(amount)
+  log.block = event.block.number
+  log.timestamp = event.block.timestamp
+  log.transaction = event.transaction.hash
+
+  log.save()
+  
+export function handleFess(event: LogNote): void {
+  let tab = bytes.toUnsignedInt(event.params.arg1)
+  let system = systemModule.getSystemState(event)
+  system.systemDebtInQueue = system.systemDebtInQueue.plus(units.fromRad(tab))
+
+  system.save()
+
+  let log = new PushDebtQueueLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-1')
+  log.amount = units.fromRad(tab)
   log.block = event.block.number
   log.timestamp = event.block.timestamp
   log.transaction = event.transaction.hash

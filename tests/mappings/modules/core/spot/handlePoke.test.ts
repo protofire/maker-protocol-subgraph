@@ -10,13 +10,6 @@ function createEvent(ilk: string, val: string, spot: i32):Poke{
     let ilkParam = tests.helpers.params.getBytes("ilk", Bytes.fromUTF8(ilk))
     let valParam = tests.helpers.params.getBytes("val", Bytes.fromHexString(val))
     let spotParam = tests.helpers.params.getBigInt("spot", BigInt.fromI32(spot))
-
-    let debug = Bytes.fromHexString(val)
-
-
-    log.debug(debug.toHexString(), [])
-    
-    //log.debug(valParam.value, [])
     
     let event = changetype<Poke>(tests.helpers.events.getNewEvent([
         ilkParam,
@@ -32,7 +25,6 @@ test("Spot#handlePoke updates CollateralPrice",
     
     let ilk = "c1"
     let val = "73cf23aaa1cd4a0b32"
-    log.debug(val.toString(), [])
     let spot = 300
 
     let newevent = createEvent(ilk, val, spot)
