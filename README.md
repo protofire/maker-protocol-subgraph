@@ -316,6 +316,16 @@ This function modifies the fllowing entities:
 
     - LiveChangeLog
 
+**handleFlog** Pops debt from the debt-queue
+
+> function fess(uint era)
+
+This function modifies the following entities: 
+
+  1. SystemState: The handleFlog function calls the Vow contract and gets the corrosponding sin value for era --> sin[era]. Than it substracts this value from the systemDebtQueue attribute
+
+  2. PopDebtQueueLog: Creates a Log Event 
+
 ### Rates Module:
 
 Jug - Accumulation of Stability Fees for collateral types

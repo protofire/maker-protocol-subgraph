@@ -298,7 +298,7 @@ dataSources:
 
         # function flog(uint era)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x889bcf4400000000000000000000000000000000000000000000000000000000"
+          topic0: "0xd7ee674b00000000000000000000000000000000000000000000000000000000"
           handler: handleFlog
 
   #
