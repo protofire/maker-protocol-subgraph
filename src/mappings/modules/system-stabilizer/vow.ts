@@ -1,4 +1,6 @@
+import { BigInt } from '@graphprotocol/graph-ts'
 import { bytes, units } from '@protofire/subgraph-toolkit'
+import { VowFlapLog } from '../../../../generated/schema'
 
 import { LogNote } from '../../../../generated/Vow/Vow'
 
@@ -52,4 +54,19 @@ export function handleFess(event: LogNote): void {
   log.transaction = event.transaction.hash
 
   log.save()
+}
+
+export function handleFlap(event: LogNote): void{
+  let system = systemModule.getSystemState(event);
+  let bump = system.surplusAuctionLotSize
+  system.save()
+
+  if (bump){
+    let log = new VowFlapLog(event.transaction.hash.toHexString())
+    log.block = event.block.number
+    log.transaction = event.transaction.hash
+    log.timestamp = event.block.timestamp
+    log.surplusAuctionLotSize = bump
+    log.save()
+  }
 }
