@@ -557,6 +557,7 @@ type PopDebtQueueLog @entity {
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!
+}
   
 type VowFlapLog @entity{
   id: ID!
