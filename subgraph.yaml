@@ -232,6 +232,10 @@ dataSources:
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
           handler: handleFile
+        
+        # event Kick (uint256 id, uint256 lot, uint256 bid)
+        - event: Kick(uint256,uint256,uint256)
+          handler: handleKick
 
   # Debt Auction
   - name: Flop
@@ -260,6 +264,9 @@ dataSources:
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
           handler: handleFile
+
+        - event: Kick(uint256,uint256,uint256,indexed address)
+          handler: handleKick
 
   # Balance Sheet
   - name: Vow

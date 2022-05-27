@@ -307,6 +307,9 @@ type SystemState @entity {
   " Minimum bid increase "
   debtAuctionMinimumBidIncrease: BigDecimal
 
+  " Vow#Ash the total amount of on-auction debt."
+  debtOnAuctionTotalAmount: BigDecimal
+
   #
   # Surplus auction parameters (flap)
   #
@@ -338,6 +341,29 @@ type SystemState @entity {
 
   " The latest transaction hash in which a system parameters was modified "
   transaction: Bytes!
+}
+
+type Auction @entity {
+  " incrementing number. Equals to the String of the Flapper#ID "
+  id: ID!
+
+  " Bid amount in DAI "
+  bidAmount: BigInt!
+
+  " auction quantity up for sale (lot) "
+  quantity: BigInt!
+
+  " the highest auction bidder (guy) "
+  highestBidder: Bytes!
+
+  " TS when the auction ends "
+  endTime: BigInt!
+
+  " TS CreatedAt (kick time) "
+  createdAt: BigInt!
+
+  " TS modifiedAt "
+  lastUpdate: BigInt!
 }
 
 " Maker Vault (formerly collateralized debt position or CDPs) "
@@ -537,5 +563,19 @@ type VowFlapLog @entity{
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!
+  " bump "
   surplusAuctionLotSize: BigDecimal!
+}
+
+type VowFlopLog @entity{
+  id: ID!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+  " address(this) "
+  sourceContract: Bytes!
+  " dump "
+  debtAuctionLotSize: BigDecimal!
+  " sump "
+  debtAuctionBidSize: BigDecimal!
 }

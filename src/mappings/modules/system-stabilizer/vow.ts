@@ -1,6 +1,6 @@
-import { BigInt } from '@graphprotocol/graph-ts'
+import { BigDecimal } from '@graphprotocol/graph-ts'
 import { bytes, units } from '@protofire/subgraph-toolkit'
-import { VowFlapLog } from '../../../../generated/schema'
+import { VowFlapLog, VowFlopLog } from '../../../../generated/schema'
 
 import { LogNote } from '../../../../generated/Vow/Vow'
 
@@ -59,7 +59,6 @@ export function handleFess(event: LogNote): void {
 export function handleFlap(event: LogNote): void{
   let system = systemModule.getSystemState(event);
   let bump = system.surplusAuctionLotSize
-  system.save()
 
   if (bump){
     let log = new VowFlapLog(event.transaction.hash.toHexString())
@@ -67,6 +66,29 @@ export function handleFlap(event: LogNote): void{
     log.transaction = event.transaction.hash
     log.timestamp = event.block.timestamp
     log.surplusAuctionLotSize = bump
+    log.save()
+  }
+}
+
+export function handleFlop(event: LogNote): void{
+  let system = systemModule.getSystemState(event);
+  let dump = system.debtAuctionInitialLotSize
+  let sump = system.debtAuctionBidSize
+  let ash = system.debtOnAuctionTotalAmount
+  if (!ash){
+    ash = BigDecimal.zero()
+  }
+  
+  if (dump && sump){
+    system.debtOnAuctionTotalAmount = ash.plus(sump)
+    system.save()
+
+    let log = new VowFlopLog(event.transaction.hash.toHexString())
+    log.block = event.block.number
+    log.transaction = event.transaction.hash
+    log.timestamp = event.block.timestamp
+    log.debtAuctionLotSize = dump
+    log.debtAuctionBidSize = sump
     log.save()
   }
 }
