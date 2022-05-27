@@ -307,10 +307,16 @@ dataSources:
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: "0x697efb7800000000000000000000000000000000000000000000000000000000"
           handler: handleFess
+
         # function flap()
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: "0x0e01198b00000000000000000000000000000000000000000000000000000000"
           handler: handleFlap
+        
+        # function flop()
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0xbbbb0d7b00000000000000000000000000000000000000000000000000000000"
+          handler: handleFlop
 
   #
   # Rates Module
