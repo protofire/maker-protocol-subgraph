@@ -14,8 +14,6 @@ export namespace Auctions {
         if (!auction){
             auction = new Auction(id)
             auction.createdAt = event.block.timestamp
-            // this might be wrong since the msg.sender does not always equal to transaction.from
-            auction.highestBidder = event.transaction.from
         }
         auction.lastUpdate = event.block.timestamp
         return auction
