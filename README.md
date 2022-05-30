@@ -298,6 +298,14 @@ Surplus Auction (flapper)
 	address: 0xdfe0fb1be2a52cdbf8fb962d5701d7fd0902db9f
 	TODO: handleKick
 
+**handleCage:** Set the Flapper liveness to false 
+
+> function cage(uint rad)
+
+This function modifies the fllowing entities:
+
+    - LiveChangeLog
+
 Debt Auction (flop)
 
 	address: 0x4d95a049d5b0b7d32058cd3f2163015747522e99

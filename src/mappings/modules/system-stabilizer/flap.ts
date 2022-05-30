@@ -3,6 +3,8 @@ import { Kick, LogNote } from '../../../../generated/Flap/Flapper'
 import { Auctions } from "../../../entities/auction"
 import { system as systemModule } from '../../../entities'
 
+import { LiveChangeLog } from '../../../../generated/schema'
+
 export function handleFile(event: LogNote): void {
   let what = event.params.arg1.toString()
   let data = bytes.toUnsignedInt(event.params.arg2)
@@ -18,6 +20,17 @@ export function handleFile(event: LogNote): void {
   }
 
   system.save()
+}
+
+// Change Liveness of Flapper Contract
+export function handleCage(event: LogNote): void {
+  let log = new LiveChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
+  log.contract = event.address
+  log.block = event.block.number
+  log.timestamp = event.block.timestamp
+  log.transaction = event.transaction.hash
+
+  log.save()
 }
 
 export function handleKick(event: Kick): void {
