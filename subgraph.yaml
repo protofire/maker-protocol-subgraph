@@ -232,6 +232,10 @@ dataSources:
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
           handler: handleFile
+        
+        # event Kick (uint256 id, uint256 lot, uint256 bid)
+        - event: Kick(uint256,uint256,uint256)
+          handler: handleKick
 
         # function cage(uint256 rad)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
@@ -266,6 +270,9 @@ dataSources:
           topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
           handler: handleFile
 
+        - event: Kick(uint256,uint256,uint256,indexed address)
+          handler: handleKick
+
   # Balance Sheet
   - name: Vow
     kind: ethereum/contract
@@ -299,12 +306,29 @@ dataSources:
           topic0: "0x6924500900000000000000000000000000000000000000000000000000000000"
           handler: handleCage
 
+        ### Pop from debt-queue
+
+        # function flog(uint era)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0xd7ee674b00000000000000000000000000000000000000000000000000000000"
+          handler: handleFlog
+
         ### Push to debt-queue ###
 
         # function fess(uint tab)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: "0x697efb7800000000000000000000000000000000000000000000000000000000"
           handler: handleFess
+
+        # function flap()
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0x0e01198b00000000000000000000000000000000000000000000000000000000"
+          handler: handleFlap
+        
+        # function flop()
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0xbbbb0d7b00000000000000000000000000000000000000000000000000000000"
+          handler: handleFlop
 
   #
   # Rates Module
