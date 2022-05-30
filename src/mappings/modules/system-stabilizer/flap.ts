@@ -1,7 +1,6 @@
 import { bytes, units } from '@protofire/subgraph-toolkit'
-
-import { LogNote } from '../../../../generated/Flap/Flapper'
-
+import { Kick, LogNote } from '../../../../generated/Flap/Flapper'
+import { Auctions } from "../../../entities/auction"
 import { system as systemModule } from '../../../entities'
 
 export function handleFile(event: LogNote): void {
@@ -19,4 +18,22 @@ export function handleFile(event: LogNote): void {
   }
 
   system.save()
+}
+
+export function handleKick(event: Kick): void {
+  let id = event.params.id
+  let lot = event.params.lot
+  let bid = event.params.bid
+
+  let auction = Auctions.loadOrCreateAuction(id.toString()+"-0", event)
+  auction.bidAmount = bid
+  auction.quantity = lot
+  // might be wrong since the smart contract refers to msg.sender
+  auction.highestBidder = event.transaction.from
+
+  let system = systemModule.getSystemState(event)
+  if (system.surplusAuctionBidDuration){
+    auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
+  }
+  auction.save()
 }
