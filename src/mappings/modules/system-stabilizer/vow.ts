@@ -1,10 +1,12 @@
 import { bytes, units } from '@protofire/subgraph-toolkit'
 
-import { LogNote } from '../../../../generated/Vow/Vow'
+import { LogNote, Vow } from '../../../../generated/Vow/Vow'
 
 import { system as systemModule } from '../../../entities'
 
-import { LiveChangeLog, PushDebtQueueLog } from '../../../../generated/schema'
+import { ethereum, Address } from '@graphprotocol/graph-ts'
+
+import { LiveChangeLog, PushDebtQueueLog, PopDebtQueueLog } from '../../../../generated/schema'
 
 export function handleFile(event: LogNote): void {
   let what = event.params.arg1.toString()
@@ -38,6 +40,24 @@ export function handleCage(event: LogNote): void {
   log.save()
 }
 
+
+export function handleFlog(event: LogNote): void {
+  let era = bytes.toUnsignedInt(event.params.arg1)
+  let system = systemModule.getSystemState(event)
+  let vowContract = Vow.bind(Address.fromString('0xa950524441892a31ebddf91d3ceefa04bf454466'));
+  let amount = vowContract.sin(era)
+  system.systemDebtInQueue = system.systemDebtInQueue.minus(units.fromRad(amount))
+  
+  system.save()
+
+  let log = new PopDebtQueueLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-1')
+  log.amount = units.fromRad(amount)
+  log.block = event.block.number
+  log.timestamp = event.block.timestamp
+  log.transaction = event.transaction.hash
+
+  log.save()
+  
 export function handleFess(event: LogNote): void {
   let tab = bytes.toUnsignedInt(event.params.arg1)
   let system = systemModule.getSystemState(event)
