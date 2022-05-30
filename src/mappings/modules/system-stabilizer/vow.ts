@@ -6,7 +6,7 @@ import { LogNote, Vow } from '../../../../generated/Vow/Vow'
 
 import { system as systemModule } from '../../../entities'
 
-import { ethereum, Address } from '@graphprotocol/graph-ts'
+import { Address } from '@graphprotocol/graph-ts'
 
 import { LiveChangeLog, PushDebtQueueLog, PopDebtQueueLog } from '../../../../generated/schema'
 
@@ -49,7 +49,7 @@ export function handleFlog(event: LogNote): void {
   let vowContract = Vow.bind(Address.fromString('0xa950524441892a31ebddf91d3ceefa04bf454466'));
   let amount = vowContract.sin(era)
   system.systemDebtInQueue = system.systemDebtInQueue.minus(units.fromRad(amount))
-  
+
   system.save()
 
   let log = new PopDebtQueueLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-1')
@@ -59,7 +59,8 @@ export function handleFlog(event: LogNote): void {
   log.transaction = event.transaction.hash
 
   log.save()
-  
+}
+
 export function handleFess(event: LogNote): void {
   let tab = bytes.toUnsignedInt(event.params.arg1)
   let system = systemModule.getSystemState(event)
@@ -76,11 +77,11 @@ export function handleFess(event: LogNote): void {
   log.save()
 }
 
-export function handleFlap(event: LogNote): void{
+export function handleFlap(event: LogNote): void {
   let system = systemModule.getSystemState(event);
   let bump = system.surplusAuctionLotSize
 
-  if (bump){
+  if (bump) {
     let log = new VowFlapLog(event.transaction.hash.toHexString())
     log.block = event.block.number
     log.transaction = event.transaction.hash
@@ -90,16 +91,16 @@ export function handleFlap(event: LogNote): void{
   }
 }
 
-export function handleFlop(event: LogNote): void{
+export function handleFlop(event: LogNote): void {
   let system = systemModule.getSystemState(event);
   let dump = system.debtAuctionInitialLotSize
   let sump = system.debtAuctionBidSize
   let ash = system.debtOnAuctionTotalAmount
-  if (!ash){
+  if (!ash) {
     ash = BigDecimal.zero()
   }
-  
-  if (dump && sump){
+
+  if (dump && sump) {
     system.debtOnAuctionTotalAmount = ash.plus(sump)
     system.save()
 
