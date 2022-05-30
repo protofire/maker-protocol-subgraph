@@ -233,6 +233,11 @@ dataSources:
           topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
           handler: handleFile
 
+        # function cage(uint256 rad)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0xa2f91af200000000000000000000000000000000000000000000000000000000"
+          handler: handleCage
+
   # Debt Auction
   - name: Flop
     kind: ethereum/contract
