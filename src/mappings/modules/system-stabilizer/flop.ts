@@ -3,6 +3,8 @@ import { Kick, LogNote } from '../../../../generated/Flop/Flopper'
 import { system as systemModule } from '../../../entities'
 import { Auctions } from '../../../entities/auction'
 
+import { LiveChangeLog } from '../../../../generated/schema'
+
 export function handleFile(event: LogNote): void {
   let what = event.params.arg1.toString()
   let data = bytes.toUnsignedInt(event.params.arg2)
@@ -22,19 +24,30 @@ export function handleFile(event: LogNote): void {
   system.save()
 }
 
-export function handleKick(event: Kick): void{
+// Change Liveness of Flapper Contract
+export function handleCage(event: LogNote): void {
+  let log = new LiveChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
+  log.contract = event.address
+  log.block = event.block.number
+  log.timestamp = event.block.timestamp
+  log.transaction = event.transaction.hash
+
+  log.save()
+}
+
+export function handleKick(event: Kick): void {
   let id = event.params.id
   let lot = event.params.lot
   let bid = event.params.bid
   let gal = event.params.gal
-  
-  let auction = Auctions.loadOrCreateAuction(id.toString()+"-1", event)
+
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
   auction.bidAmount = bid
   auction.quantity = lot
   auction.highestBidder = gal
 
   let system = systemModule.getSystemState(event)
-  if (system.surplusAuctionBidDuration){
+  if (system.surplusAuctionBidDuration) {
     auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
   }
   auction.save()
