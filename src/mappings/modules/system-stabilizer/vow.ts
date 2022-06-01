@@ -1,13 +1,9 @@
 import { BigDecimal } from '@graphprotocol/graph-ts'
 import { bytes, units } from '@protofire/subgraph-toolkit'
-import { VowFlapLog, VowFlopLog } from '../../../../generated/schema'
-
+import { SystemState, VowFlapLog, VowFlopLog } from '../../../../generated/schema'
 import { LogNote, Vow } from '../../../../generated/Vow/Vow'
-
 import { system as systemModule } from '../../../entities'
-
 import { Address } from '@graphprotocol/graph-ts'
-
 import { LiveChangeLog, PushDebtQueueLog, PopDebtQueueLog } from '../../../../generated/schema'
 
 export function handleFile(event: LogNote): void {
@@ -111,5 +107,17 @@ export function handleFlop(event: LogNote): void {
     log.debtAuctionLotSize = dump
     log.debtAuctionBidSize = sump
     log.save()
+  }
+}
+
+export function handleKiss(event: LogNote): void {
+  let rad = units.fromRad(bytes.toUnsignedInt(event.params.arg1))
+
+  let systemState = systemModule.getSystemState(event)
+  let debtOnAuctionTotalAmount = systemState.debtOnAuctionTotalAmount
+
+  if (debtOnAuctionTotalAmount) {
+    systemState.debtOnAuctionTotalAmount = debtOnAuctionTotalAmount.plus(rad)
+    systemState.save()
   }
 }

@@ -335,6 +335,11 @@ dataSources:
           topic0: "0xbbbb0d7b00000000000000000000000000000000000000000000000000000000"
           handler: handleFlop
 
+        # function kiss(uint rad)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0x2506855a000000000000000000000000000000000000000000000000000000000000000a"
+          handler: handlekiss
+
   #
   # Rates Module
   #
