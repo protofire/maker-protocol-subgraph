@@ -1,8 +1,11 @@
 import { Bytes, BigInt } from "@graphprotocol/graph-ts";
-import { test, clearStore } from "matchstick-as";
+import { decimal } from "@protofire/subgraph-toolkit";
+import { test, clearStore, assert } from "matchstick-as";
+import { SystemState } from "../../../../../generated/schema";
 import { LogNote } from "../../../../../generated/Vow/Vow";
 import { handleKiss } from "../../../../../src/mappings/modules/system-stabilizer/vow";
 import { tests } from "../../../../../src/mappings/modules/tests";
+import { mockDebt } from "../../../../helpers/mockedFunctions";
 
 function createEvent(rad: string): LogNote {
   let sig = tests.helpers.params.getBytes("sig", Bytes.fromHexString("0x1a0b287e"));
@@ -20,13 +23,21 @@ function createEvent(rad: string): LogNote {
 }
 
 test(
-  "Vow#handleKiss",
+  "Vow#handleKiss: Updates debtOnAuctionTotalAmount",
   () => {
     let rad = "100500000000000000000000000000000000000000000000"
 
+    let systemState = new SystemState("current")
+    systemState.debtOnAuctionTotalAmount = decimal.ZERO
+    systemState.save()
+
     let event = createEvent(rad)
 
+    mockDebt()
+
     handleKiss(event)
+
+    assert.fieldEquals("SystemState", "current", "debtOnAuctionTotalAmount", "100.5")
 
     clearStore()
   }
