@@ -44,15 +44,17 @@ export function handleTick(event: LogNote): void {
   let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
   let system = systemModule.getSystemState(event)
 
-  let lotSizeIncrease = system.debtAuctionLotSizeIncrease // pad
+  let lotSizeIncrease = system.debtAuctionLotSizeIncrease // pad (name in contract)
   let auctionBidDuration = system.debtAuctionBidDuration // ttl
   let quantity = auction.quantity //lot
 
-  // use ! or ask if its null to skip all the code below in that case.
-  auction.quantity = units.toRad(lotSizeIncrease!.times(quantity.toBigDecimal()).div(ONE))
-  auction.endTime = event.block.timestamp.plus(auctionBidDuration!)
+  if (lotSizeIncrease && auctionBidDuration) {
+    let mul = lotSizeIncrease.times(quantity.toBigDecimal())
+    auction.quantity = units.toWad(mul.div(ONE)) // WAD
+    auction.endTime = event.block.timestamp.plus(auctionBidDuration)
 
-  auction.save()
+    auction.save()
+  }
 }
 
 export function handleKick(event: Kick): void {
