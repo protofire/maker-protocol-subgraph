@@ -15,7 +15,7 @@ dataSources:
     network: mainnet
     source:
       abi: Vat
-      address: "0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b"
+      address: '0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'
       startBlock: 8928152
     mapping:
       kind: ethereum/events
@@ -35,79 +35,79 @@ dataSources:
 
         # function init(bytes32 ilk)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x3b66319500000000000000000000000000000000000000000000000000000000"
+          topic0: '0x3b66319500000000000000000000000000000000000000000000000000000000'
           handler: handleInit
 
         # function file(bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
+          topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
         # function file(bytes32 ilk, bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x1a0b287e00000000000000000000000000000000000000000000000000000000"
+          topic0: '0x1a0b287e00000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
         # function cage()
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x6924500900000000000000000000000000000000000000000000000000000000"
+          topic0: '0x6924500900000000000000000000000000000000000000000000000000000000'
           handler: handleCage
 
         ### Fungibility ###
 
         # function slip(bytes32 ilk, address usr, int256 wad)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x7cdd3fde00000000000000000000000000000000000000000000000000000000"
+          topic0: '0x7cdd3fde00000000000000000000000000000000000000000000000000000000'
           handler: handleSlip
 
         # function flux(bytes32 ilk, address src, address dst, uint256 rad)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x6111be2e00000000000000000000000000000000000000000000000000000000"
+          topic0: '0x6111be2e00000000000000000000000000000000000000000000000000000000'
           handler: handleFlux
 
         # function move(address src, address dst, uint256 rad)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xbb35783b00000000000000000000000000000000000000000000000000000000"
+          topic0: '0xbb35783b00000000000000000000000000000000000000000000000000000000'
           handler: handleMove
 
         ### CDP Manipulation ###
 
         # function frob(bytes32 i, address u, address v, address w, int256 dink, int256 dart)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x7608870300000000000000000000000000000000000000000000000000000000"
+          topic0: '0x7608870300000000000000000000000000000000000000000000000000000000'
           handler: handleFrob
 
         ### CDP Fungibility ###
 
         # function fork(bytes32 ilk, address src, address dst, int256 dink, int256 dart)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x870c616d00000000000000000000000000000000000000000000000000000000"
+          topic0: '0x870c616d00000000000000000000000000000000000000000000000000000000'
           handler: handleFork
 
         ### CDP Confiscation ###
 
         # function grab(bytes32 i, address u, address v, address w, int256 dink, int256 dart)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x7bab3f4000000000000000000000000000000000000000000000000000000000"
+          topic0: '0x7bab3f4000000000000000000000000000000000000000000000000000000000'
           handler: handleGrab
 
         ### Settlement ###
 
         # function heal(uint256 rad)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xf37ac61c00000000000000000000000000000000000000000000000000000000"
+          topic0: '0xf37ac61c00000000000000000000000000000000000000000000000000000000'
           handler: handleHeal
 
         # function suck(address u, address v, uint256 rad)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xf24e23eb00000000000000000000000000000000000000000000000000000000"
+          topic0: '0xf24e23eb00000000000000000000000000000000000000000000000000000000'
           handler: handleSuck
 
         ### Rates ###
 
         # function fold(bytes32 i, address u, int256 rate)
         - event: LogNote(indexed bytes4,indexed bytes32,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xb65337df00000000000000000000000000000000000000000000000000000000"
+          topic0: '0xb65337df00000000000000000000000000000000000000000000000000000000'
           handler: handleFold
 
   #  Liaison between the oracles and core contracts
@@ -116,7 +116,7 @@ dataSources:
     network: mainnet
     source:
       abi: Spotter
-      address: "0x65c79fcb50ca1594b025960e539ed7a9a6d434a3"
+      address: '0x65c79fcb50ca1594b025960e539ed7a9a6d434a3'
       startBlock: 8928152
     mapping:
       kind: ethereum/events
@@ -137,17 +137,17 @@ dataSources:
 
         # file(bytes32 ilk, bytes32 what, address pip_)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xebecb39d00000000000000000000000000000000000000000000000000000000"
+          topic0: '0xebecb39d00000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
         # file(bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
+          topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
         # file(bytes32 ilk, bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x1a0b287e00000000000000000000000000000000000000000000000000000000"
+          topic0: '0x1a0b287e00000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
         ### Update value ###
@@ -155,10 +155,10 @@ dataSources:
         # event Poke(bytes32 ilk, bytes32 val, uint256 spot)
         - event: Poke(bytes32,bytes32,uint256)
           handler: handlePoke
-        
+
         # function cage()
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x6924500900000000000000000000000000000000000000000000000000000000"
+          topic0: '0x6924500900000000000000000000000000000000000000000000000000000000'
           handler: handleCage
 
   #  Liquidation Agent
@@ -167,7 +167,7 @@ dataSources:
     network: mainnet
     source:
       abi: Cat
-      address: "0x78f2c2af65126834c51822f56be0d7469d7a523e"
+      address: '0x78f2c2af65126834c51822f56be0d7469d7a523e'
       startBlock: 8928165
     mapping:
       kind: ethereum/events
@@ -187,12 +187,12 @@ dataSources:
 
         # function file(bytes32 ilk, bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x1a0b287e00000000000000000000000000000000000000000000000000000000"
+          topic0: '0x1a0b287e00000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
         # function file(bytes32 ilk, bytes32 what, address flip)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xebecb39d00000000000000000000000000000000000000000000000000000000"
+          topic0: '0xebecb39d00000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
         ### CDP Liquidation ###
@@ -211,7 +211,7 @@ dataSources:
     network: mainnet
     source:
       abi: Flapper
-      address: "0xdfe0fb1be2a52cdbf8fb962d5701d7fd0902db9f"
+      address: '0xdfe0fb1be2a52cdbf8fb962d5701d7fd0902db9f'
       startBlock: 8928163
     mapping:
       kind: ethereum/events
@@ -230,16 +230,16 @@ dataSources:
 
         # function file(bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
+          topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
-        
+
         # event Kick (uint256 id, uint256 lot, uint256 bid)
         - event: Kick(uint256,uint256,uint256)
           handler: handleKick
 
         # function cage(uint256 rad)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xa2f91af200000000000000000000000000000000000000000000000000000000"
+          topic0: '0xa2f91af200000000000000000000000000000000000000000000000000000000'
           handler: handleCage
 
   # Debt Auction
@@ -248,7 +248,7 @@ dataSources:
     network: mainnet
     source:
       abi: Flopper
-      address: "0x4d95a049d5b0b7d32058cd3f2163015747522e99"
+      address: '0x4d95a049d5b0b7d32058cd3f2163015747522e99'
       startBlock: 9006717
     mapping:
       kind: ethereum/events
@@ -267,13 +267,18 @@ dataSources:
 
         # function file(bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
+          topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
         # function cage()
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x6924500900000000000000000000000000000000000000000000000000000000"
+          topic0: '0x6924500900000000000000000000000000000000000000000000000000000000'
           handler: handleCage
+
+        # function Tick(uint256 id)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xfc7b6aee00000000000000000000000000000000000000000000000000000000'
+          handler: handleTick
 
         - event: Kick(uint256,uint256,uint256,indexed address)
           handler: handleKick
@@ -284,7 +289,7 @@ dataSources:
     network: mainnet
     source:
       abi: Vow
-      address: "0xa950524441892a31ebddf91d3ceefa04bf454466"
+      address: '0xa950524441892a31ebddf91d3ceefa04bf454466'
       startBlock: 8928163
     mapping:
       kind: ethereum/events
@@ -303,36 +308,36 @@ dataSources:
 
         # function file(bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
+          topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
         # function cage()
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x6924500900000000000000000000000000000000000000000000000000000000"
+          topic0: '0x6924500900000000000000000000000000000000000000000000000000000000'
           handler: handleCage
 
         ### Pop from debt-queue
 
         # function flog(uint era)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xd7ee674b00000000000000000000000000000000000000000000000000000000"
+          topic0: '0xd7ee674b00000000000000000000000000000000000000000000000000000000'
           handler: handleFlog
 
         ### Push to debt-queue ###
 
         # function fess(uint tab)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x697efb7800000000000000000000000000000000000000000000000000000000"
+          topic0: '0x697efb7800000000000000000000000000000000000000000000000000000000'
           handler: handleFess
 
         # function flap()
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x0e01198b00000000000000000000000000000000000000000000000000000000"
+          topic0: '0x0e01198b00000000000000000000000000000000000000000000000000000000'
           handler: handleFlap
-        
+
         # function flop()
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xbbbb0d7b00000000000000000000000000000000000000000000000000000000"
+          topic0: '0xbbbb0d7b00000000000000000000000000000000000000000000000000000000'
           handler: handleFlop
 
   #
@@ -345,7 +350,7 @@ dataSources:
     network: mainnet
     source:
       abi: Jug
-      address: "0x19c0976f590d67707e62397c87829d896dc0f1f1"
+      address: '0x19c0976f590d67707e62397c87829d896dc0f1f1'
       startBlock: 8928160
     mapping:
       kind: ethereum/events
@@ -365,17 +370,17 @@ dataSources:
 
         # init(bytes32 ilk)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x3b66319500000000000000000000000000000000000000000000000000000000"
+          topic0: '0x3b66319500000000000000000000000000000000000000000000000000000000'
           handler: handleInit
 
         # function file(bytes32 ilk, bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x1a0b287e00000000000000000000000000000000000000000000000000000000"
+          topic0: '0x1a0b287e00000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
         # function file(bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
+          topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
   # Dai Savings Rate
@@ -384,7 +389,7 @@ dataSources:
     network: mainnet
     source:
       abi: Pot
-      address: "0x197e90f9fad81970ba7976f33cbd77088e5d7cf7"
+      address: '0x197e90f9fad81970ba7976f33cbd77088e5d7cf7'
       startBlock: 8928160
     mapping:
       kind: ethereum/events
@@ -403,7 +408,7 @@ dataSources:
 
         # function file(bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
+          topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
   #
@@ -416,7 +421,7 @@ dataSources:
     network: mainnet
     source:
       abi: DSProxyFactory
-      address: "0xa26e15c895efc0616177b7c1e7270a4c7d51c997"
+      address: '0xa26e15c895efc0616177b7c1e7270a4c7d51c997'
       startBlock: 5834580
     mapping:
       kind: ethereum/events
@@ -442,7 +447,7 @@ dataSources:
     network: mainnet
     source:
       abi: DssCdpManager
-      address: "0x5ef30b9986345249bc32d8928b7ee64de9435e39"
+      address: '0x5ef30b9986345249bc32d8928b7ee64de9435e39'
       startBlock: 8928198
     mapping:
       kind: ethereum/events
@@ -466,7 +471,7 @@ dataSources:
 
         # function give(uint cdp, address dst)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xfcafcc6800000000000000000000000000000000000000000000000000000000"
+          topic0: '0xfcafcc6800000000000000000000000000000000000000000000000000000000'
           handler: handleGive
 
 templates:
@@ -494,7 +499,7 @@ templates:
 
         # function file(bytes32 what, uint256 data)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0x29ae811400000000000000000000000000000000000000000000000000000000"
+          topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
         ### Auction ###
