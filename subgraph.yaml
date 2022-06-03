@@ -275,6 +275,11 @@ dataSources:
           topic0: '0x6924500900000000000000000000000000000000000000000000000000000000'
           handler: handleCage
 
+        # function Tick(uint256 id)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xfc7b6aee00000000000000000000000000000000000000000000000000000000'
+          handler: handleTick
+
         - event: Kick(uint256,uint256,uint256,indexed address)
           handler: handleKick
 
