@@ -59,6 +59,8 @@ export function handleTick(event: LogNote): void{
   if (system.surplusAuctionBidDuration){
     auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
   }
+
+  auction.lastUpdate = event.block.timestamp
   
   auction.save()
 }
