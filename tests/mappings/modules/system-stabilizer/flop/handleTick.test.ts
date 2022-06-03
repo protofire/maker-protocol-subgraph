@@ -18,7 +18,7 @@ function createEvent(id: BigInt): LogNote {
   return event
 }
 
-test('Flopper#handleTick updates Auction.quantity and Auction.endTime', () => {
+test('Flopper#handleTick updates Auction.quantity, Auction.endTime and Auction.lasUpdate', () => {
   let bidId = BigInt.fromString('1')
   let auctionId = bidId.toString() + '-1'
 
@@ -33,6 +33,7 @@ test('Flopper#handleTick updates Auction.quantity and Auction.endTime', () => {
   let auction = Auctions.loadOrCreateAuction(auctionId, event) // load the Auction with the quantity value
   auction.endTime = event.block.timestamp
   auction.quantity = quantity
+  auction.lastUpdate = BigInt.fromI32(0)
   auction.save()
 
   mockDebt()
@@ -50,6 +51,7 @@ test('Flopper#handleTick updates Auction.quantity and Auction.endTime', () => {
   // Test
   assert.fieldEquals('Auction', auctionId, 'endTime', endTime.toString()) //'172801'
   assert.fieldEquals('Auction', auctionId, 'quantity', '15')
+  assert.fieldEquals('Auction', auctionId, 'lastUpdate', event.block.timestamp.toString())
 
   clearStore()
 })
