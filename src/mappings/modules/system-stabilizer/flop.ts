@@ -53,6 +53,7 @@ export function handleTick(event: LogNote): void {
     auction.quantity = units.toWad(mul.div(ONE)) // WAD
     auction.endTime = event.block.timestamp.plus(auctionBidDuration)
 
+    auction.lastUpdate = event.block.timestamp
     auction.save()
   }
 }
