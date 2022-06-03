@@ -242,6 +242,13 @@ dataSources:
           topic0: "0xa2f91af200000000000000000000000000000000000000000000000000000000"
           handler: handleCage
 
+        ### Auction ###
+
+        # function tick(uint256 id)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0xfc7b6aee00000000000000000000000000000000000000000000000000000000"
+          handler: handleTick
+
   # Debt Auction
   - name: Flop
     kind: ethereum/contract

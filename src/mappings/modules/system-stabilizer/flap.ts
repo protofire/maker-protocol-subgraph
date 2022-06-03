@@ -50,3 +50,15 @@ export function handleKick(event: Kick): void {
   }
   auction.save()
 }
+
+export function handleTick(event: LogNote): void{
+  let id = bytes.toUnsignedInt(event.params.arg1)
+  let auction = Auctions.loadOrCreateAuction(id.toString()+"-0", event)
+
+  let system = systemModule.getSystemState(event)
+  if (system.surplusAuctionBidDuration){
+    auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
+  }
+  
+  auction.save()
+}

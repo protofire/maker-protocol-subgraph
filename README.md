@@ -306,6 +306,14 @@ This function modifies the fllowing entities:
 
     - LiveChangeLog
 
+**handleTick:** Adds 2 days to the Auction end-time
+
+> function tick(uint id)
+
+This function modifies the following entities:
+
+  - Auction: Adds the surplusAuctionBidDuration (2 days) to the endTime attribute
+
 Debt Auction (flop)
 
 	address: 0x4d95a049d5b0b7d32058cd3f2163015747522e99
