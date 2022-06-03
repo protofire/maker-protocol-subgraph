@@ -58,6 +58,22 @@ export function handleTick(event: LogNote): void {
   }
 }
 
+export function handleDeal(event: LogNote): void {
+  /* require(live == 1, "Flopper/not-live");
+  require(bids[id].tic != 0 && (bids[id].tic < now || bids[id].end < now), "Flopper/not-finished");
+  gem.mint(bids[id].guy, bids[id].lot);
+  delete bids[id]; */
+
+  let id = bytes.toUnsignedInt(event.params.arg1)
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
+
+  let highestBidder = auction.highestBidder // guy (address)
+  let quantity = auction.quantity // lot
+
+  if (highestBidder && quantity) {
+  }
+}
+
 export function handleKick(event: Kick): void {
   let id = event.params.id
   let lot = event.params.lot
