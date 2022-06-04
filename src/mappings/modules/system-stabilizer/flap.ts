@@ -65,3 +65,25 @@ export function handleTick(event: LogNote): void{
   
   auction.save()
 }
+
+export function handleYank(event: LogNote): void{
+  let id = bytes.toUnsignedInt(event.params.arg1)
+
+  let auction = Auctions.loadOrCreateAuction(id.toString()+"-0", event)
+  auction.active = false
+  auction.save()
+
+  let log = new endedAuctionLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-2')
+  log.auctionId = auction.id
+  log.bidAmount = auction.bidAmount
+  log.quantity = auction.quantity
+  log.highestBidder = auction.highestBidder
+  log.endTime = auction.endTime
+  log.createdAt = auction.createdAt
+  log.lastUpdate = auction.lastUpdate
+  log.block = event.block.number
+  log.timestamp = event.block.timestamp
+  log.transaction = event.transaction.hash
+
+  log.save()
+}
