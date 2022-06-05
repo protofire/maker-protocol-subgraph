@@ -317,6 +317,16 @@ This function modifies the following entities:
 
   - Auction: Adds the surplusAuctionBidDuration (2 days) to the endTime attribute
 
+**handleYank:** Sets an aucton to inactive
+
+> function yank(uint id)
+
+This function modifies the following entities:
+
+  - Auction: Sets the Auction active attribute to false
+
+  - EndedAuctionLog: Creates a LogEvent for every ended Auction
+
 Debt Auction (flop)
 
     address: 0x4d95a049d5b0b7d32058cd3f2163015747522e99

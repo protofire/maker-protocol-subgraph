@@ -2,7 +2,7 @@ import { BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { test, assert, clearStore } from "matchstick-as";
 import { tests } from "../../../../../src/mappings/modules/tests";
 import { LogNote } from "../../../../../generated/Flap/Flapper";
-import { handleTick } from "../../../../../src/mappings/modules/system-stabilizer/flap";
+import { handleYank } from "../../../../../src/mappings/modules/system-stabilizer/flap";
 import { Auction } from "../../../../../generated/schema";
 import { mockDebt } from "../../../../helpers/mockedFunctions";
 import { system as systemModule } from '../../../../../src/entities'
@@ -24,7 +24,7 @@ function createEvent(id: BigInt): LogNote {
     }
 
 
-test("Flapper#handleYank: Updates the end-time of an auction",
+test("Flapper#handleYank: Sets the Auction-active to false",
   () => {
     let id = BigInt.fromString("50")
 
@@ -32,11 +32,10 @@ test("Flapper#handleYank: Updates the end-time of an auction",
 
     mockDebt()
     let system = systemModule.getSystemState(event)
-    system.surplusAuctionBidDuration = BigInt.fromString("1000")
     system.save()
-    handleTi(event)
+    handleYank(event)
 
-    assert.fieldEquals("Auction", id.toString()+"-0", "endTime", "1001")
+    assert.fieldEquals("Auction", id.toString()+"-0", "active", "false")
     clearStore()
   }
 ) 

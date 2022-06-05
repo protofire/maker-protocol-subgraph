@@ -584,7 +584,7 @@ type VowFlopLog @entity{
   debtAuctionBidSize: BigDecimal!
 }
 
-type endedAuctionLog @entity{
+type EndedAuctionLog @entity{
   id: ID!
   auctionId: String!
 

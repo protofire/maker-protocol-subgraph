@@ -3,7 +3,7 @@ import { Kick, LogNote } from '../../../../generated/Flap/Flapper'
 import { Auctions } from "../../../entities/auction"
 import { system as systemModule } from '../../../entities'
 
-import { LiveChangeLog } from '../../../../generated/schema'
+import { LiveChangeLog, EndedAuctionLog } from '../../../../generated/schema'
 import { BigInt } from '@graphprotocol/graph-ts'
 
 export function handleFile(event: LogNote): void {
@@ -49,6 +49,7 @@ export function handleKick(event: Kick): void {
   if (system.surplusAuctionBidDuration) {
     auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
   }
+  auction.active = true
   auction.save()
 }
 
@@ -73,7 +74,7 @@ export function handleYank(event: LogNote): void{
   auction.active = false
   auction.save()
 
-  let log = new endedAuctionLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-2')
+  let log = new EndedAuctionLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-2')
   log.auctionId = auction.id
   log.bidAmount = auction.bidAmount
   log.quantity = auction.quantity
