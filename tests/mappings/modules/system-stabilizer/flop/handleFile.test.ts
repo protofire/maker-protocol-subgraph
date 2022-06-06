@@ -75,8 +75,6 @@ describe('Flopper#handleFile', () => {
     test('Updates SystemState.debtAuctionDuration', () => {
       let what = 'tau'
       let data = '60' // 60 seconds
-      // https://docs.soliditylang.org/en/v0.8.14/units-and-global-variables.html
-      // SM: uint48   public   ttl = 3 hours;
 
       let event = createEvent(what, data)
 
