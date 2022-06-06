@@ -247,7 +247,6 @@ This function modifies the following entities:
       - "totalDebt"
       - "totalSystemDebt"
 
-
 **handleFlux:** Transfer Collateral between Users
 
 > function flux(bytes32 ilk, address src, address dst, uint256 wad)
@@ -315,7 +314,7 @@ This function modifies the following entities:
 
 This function modifies the following entities:
 
-  - Auction: Adds the surplusAuctionBidDuration (2 days) to the endTime attribute
+- Auction: Adds the surplusAuctionBidDuration (2 days) to the endTime attribute
 
 Debt Auction (flop)
 
@@ -329,6 +328,14 @@ Debt Auction (flop)
 This function modifies the following entities:
 
     - LiveChangeLog
+
+**handleFile:** Set the system state vars
+
+> function file(bytes32 what, uint data)
+
+This function modifies the following entities:
+
+    - System
 
 **handleTick:** Restarts an auction
 
