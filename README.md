@@ -338,6 +338,16 @@ This function modifies the following entities:
 
     - Auction
 
+**handleYank:** Sets an auction to inactive
+
+> function yank(uint id)
+
+  This function modifies the following entities:
+
+  - Auction: Sets the Auction active attribute to false
+
+  - EndedDebtAuctionLog: Creates a LogEvent for every ended Auction
+
 Balance Sheet (vow)
 
     address: 0xa950524441892a31ebddf91d3ceefa04bf454466

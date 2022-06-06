@@ -364,6 +364,9 @@ type Auction @entity {
 
   " TS modifiedAt "
   lastUpdate: BigInt!
+
+  " False if Auction was ended "
+  active: Boolean!
 }
 
 " Maker Vault (formerly collateralized debt position or CDPs) "
@@ -579,4 +582,31 @@ type VowFlopLog @entity{
   debtAuctionLotSize: BigDecimal!
   " sump "
   debtAuctionBidSize: BigDecimal!
+}
+
+type EndedDebtAuctionLog @entity{
+  id: ID!
+  auctionId: String!
+
+  " Bid amount in DAI "
+  bidAmount: BigInt!
+
+  " auction quantity up for sale (lot) "
+  quantity: BigInt!
+
+  " the highest auction bidder (guy) "
+  highestBidder: Bytes!
+
+  " TS when the auction ends "
+  endTime: BigInt!
+
+  " TS CreatedAt (kick time) "
+  createdAt: BigInt!
+
+  " TS modifiedAt "
+  lastUpdate: BigInt!
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
 }
