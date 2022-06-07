@@ -67,24 +67,6 @@ export function handleDeal(event: LogNote): void {
   let quantity = auction.quantity // lot
 
   if (highestBidder && quantity) {
-    // TODO: mint the gems when we start the collateral contract
-    // gem.mint(bids[id].guy, bids[id].lot);
-
-    /* let collateral = collaterals.loadOrCreateCollateral(event, '', highestBidder.toString()) // ilk-> colateral type
-    
-    let amountCollateralBefore = collateral.amount
-    collateral.amount = collateral.amount.plus(units.fromWad(quantity)) */
-
-    // update de log for collateral mint
-    /* let log = new CollateralChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
-    log.block = event.block.number
-    log.collateral = collateral.id
-    log.collateralAfter = collateral.amount
-    log.collateralBefore = amountCollateralBefore */
-
-    /* collateral.save()
-    log.save() */
-
     //auction to inactive "delete"
     auction.deleteAt = event.block.timestamp
     auction.active = false
