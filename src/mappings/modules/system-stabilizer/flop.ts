@@ -1,10 +1,10 @@
 import { bytes, units } from '@protofire/subgraph-toolkit'
 import { Kick, LogNote } from '../../../../generated/Flop/Flopper'
 import { system as systemModule } from '../../../entities'
+
 import { Auctions } from '../../../entities/auction'
 
 import { LiveChangeLog } from '../../../../generated/schema'
-import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 
 export function handleFile(event: LogNote): void {
   let what = event.params.arg1.toString()
@@ -58,12 +58,8 @@ export function handleTick(event: LogNote): void {
   }
 }
 
+//  claim a winning bid / settles a completed auction
 export function handleDeal(event: LogNote): void {
-  /* require(live == 1, "Flopper/not-live");
-  require(bids[id].tic != 0 && (bids[id].tic < now || bids[id].end < now), "Flopper/not-finished");
-  gem.mint(bids[id].guy, bids[id].lot);
-  delete bids[id]; */
-
   let id = bytes.toUnsignedInt(event.params.arg1)
   let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
 
@@ -71,6 +67,29 @@ export function handleDeal(event: LogNote): void {
   let quantity = auction.quantity // lot
 
   if (highestBidder && quantity) {
+    // TODO: mint the gems when we start the collateral contract
+    // gem.mint(bids[id].guy, bids[id].lot);
+
+    /* let collateral = collaterals.loadOrCreateCollateral(event, '', highestBidder.toString()) // ilk-> colateral type
+    
+    let amountCollateralBefore = collateral.amount
+    collateral.amount = collateral.amount.plus(units.fromWad(quantity)) */
+
+    // update de log for collateral mint
+    /* let log = new CollateralChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
+    log.block = event.block.number
+    log.collateral = collateral.id
+    log.collateralAfter = collateral.amount
+    log.collateralBefore = amountCollateralBefore */
+
+    /* collateral.save()
+    log.save() */
+
+    //auction to inactive "delete"
+    auction.deleteAt = event.block.timestamp
+    auction.active = false
+
+    auction.save()
   }
 }
 
