@@ -329,6 +329,14 @@ This function modifies the following entities:
 
     - LiveChangeLog
 
+**handleDeal:** Claim a winning bid / settles a completed auction
+
+> function Deal(uint256 id)
+
+This function modifies the following entities:
+
+    - Auction
+  
 **handleFile:** Set the system state vars
 
 > function file(bytes32 what, uint data)
