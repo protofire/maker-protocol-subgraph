@@ -3,6 +3,7 @@ import { Kick, LogNote } from '../../../../generated/Flap/Flapper'
 import { Auctions } from '../../../entities/auction'
 import { system as systemModule } from '../../../entities'
 import { LiveChangeLog } from '../../../../generated/schema'
+import { BigInt } from '@graphprotocol/graph-ts'
 
 export function handleFile(event: LogNote): void {
   let what = event.params.arg1.toString()
@@ -60,6 +61,23 @@ export function handleTick(event: LogNote): void {
   }
 
   auction.lastUpdate = event.block.timestamp
+
+  auction.save()
+}
+
+export function handleTend(event: LogNote): void {
+  let id = bytes.toUnsignedInt(event.params.arg1)
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-0', event)
+
+  if (auction.highestBidder.toHexString() !== event.transaction.from.toHexString()) {
+    auction.highestBidder = event.transaction.from
+  }
+
+  let system = systemModule.getSystemState(event)
+  auction.bidAmount = BigInt.fromByteArray(event.params.arg2)
+  if (system.surplusAuctionBidDuration) {
+    auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
+  }
 
   auction.save()
 }
