@@ -1,6 +1,6 @@
 import { Bytes, Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
 import { units, bytes } from '@protofire/subgraph-toolkit'
-import { test, clearStore, assert, log } from 'matchstick-as'
+import { test, clearStore, assert, describe } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Flop/Flopper'
 import { handleDeal } from '../../../../../src/mappings/modules/system-stabilizer/flop'
 import { tests } from '../../../../../src/mappings/modules/tests'
@@ -17,23 +17,25 @@ function createEvent(id: BigInt): LogNote {
   return event
 }
 
-test('Flopper#handleDeal updates Auction.active and Auction.deleteAt ', () => {
-  let Id = BigInt.fromString('50')
-  let auctionId = Id.toString() + '-1'
+describe('Flopper#handleDeal', () => {
+  test('Updates Auction.active and Auction.deleteAt ', () => {
+    let id = BigInt.fromString('50')
+    let auctionId = id.toString() + '-1'
 
-  let event = createEvent(Id)
+    let event = createEvent(id)
 
-  let auction = Auctions.loadOrCreateAuction(auctionId, event) // load the Auction with the quantity value
-  auction.endTime = event.block.timestamp
-  auction.highestBidder = event.transaction.from
-  auction.quantity = BigInt.fromString('100')
-  auction.lastUpdate = BigInt.fromI32(0)
-  auction.save()
+    let auction = Auctions.loadOrCreateAuction(auctionId, event) // load the Auction with the quantity value
+    auction.endTime = event.block.timestamp
+    auction.highestBidder = event.transaction.from
+    auction.quantity = BigInt.fromString('100')
+    auction.lastUpdate = BigInt.fromI32(0)
+    auction.save()
 
-  handleDeal(event)
+    handleDeal(event)
 
-  assert.fieldEquals('Auction', auctionId, 'deleteAt', event.block.timestamp.toString())
-  assert.fieldEquals('Auction', auctionId, 'active', 'false')
+    assert.fieldEquals('Auction', auctionId, 'deleteAt', event.block.timestamp.toString())
+    assert.fieldEquals('Auction', auctionId, 'active', 'false')
 
-  clearStore()
+    clearStore()
+  })
 })

@@ -63,16 +63,11 @@ export function handleDeal(event: LogNote): void {
   let id = bytes.toUnsignedInt(event.params.arg1)
   let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
 
-  let highestBidder = auction.highestBidder // guy (address)
-  let quantity = auction.quantity // lot
+  //auction to inactive "delete"
+  auction.deleteAt = event.block.timestamp
+  auction.active = false
 
-  if (highestBidder && quantity) {
-    //auction to inactive "delete"
-    auction.deleteAt = event.block.timestamp
-    auction.active = false
-
-    auction.save()
-  }
+  auction.save()
 }
 
 export function handleKick(event: Kick): void {
