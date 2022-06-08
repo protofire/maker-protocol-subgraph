@@ -246,7 +246,7 @@ dataSources:
 
         # function tick(uint256 id)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xfc7b6aee00000000000000000000000000000000000000000000000000000000"
+          topic0: '0xfc7b6aee00000000000000000000000000000000000000000000000000000000'
           handler: handleTick
 
   # Debt Auction
@@ -289,6 +289,11 @@ dataSources:
 
         - event: Kick(uint256,uint256,uint256,indexed address)
           handler: handleKick
+
+        # function dent(uint256 id, uint256 lot, uint256 bid)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleDent
 
   # Balance Sheet
   - name: Vow
