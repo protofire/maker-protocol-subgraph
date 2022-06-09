@@ -314,6 +314,11 @@ dataSources:
           topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
           handler: handleYank
 
+        # function dent(uint256 id, uint256 lot, uint256 bid)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x5ff3a38200000000000000000000000000000000000000000000000000000000'
+          handler: handleDent
+
   # Balance Sheet
   - name: Vow
     kind: ethereum/contract
