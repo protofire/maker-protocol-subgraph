@@ -1,9 +1,9 @@
 import { bytes, units } from '@protofire/subgraph-toolkit'
 import { Kick, LogNote } from '../../../../generated/Flap/Flapper'
-import { Auctions } from "../../../entities/auction"
+import { Auctions } from '../../../entities/auction'
 import { system as systemModule } from '../../../entities'
 
-import { LiveChangeLog, EndedSurplusAuctionLog } from '../../../../generated/schema'
+import { LiveChangeLog } from '../../../../generated/schema'
 import { BigInt } from '@graphprotocol/graph-ts'
 
 export function handleFile(event: LogNote): void {
@@ -39,7 +39,7 @@ export function handleKick(event: Kick): void {
   let lot = event.params.lot
   let bid = event.params.bid
 
-  let auction = Auctions.loadOrCreateAuction(id.toString() + "-0", event)
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-0', event)
   auction.bidAmount = bid
   auction.quantity = lot
   // might be wrong since the smart contract refers to msg.sender
@@ -53,38 +53,25 @@ export function handleKick(event: Kick): void {
   auction.save()
 }
 
-export function handleTick(event: LogNote): void{
+export function handleTick(event: LogNote): void {
   let id = bytes.toUnsignedInt(event.params.arg1)
-  let auction = Auctions.loadOrCreateAuction(id.toString()+"-0", event)
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-0', event)
 
   let system = systemModule.getSystemState(event)
-  if (system.surplusAuctionBidDuration){
+  if (system.surplusAuctionBidDuration) {
     auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
   }
 
   auction.lastUpdate = event.block.timestamp
-  
+
   auction.save()
 }
 
-export function handleYank(event: LogNote): void{
+export function handleYank(event: LogNote): void {
   let id = bytes.toUnsignedInt(event.params.arg1)
 
-  let auction = Auctions.loadOrCreateAuction(id.toString()+"-0", event)
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-0', event)
   auction.active = false
+  auction.deleteAt = event.block.timestamp
   auction.save()
-
-  let log = new EndedSurplusAuctionLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-2')
-  log.auctionId = auction.id
-  log.bidAmount = auction.bidAmount
-  log.quantity = auction.quantity
-  log.highestBidder = auction.highestBidder
-  log.endTime = auction.endTime
-  log.createdAt = auction.createdAt
-  log.lastUpdate = auction.lastUpdate
-  log.block = event.block.number
-  log.timestamp = event.block.timestamp
-  log.transaction = event.transaction.hash
-
-  log.save()
 }
