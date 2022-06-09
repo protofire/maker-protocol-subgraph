@@ -99,6 +99,7 @@ export function handleDent(event: LogNote): void {
   if (system.debtAuctionBidDuration) {
     auction.endTime = event.block.timestamp.plus(system.debtAuctionBidDuration!)
   }
+  auction.save()
 }
 
 export function handleYank(event: LogNote): void {
