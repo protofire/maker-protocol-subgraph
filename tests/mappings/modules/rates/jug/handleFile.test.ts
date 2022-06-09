@@ -36,7 +36,7 @@ function createEventVow(what: string, data: string): LogNote {
   return event
 }
 
-function createEventIlk(ilk: string, what: string, _data: string): LogNote {
+function createEventIlk(ilk: string, what: string, data: string): LogNote {
   let ilkBytes = Bytes.fromUTF8(ilk)
   let whatBytes = Bytes.fromUTF8(what)
   let sigBytes = Bytes.fromHexString('0x1a0b287e')
@@ -45,9 +45,9 @@ function createEventIlk(ilk: string, what: string, _data: string): LogNote {
   let usr = tests.helpers.params.getBytes('usr', Bytes.fromUTF8(''))
   let arg1 = tests.helpers.params.getBytes('arg1', ilkBytes)
   let arg2 = tests.helpers.params.getBytes('arg2', whatBytes)
-  let data = tests.helpers.params.getBytes('data', strRadToBytes(_data))
+  let dataParam = tests.helpers.params.getBytes('data', strRadToBytes(data))
 
-  let event = changetype<LogNote>(tests.helpers.events.getNewEvent([sig, usr, arg1, arg2, data]))
+  let event = changetype<LogNote>(tests.helpers.events.getNewEvent([sig, usr, arg1, arg2, dataParam]))
   return event
 }
 
