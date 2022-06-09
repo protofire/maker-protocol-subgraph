@@ -3,7 +3,7 @@ import { Kick, LogNote } from '../../../../generated/Flop/Flopper'
 import { system as systemModule } from '../../../entities'
 import { Auctions } from '../../../entities/auction'
 
-import { LiveChangeLog, EndedDebtAuctionLog } from '../../../../generated/schema'
+import { LiveChangeLog } from '../../../../generated/schema'
 import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 
 export function handleFile(event: LogNote): void {
@@ -76,24 +76,11 @@ export function handleKick(event: Kick): void {
   auction.save()
 }
 
-export function handleYank(event: LogNote): void{
+export function handleYank(event: LogNote): void {
   let id = bytes.toUnsignedInt(event.params.arg1)
 
-  let auction = Auctions.loadOrCreateAuction(id.toString()+"-1", event)
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
   auction.active = false
+  auction.deleteAt = event.block.timestamp
   auction.save()
-
-  let log = new EndedDebtAuctionLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-2')
-  log.auctionId = auction.id
-  log.bidAmount = auction.bidAmount
-  log.quantity = auction.quantity
-  log.highestBidder = auction.highestBidder
-  log.endTime = auction.endTime
-  log.createdAt = auction.createdAt
-  log.lastUpdate = auction.lastUpdate
-  log.block = event.block.number
-  log.timestamp = event.block.timestamp
-  log.transaction = event.transaction.hash
-
-  log.save()
 }
