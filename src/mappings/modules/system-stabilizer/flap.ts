@@ -2,9 +2,7 @@ import { bytes, units } from '@protofire/subgraph-toolkit'
 import { Kick, LogNote } from '../../../../generated/Flap/Flapper'
 import { Auctions } from '../../../entities/auction'
 import { system as systemModule } from '../../../entities'
-
 import { LiveChangeLog } from '../../../../generated/schema'
-import { BigInt } from '@graphprotocol/graph-ts'
 
 export function handleFile(event: LogNote): void {
   let what = event.params.arg1.toString()
@@ -15,9 +13,9 @@ export function handleFile(event: LogNote): void {
   if (what == 'beg') {
     system.surplusAuctionMinimumBidIncrease = units.fromWad(data)
   } else if (what == 'ttl') {
-    system.surplusAuctionBidDuration = data.div(BigInt.fromString('1000000000000000000'))
+    system.surplusAuctionBidDuration = data
   } else if (what == 'tau') {
-    system.surplusAuctionDuration = data.div(BigInt.fromString('1000000000000000000'))
+    system.surplusAuctionDuration = data
   }
 
   system.save()
@@ -73,5 +71,6 @@ export function handleYank(event: LogNote): void {
   let auction = Auctions.loadOrCreateAuction(id.toString() + '-0', event)
   auction.active = false
   auction.deleteAt = event.block.timestamp
+
   auction.save()
 }
