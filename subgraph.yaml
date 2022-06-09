@@ -282,23 +282,33 @@ dataSources:
           topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
-        # function cage()
-        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x6924500900000000000000000000000000000000000000000000000000000000'
-          handler: handleCage
+        ### Auction ###
+
+        - event: Kick(uint256,uint256,uint256,indexed address)
+          handler: handleKick
 
         # function tick(uint256 id)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0xfc7b6aee00000000000000000000000000000000000000000000000000000000'
           handler: handleTick
-
+          
         # function deal(uint256 id)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
           handler: handleDeal
 
-        - event: Kick(uint256,uint256,uint256,indexed address)
-          handler: handleKick
+        ### Shutdown ###
+
+        # function cage()
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x6924500900000000000000000000000000000000000000000000000000000000'
+          handler: handleCage
+
+        # function yank(unit256 id)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0x26e027f100000000000000000000000000000000000000000000000000000000"
+          handler: handleYank
+
 
   # Balance Sheet
   - name: Vow

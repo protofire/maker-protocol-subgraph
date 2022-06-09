@@ -87,3 +87,12 @@ export function handleKick(event: Kick): void {
   }
   auction.save()
 }
+
+export function handleYank(event: LogNote): void {
+  let id = bytes.toUnsignedInt(event.params.arg1)
+
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
+  auction.active = false
+  auction.deleteAt = event.block.timestamp
+  auction.save()
+}
