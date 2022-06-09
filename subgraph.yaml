@@ -249,6 +249,11 @@ dataSources:
           topic0: '0xfc7b6aee00000000000000000000000000000000000000000000000000000000'
           handler: handleTick
 
+        # function deal(uint256 id)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleDeal
+
   # Debt Auction
   - name: Flop
     kind: ethereum/contract
