@@ -25,16 +25,14 @@ export function handleFile(event: LogNote): void {
   if (signature == '0x1a0b287e') {
     let ilk = event.params.arg1.toString()
     let what = event.params.arg2.toString()
-    let data = bytes.toUnsignedInt(<Bytes>event.params.data.subarray(68, 100))
+    let data = bytes.toUnsignedInt(event.params.data)
 
     if (what == 'duty') {
       let collateral = CollateralType.load(ilk)
 
       if (collateral) {
         collateral.stabilityFee = units.fromRay(data)
-
         collateral.save()
-        system.save()
       }
     }
   } else if (signature == '0x29ae8114') {
@@ -43,6 +41,14 @@ export function handleFile(event: LogNote): void {
 
     if (what == 'base') {
       system.baseStabilityFee = units.fromRay(data)
+      system.save()
+    }
+  } else if (signature == '0xd4e8be83') {
+    let what = event.params.arg1.toString()
+    let data = bytes.toAddress(event.params.arg2) // vow: the address of the Vow contract
+
+    if (what == 'vow') {
+      system.vowContract = data
       system.save()
     }
   }
