@@ -246,7 +246,7 @@ dataSources:
 
         # function tick(uint256 id)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: "0xfc7b6aee00000000000000000000000000000000000000000000000000000000"
+          topic0: '0xfc7b6aee00000000000000000000000000000000000000000000000000000000'
           handler: handleTick
 
   # Debt Auction
@@ -282,10 +282,15 @@ dataSources:
         - event: Kick(uint256,uint256,uint256,indexed address)
           handler: handleKick
 
-        # function Tick(uint256 id)
+        # function tick(uint256 id)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0xfc7b6aee00000000000000000000000000000000000000000000000000000000'
           handler: handleTick
+          
+        # function deal(uint256 id)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleDeal
 
         ### Shutdown ###
 
@@ -298,6 +303,7 @@ dataSources:
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: "0x26e027f100000000000000000000000000000000000000000000000000000000"
           handler: handleYank
+
 
   # Balance Sheet
   - name: Vow

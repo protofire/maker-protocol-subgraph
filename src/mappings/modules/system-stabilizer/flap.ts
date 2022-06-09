@@ -1,10 +1,8 @@
 import { bytes, units } from '@protofire/subgraph-toolkit'
 import { Kick, LogNote } from '../../../../generated/Flap/Flapper'
-import { Auctions } from "../../../entities/auction"
+import { Auctions } from '../../../entities/auction'
 import { system as systemModule } from '../../../entities'
-
 import { LiveChangeLog } from '../../../../generated/schema'
-import { BigInt } from '@graphprotocol/graph-ts'
 
 export function handleFile(event: LogNote): void {
   let what = event.params.arg1.toString()
@@ -15,9 +13,9 @@ export function handleFile(event: LogNote): void {
   if (what == 'beg') {
     system.surplusAuctionMinimumBidIncrease = units.fromWad(data)
   } else if (what == 'ttl') {
-    system.surplusAuctionBidDuration = data.div(BigInt.fromString('1000000000000000000'))
+    system.surplusAuctionBidDuration = data
   } else if (what == 'tau') {
-    system.surplusAuctionDuration = data.div(BigInt.fromString('1000000000000000000'))
+    system.surplusAuctionDuration = data
   }
 
   system.save()
@@ -39,7 +37,7 @@ export function handleKick(event: Kick): void {
   let lot = event.params.lot
   let bid = event.params.bid
 
-  let auction = Auctions.loadOrCreateAuction(id.toString() + "-0", event)
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-0', event)
   auction.bidAmount = bid
   auction.quantity = lot
   // might be wrong since the smart contract refers to msg.sender
@@ -52,16 +50,16 @@ export function handleKick(event: Kick): void {
   auction.save()
 }
 
-export function handleTick(event: LogNote): void{
+export function handleTick(event: LogNote): void {
   let id = bytes.toUnsignedInt(event.params.arg1)
-  let auction = Auctions.loadOrCreateAuction(id.toString()+"-0", event)
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-0', event)
 
   let system = systemModule.getSystemState(event)
-  if (system.surplusAuctionBidDuration){
+  if (system.surplusAuctionBidDuration) {
     auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
   }
 
   auction.lastUpdate = event.block.timestamp
-  
+
   auction.save()
 }
