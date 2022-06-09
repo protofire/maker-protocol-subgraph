@@ -5,6 +5,7 @@ import { system as systemModule } from '../../../entities'
 import { Auctions } from '../../../entities/auction'
 
 import { LiveChangeLog } from '../../../../generated/schema'
+import { BigInt } from '@graphprotocol/graph-ts'
 
 export function handleFile(event: LogNote): void {
   let what = event.params.arg1.toString()
@@ -82,8 +83,30 @@ export function handleKick(event: Kick): void {
   auction.highestBidder = gal
 
   let system = systemModule.getSystemState(event)
-  if (system.surplusAuctionBidDuration) {
-    auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
+  if (system.debtAuctionBidDuration) {
+    auction.endTime = event.block.timestamp.plus(system.debtAuctionBidDuration!)
   }
+  auction.save()
+}
+
+export function handleDent(event: LogNote): void {
+  let id = bytes.toUnsignedInt(event.params.arg1)
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
+  auction.highestBidder = event.transaction.from
+  auction.quantity = BigInt.fromUnsignedBytes(event.params.arg2)
+
+  let system = systemModule.getSystemState(event)
+  if (system.debtAuctionBidDuration) {
+    auction.endTime = event.block.timestamp.plus(system.debtAuctionBidDuration!)
+  }
+  auction.save()
+}
+
+export function handleYank(event: LogNote): void {
+  let id = bytes.toUnsignedInt(event.params.arg1)
+
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
+  auction.active = false
+  auction.deleteAt = event.block.timestamp
   auction.save()
 }
