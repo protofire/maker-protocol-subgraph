@@ -6,7 +6,7 @@ import { handleDent } from '../../../../../src/mappings/modules/system-stabilize
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { mockDebt } from '../../../../helpers/mockedFunctions'
 
-describe('Flapper#handleDent', () => {
+describe('Flopper#handleDent', () => {
   test('updates the highestBidder, quantity and endTime', () => {
     let signature = '0x5ff3a382'
 
