@@ -48,6 +48,7 @@ export function handleKick(event: Kick): void {
   if (system.surplusAuctionBidDuration) {
     auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
   }
+  auction.active = true
   auction.save()
 }
 
@@ -78,6 +79,15 @@ export function handleTend(event: LogNote): void {
   if (system.surplusAuctionBidDuration) {
     auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
   }
+  auction.save()
+}
+
+export function handleYank(event: LogNote): void {
+  let id = bytes.toUnsignedInt(event.params.arg1)
+
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-0', event)
+  auction.active = false
+  auction.deleteAt = event.block.timestamp
 
   auction.save()
 }

@@ -1,10 +1,10 @@
 import { bytes, units } from '@protofire/subgraph-toolkit'
 import { Kick, LogNote } from '../../../../generated/Flop/Flopper'
 import { system as systemModule } from '../../../entities'
+
 import { Auctions } from '../../../entities/auction'
 
 import { LiveChangeLog } from '../../../../generated/schema'
-import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 
 export function handleFile(event: LogNote): void {
   let what = event.params.arg1.toString()
@@ -58,6 +58,18 @@ export function handleTick(event: LogNote): void {
   }
 }
 
+//  claim a winning bid / settles a completed auction
+export function handleDeal(event: LogNote): void {
+  let id = bytes.toUnsignedInt(event.params.arg1)
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
+
+  //auction to inactive "delete"
+  auction.deleteAt = event.block.timestamp
+  auction.active = false
+
+  auction.save()
+}
+
 export function handleKick(event: Kick): void {
   let id = event.params.id
   let lot = event.params.lot
@@ -73,5 +85,14 @@ export function handleKick(event: Kick): void {
   if (system.surplusAuctionBidDuration) {
     auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
   }
+  auction.save()
+}
+
+export function handleYank(event: LogNote): void {
+  let id = bytes.toUnsignedInt(event.params.arg1)
+
+  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
+  auction.active = false
+  auction.deleteAt = event.block.timestamp
   auction.save()
 }
