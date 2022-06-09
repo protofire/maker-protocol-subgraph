@@ -9,14 +9,12 @@ import { system as systemModule } from '../../../entities'
 // Start stability fee collection for a particular collateral type
 export function handleInit(event: LogNote): void {
   let ilk = event.params.arg1.toString()
-  let system = systemModule.getSystemState(event)
-  let collateral = CollateralType.load(ilk)
+  let collateralType = CollateralType.load(ilk)
 
-  if (collateral) {
-    collateral.stabilityFee = decimal.ONE
+  if (collateralType) {
+    collateralType.stabilityFee = decimal.ONE
 
-    collateral.save()
-    system.save()
+    collateralType.save()
   }
 }
 
