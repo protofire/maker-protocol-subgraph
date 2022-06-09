@@ -82,8 +82,8 @@ export function handleKick(event: Kick): void {
   auction.highestBidder = gal
 
   let system = systemModule.getSystemState(event)
-  if (system.surplusAuctionBidDuration) {
-    auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
+  if (system.debtAuctionBidDuration) {
+    auction.endTime = event.block.timestamp.plus(system.debtAuctionBidDuration!)
   }
   auction.save()
 }
