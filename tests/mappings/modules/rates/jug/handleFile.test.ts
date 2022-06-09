@@ -9,17 +9,6 @@ import { Auctions, system as systemModule } from '../../../../../src/entities'
 import { collateralTypes } from '../../../../../src/entities/collateralTypes'
 
 function strRadToBytes(value: string): Bytes {
-  /* log.debug('value: {}', [value])
-  log.debug('bigint from str: {}', [BigInt.fromString(value).toString()])
-  log.debug('bytes from bigint: {}', [Bytes.fromBigInt(BigInt.fromString(value)).toHexString()])
-  log.debug('bytes reverse: {}', [
-    Bytes.fromBigInt(BigInt.fromString(value))
-      .reverse()
-      .toString(),
-  ])
-  log.debug('bytes from uArray: {}', [
-    Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString(value)).reverse()).toHexString(),
-  ]) */
   return Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString(value)).reverse())
 }
 
@@ -52,27 +41,13 @@ function createEventIlk(ilk: string, what: string, _data: string): LogNote {
   let whatBytes = Bytes.fromUTF8(what)
   let sigBytes = Bytes.fromHexString('0x1a0b287e')
 
-  let dataBytes = sigBytes
-  dataBytes = dataBytes.concat(ilkBytes).concat(new Bytes(32 - ilkBytes.length))
-  dataBytes = dataBytes.concat(whatBytes).concat(new Bytes(32 - whatBytes.length))
-  dataBytes = dataBytes.concat(Bytes.fromHexString(_data))
-
   let sig = tests.helpers.params.getBytes('sig', sigBytes)
   let usr = tests.helpers.params.getBytes('usr', Bytes.fromUTF8(''))
   let arg1 = tests.helpers.params.getBytes('arg1', ilkBytes)
   let arg2 = tests.helpers.params.getBytes('arg2', whatBytes)
   let data = tests.helpers.params.getBytes('data', strRadToBytes(_data))
 
-  /* bytes4   indexed  sig,
-  address  indexed  usr,
-  bytes32  indexed  arg1,
-  bytes32  indexed  arg2,
-  bytes             data */
-
-  // file(bytes32 ilk, bytes32 what, uint256 data)
-
   let event = changetype<LogNote>(tests.helpers.events.getNewEvent([sig, usr, arg1, arg2, data]))
-
   return event
 }
 
@@ -115,7 +90,7 @@ describe('Jug#handleFile', () => {
     test('Updates CollateralType.stabilityFee', () => {
       let ilk = '5257413030312d410000'
       let what = 'duty'
-      let data = '100500000000000000000000000000000000000000000000'
+      let data = '10000000000000000000000000000' // 10 ray
 
       let event = createEventIlk(ilk, what, data)
 
@@ -125,7 +100,7 @@ describe('Jug#handleFile', () => {
 
       handleFile(event)
 
-      assert.fieldEquals('CollateralType', ilk, 'stabilityFee', '100500000000000000000')
+      assert.fieldEquals('CollateralType', ilk, 'stabilityFee', '10')
 
       clearStore()
     })
