@@ -233,10 +233,6 @@ dataSources:
           topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
-        # event Kick (uint256 id, uint256 lot, uint256 bid)
-        - event: Kick(uint256,uint256,uint256)
-          handler: handleKick
-
         # function cage(uint256 rad)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0xa2f91af200000000000000000000000000000000000000000000000000000000'
@@ -244,10 +240,19 @@ dataSources:
 
         ### Auction ###
 
+        # event Kick (uint256 id, uint256 lot, uint256 bid)
+        - event: Kick(uint256,uint256,uint256)
+          handler: handleKick
+
         # function tick(uint256 id)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0xfc7b6aee00000000000000000000000000000000000000000000000000000000'
           handler: handleTick
+
+        # function yank(uint256 id)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: "0x26e027f100000000000000000000000000000000000000000000000000000000"
+          handler: handleYank
 
   # Debt Auction
   - name: Flop
@@ -277,18 +282,33 @@ dataSources:
           topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
+        ### Auction ###
+
+        - event: Kick(uint256,uint256,uint256,indexed address)
+          handler: handleKick
+
+        # function tick(uint256 id)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xfc7b6aee00000000000000000000000000000000000000000000000000000000'
+          handler: handleTick
+          
+        # function deal(uint256 id)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0xc959c42b00000000000000000000000000000000000000000000000000000000'
+          handler: handleDeal
+
+        ### Shutdown ###
+
         # function cage()
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0x6924500900000000000000000000000000000000000000000000000000000000'
           handler: handleCage
 
-        # function Tick(uint256 id)
+        # function yank(unit256 id)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0xfc7b6aee00000000000000000000000000000000000000000000000000000000'
-          handler: handleTick
+          topic0: "0x26e027f100000000000000000000000000000000000000000000000000000000"
+          handler: handleYank
 
-        - event: Kick(uint256,uint256,uint256,indexed address)
-          handler: handleKick
 
         # function dent(uint256 id, uint256 lot, uint256 bid)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)

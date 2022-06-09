@@ -243,11 +243,10 @@ type SystemState @entity {
   " Total debt issued [DAI] (Vat.debt)"
   totalDebt: BigDecimal!
 
-    "Total unbacked debt DAI (Vat.vice)"
+  "Total unbacked debt DAI (Vat.vice)"
   totalSystemDebt: BigDecimal!
 
-  systemDebt: [SystemDebt!]  # TODO relate sins with system state 
-
+  systemDebt: [SystemDebt!] # TODO relate sins with system state
   systemDebtInQueue: BigDecimal!
 
   #
@@ -364,6 +363,12 @@ type Auction @entity {
 
   " TS modifiedAt "
   lastUpdate: BigInt!
+
+  "False if Auction was deleted "
+  active: Boolean!
+
+  "Timestamp when the auction was deleted"
+  deleteAt: BigInt!
 }
 
 " Maker Vault (formerly collateralized debt position or CDPs) "
@@ -479,7 +484,7 @@ interface CollateralLog {
   transaction: Bytes!
 }
 
-type CollateralChangeLog implements CollateralLog @entity{
+type CollateralChangeLog implements CollateralLog @entity {
   id: ID!
   collateral: Collateral!
   collateralBefore: BigDecimal!
@@ -490,11 +495,11 @@ type CollateralChangeLog implements CollateralLog @entity{
 }
 
 enum Direction {
-  IN 
+  IN
   OUT
 }
 
-type CollateralTransferLog implements CollateralLog @entity{
+type CollateralTransferLog implements CollateralLog @entity {
   id: ID!
   src: Bytes!
   dst: Bytes!
@@ -523,7 +528,7 @@ type SpotParLog @entity {
   transaction: Bytes!
   " Value of DAI in the reference asset (e.g. $1 per DAI) "
   par: BigInt!
- }
+}
 
 type LiveChangeLog @entity {
   id: ID!
@@ -558,8 +563,8 @@ type PopDebtQueueLog @entity {
   timestamp: BigInt!
   transaction: Bytes!
 }
-  
-type VowFlapLog @entity{
+
+type VowFlapLog @entity {
   id: ID!
   block: BigInt!
   timestamp: BigInt!
@@ -568,7 +573,7 @@ type VowFlapLog @entity{
   surplusAuctionLotSize: BigDecimal!
 }
 
-type VowFlopLog @entity{
+type VowFlopLog @entity {
   id: ID!
   block: BigInt!
   timestamp: BigInt!
