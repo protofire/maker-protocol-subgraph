@@ -13,6 +13,18 @@ export function handleInit(event: LogNote): void {
 
   if (collateralType) {
     collateralType.stabilityFee = decimal.ONE
+    collateralType.stabilityFeeUpdatedAt = event.block.timestamp
+    collateralType.save()
+  }
+}
+
+// collect stability fees for a given collateral type
+export function handleDrip(event: LogNote): void {
+  let ilk = event.params.arg1.toString()
+  let collateralType = CollateralType.load(ilk)
+
+  if (collateralType) {
+    collateralType.stabilityFeeUpdatedAt = event.block.timestamp
 
     collateralType.save()
   }

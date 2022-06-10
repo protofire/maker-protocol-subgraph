@@ -264,7 +264,6 @@ dataSources:
           topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
           handler: handleYank
 
-
   # Debt Auction
   - name: Flop
     kind: ethereum/contract
@@ -434,6 +433,13 @@ dataSources:
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
+
+        ### Stability Fee Collection ###
+
+        # function drip(bytes32 ilk)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x44e2a5a800000000000000000000000000000000000000000000000000000000'
+          handler: handleDrip
 
   # Dai Savings Rate
   - name: Pot

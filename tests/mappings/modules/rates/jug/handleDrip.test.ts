@@ -1,5 +1,5 @@
 import { test, clearStore, describe, beforeEach, assert } from 'matchstick-as'
-import { handleInit } from '../../../../../src/mappings/modules/rates/jug'
+import { handleDrip } from '../../../../../src/mappings/modules/rates/jug'
 import { LogNote } from '../../../../../generated/Jug/Jug'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { Bytes } from '@graphprotocol/graph-ts'
@@ -15,18 +15,17 @@ function createEvent(collateralTypeId: string): LogNote {
   return event
 }
 
-describe('Jug#handleInit', () => {
+describe('Jug#handleDrip', () => {
   beforeEach(() => {
     let collateralType = collateralTypes.loadOrCreateCollateralType('c1')
     collateralType.save()
   })
   describe('when collateralType exist', () => {
-    test('initiates CollateralType.stabilityFee to 1 and CollateralType.stabilityFeeUpdatedAt to now', () => {
+    test('sets CollateralType.stabilityFeeUpdatedAt to now', () => {
       let event = createEvent('c1')
 
-      handleInit(event)
+      handleDrip(event)
 
-      assert.fieldEquals('CollateralType', 'c1', 'stabilityFee', '1')
       assert.fieldEquals('CollateralType', 'c1', 'stabilityFeeUpdatedAt', event.block.timestamp.toString())
 
       clearStore()
@@ -36,9 +35,18 @@ describe('Jug#handleInit', () => {
     test('does nothing', () => {
       let event = createEvent('c2')
 
-      handleInit(event)
+      handleDrip(event)
 
-      assert.fieldEquals('CollateralType', 'c1', 'stabilityFee', '0')
+      assert.fieldEquals('CollateralType', 'c1', 'stabilityFeeUpdatedAt', '0')
+
+      clearStore()
+    })
+    test('does not create it', () => {
+      let event = createEvent('c2')
+
+      handleDrip(event)
+
+      assert.notInStore('CollateralType', 'c2')
 
       clearStore()
     })
