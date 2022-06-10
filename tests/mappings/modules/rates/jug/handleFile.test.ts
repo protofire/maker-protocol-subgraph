@@ -51,11 +51,11 @@ function createEventIlk(ilk: string, what: string, data: string): LogNote {
   return event
 }
 
-beforeEach(() => {
-  mockDebt()
-})
-
 describe('Jug#handleFile', () => {
+  beforeEach(() => {
+    mockDebt()
+  })
+
   describe("When [what] is 'base'", () => {
     test('Updates SystemState.baseStabilityFee', () => {
       let what = 'base'
