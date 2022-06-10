@@ -332,8 +332,8 @@ type SystemState @entity {
   # Accumulation of Stability Fees for Collateral Types (jug)
   #
 
-  " Address of the vow contract "
-  vowContract: Bytes!
+  " Address of the vow contract modify by Jug Contract"
+  jugVowContract: Bytes!
 
   #
   # Status fields

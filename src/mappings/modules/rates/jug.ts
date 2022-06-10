@@ -48,7 +48,7 @@ export function handleFile(event: LogNote): void {
     let data = bytes.toAddress(event.params.arg2) // vow: the address of the Vow contract
 
     if (what == 'vow') {
-      system.vowContract = data
+      system.jugVowContract = data
       system.save()
     }
   }

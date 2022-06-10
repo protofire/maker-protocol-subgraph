@@ -80,7 +80,7 @@ describe('Jug#handleFile', () => {
 
       handleFile(event)
 
-      assert.fieldEquals('SystemState', 'current', 'vowContract', data)
+      assert.fieldEquals('SystemState', 'current', 'jugVowContract', data)
 
       clearStore()
     })
