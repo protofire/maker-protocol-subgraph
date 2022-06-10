@@ -14,14 +14,15 @@ export function handleFile(event: LogNote): void {
       let system = systemModule.getSystemState(event)
       let data = bytes.toUnsignedInt(event.params.arg2)
 
-      system.savingsRate = units.fromRay(data)
+      system.savingsRate = units.fromRay(data) // Dai Savings Rate
       system.save()
     }
   } else if (signature == '0xd4e8be83') {
-    if (what == 'dsr') {
+    if (what == 'vow') {
       let system = systemModule.getSystemState(event)
       let data = bytes.toAddress(event.params.arg2)
       system.potVowContract = data
+      system.save()
     }
   }
 }
