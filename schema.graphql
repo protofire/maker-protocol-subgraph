@@ -329,6 +329,13 @@ type SystemState @entity {
   surplusAuctionMinimumBidIncrease: BigDecimal
 
   #
+  # Accumulation of Stability Fees for Collateral Types (jug)
+  #
+
+  " Address of the vow contract modify by Jug Contract"
+  jugVowContract: Bytes!
+
+  #
   # Status fields
   #
 
