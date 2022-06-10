@@ -118,7 +118,7 @@ type CollateralType @entity {
 
   " Stability fee rate per second "
   stabilityFee: BigDecimal!
-
+  stabilityFeeUpdatedAt: BigInt!
   #
   # Vaults
   #
