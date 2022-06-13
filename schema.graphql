@@ -336,6 +336,13 @@ type SystemState @entity {
   jugVowContract: Bytes!
 
   #
+  # The Dai Savings Rate (pot)
+  #
+
+  " Address that conforms to a VowLike interface "
+  potVowContract: Bytes!
+
+  #
   # Status fields
   #
 
