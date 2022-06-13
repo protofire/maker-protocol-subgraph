@@ -1,3 +1,4 @@
+import { BigDecimal } from '@graphprotocol/graph-ts'
 import { bytes, units } from '@protofire/subgraph-toolkit'
 
 import { LogNote } from '../../../../generated/Pot/Pot'
@@ -13,4 +14,13 @@ export function handleFile(event: LogNote): void {
     system.savingsRate = units.fromRay(data)
     system.save()
   }
+}
+
+export function handleCage(event: LogNote): void {
+  let system = systemModule.getSystemState(event)
+
+  system.savingsRate = BigDecimal.fromString('1') // Dai Savings Rate
+  system.dsrLive = false // Access Flag
+  system.dsrLiveLastUpdateAt = event.block.timestamp
+  system.save()
 }
