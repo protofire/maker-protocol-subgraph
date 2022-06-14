@@ -16,7 +16,7 @@ function createEvent(): LogNote {
 }
 
 describe('Pot#handleCage', () => {
-  test('Updates SystemState.baseStabilityFee', () => {
+  test('Updates SystemState.savingsRate, dsrLive & dsrLiveLastUpdateAt', () => {
     let event = createEvent()
 
     mockDebt()
