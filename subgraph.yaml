@@ -469,10 +469,16 @@ dataSources:
           topic0: '0x29ae811400000000000000000000000000000000000000000000000000000000'
           handler: handleFile
 
+        # function cage()
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x6924500900000000000000000000000000000000000000000000000000000000'
+          handler: handleCage
+
         # function file(bytes32 what, address addr)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0xd4e8be8300000000000000000000000000000000000000000000000000000000'
           handler: handleFile
+          
   #
   # Proxy Module
   #
