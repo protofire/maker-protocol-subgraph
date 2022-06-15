@@ -203,6 +203,9 @@ type User @entity {
   " The user savings in DAI (Pot#pie) "
   savings: BigDecimal!
 
+  " Total maker balance "
+  totalMkrBalance: BigDecimal!
+
   " Number of user proxies associated to the user "
   proxyCount: BigInt!
 
@@ -217,6 +220,9 @@ type User @entity {
 
   " User's collaterals "
   collaterals: [Collateral!] @derivedFrom(field: "owner")
+
+  mkrOutgoingTransfers: [MkrTransfer!] @derivedFrom(field: "src")
+  mkrIngoingTransfers: [MkrTransfer!] @derivedFrom(field: "dst")
 }
 
 " Contract used to execute transactions and sequences of transactions on behalf of a user "
@@ -242,6 +248,9 @@ type SystemState @entity {
   #
   # General protocol stats
   #
+
+  " Total mkr issued [MKR] DSToken._supply"
+  totalMkr: BigDecimal!
 
   " Total debt issued [DAI] (Vat.debt)"
   totalDebt: BigDecimal!
@@ -555,6 +564,25 @@ type DaiMoveLog @entity {
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!
+}
+
+type MkrTransfer @entity {
+  id: ID!
+  src: User!
+  dst: User!
+  amount: BigDecimal!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type MkrApproval @entity {
+  id: ID!
+  owner: User!
+  spender: User!
+  amount: BigDecimal!
+  createdAt: BigInt!
+  updatedAt: BigInt!
 }
 
 type SpotParLog @entity {
