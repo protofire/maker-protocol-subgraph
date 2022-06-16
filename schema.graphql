@@ -339,12 +339,6 @@ type SystemState @entity {
   # The Dai Savings Rate (pot)
   #
 
-  " Dai Savings Rate Live"
-  dsrLive: Boolean!
-
-  " Dai Savings Rate Live LastUpdate"
-  dsrLiveLastUpdateAt: BigInt!
-
   " Address that conforms to a VowLike interface "
   potVowContract: Bytes!
 

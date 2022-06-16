@@ -25,10 +25,6 @@ export namespace system {
       state.baseStabilityFee = decimal.ONE
       state.savingsRate = decimal.ONE
       state.totalDebtCeiling = decimal.ZERO
-
-      // pot parameters
-      state.dsrLiveLastUpdateAt = event.block.timestamp
-      state.dsrLive = true
     }
 
     // Hotfix for totalDebt
