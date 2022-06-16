@@ -25,12 +25,14 @@ describe('Pot#handleCage', () => {
 
     event.address = address
 
+
     mockDebt()
 
     handleCage(event)
 
     assert.fieldEquals('SystemState', 'current', 'savingsRate', '1')
     assert.fieldEquals('LiveChangeLog', id, 'contract', addressString)
+
 
     clearStore()
   })
