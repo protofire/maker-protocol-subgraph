@@ -28,6 +28,10 @@ export namespace system {
 
       // DAI Erc.20 parameters
       state.daiTotalSupply = decimal.ZERO
+
+      // pot parameters
+      state.dsrLiveLastUpdateAt = event.block.timestamp
+      state.dsrLive = true
     }
 
     // Hotfix for totalDebt
