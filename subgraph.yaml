@@ -269,7 +269,7 @@ dataSources:
     kind: ethereum/contract
     network: mainnet
     source:
-      abi: dog
+      abi: Dog
       address: '0x135954d155898D42C90D2a57824C690e0c7BEf1B'
       startBlock: 12246358
     mapping:
