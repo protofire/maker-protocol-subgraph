@@ -264,6 +264,28 @@ dataSources:
           topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
           handler: handleYank
 
+  #  Liquidation Module
+  - name: Dog
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: dog
+      address: '0x135954d155898D42C90D2a57824C690e0c7BEf1B'
+      startBlock: 12246358
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/modules/liquidation/dog.ts
+      abis:
+        - name: Dog
+          file: ./abis/Dog.json
+      entities:
+        - SystemState
+      eventHandlers:
+        - event: Cage()
+          handler: handleCage
+
   # Debt Auction
   - name: Flop
     kind: ethereum/contract
@@ -478,7 +500,7 @@ dataSources:
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0xd4e8be8300000000000000000000000000000000000000000000000000000000'
           handler: handleFile
-          
+
   #
   # Proxy Module
   #
