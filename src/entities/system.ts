@@ -4,9 +4,8 @@ import { decimal, integer, units } from '@protofire/subgraph-toolkit'
 import { SystemState } from '../../generated/schema'
 import { Vat } from '../../generated/Vat/Vat'
 export namespace system {
-
   export function getSystemState(event: ethereum.Event): SystemState {
-    let vatContract = Vat.bind(Address.fromString('0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'));
+    let vatContract = Vat.bind(Address.fromString('0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'))
     let state = SystemState.load('current')
 
     if (state == null) {
@@ -27,16 +26,17 @@ export namespace system {
       state.savingsRate = decimal.ONE
       state.totalDebtCeiling = decimal.ZERO
 
+      // DAI Erc.20 parameters
+      state.daiTotalSupply = decimal.ZERO
     }
 
     // Hotfix for totalDebt
-    let debt = vatContract.try_debt();
-    state.totalDebt = debt.reverted ? state.totalDebt : units.fromRad(debt.value);
+    let debt = vatContract.try_debt()
+    state.totalDebt = debt.reverted ? state.totalDebt : units.fromRad(debt.value)
     state.block = event.block.number
     state.timestamp = event.block.timestamp
     state.transaction = event.transaction.hash
 
     return state as SystemState
   }
-
 }

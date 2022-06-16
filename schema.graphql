@@ -197,8 +197,11 @@ type User @entity {
   " Account address "
   address: Bytes!
 
-  " User's DAI "
-  dai: BigDecimal!
+  " User's DAI in the Vault"
+  totalVaultDai: BigDecimal!
+
+  " User's Total Erc20.DAI "
+  TotalErc20Dai: BigDecimal!
 
   " Number of user proxies associated to the user "
   proxyCount: BigInt!
@@ -341,6 +344,13 @@ type SystemState @entity {
 
   " Address that conforms to a VowLike interface "
   potVowContract: Bytes!
+
+  #
+  # DAI ERC20 contract address
+  #
+
+  " Total supply of ERC20.DAI "
+  daiTotalSupply: BigDecimal!
 
   #
   # Status fields
@@ -598,4 +608,27 @@ type VowFlopLog @entity {
   debtAuctionLotSize: BigDecimal!
   " sump "
   debtAuctionBidSize: BigDecimal!
+}
+
+type DaiTransfer @entity {
+  " Equals to: <transaction.hash>-<event.logindex>"
+  id: ID!
+  " timestamp of the transfer "
+  createdAt: BigInt!
+  " User of the sender "
+  from: User!
+  " User of the receiver "
+  to: User!
+  " Amount of DAI transferred "
+  value: BigDecimal!
+}
+
+type DaiApproval @entity {
+  id: ID!
+  " User account sender "
+  owner: User!
+  " User account authorized to spend DAI "
+  spender: User!
+  " Amount of DAI approved "
+  value: BigDecimal!
 }
