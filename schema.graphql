@@ -200,6 +200,9 @@ type User @entity {
   " User's DAI "
   dai: BigDecimal!
 
+  " The user savings in DAI (Pot#pie) "
+  savings: BigDecimal!
+
   " Number of user proxies associated to the user "
   proxyCount: BigInt!
 
@@ -347,6 +350,9 @@ type SystemState @entity {
 
   " Address that conforms to a VowLike interface "
   potVowContract: Bytes!
+
+  " Total savings in DAI of all users (Pot#Pie) "
+  totalSavingsInPot: BigDecimal!
 
   #
   # Status fields
