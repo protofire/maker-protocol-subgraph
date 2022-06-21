@@ -282,6 +282,16 @@ type SystemState @entity {
   totalDebtCeiling: BigDecimal!
 
   #
+  # Balance Sheet paramters (vow)
+  #
+
+  " Address that conforms to a FlapLike interface "
+  vowFlapperContract: Bytes!
+
+  " Address that conforms to a Floplike interface "
+  vowFlopperContract: Bytes!
+
+  #
   # Debt auction parameters (flop)
   #
 
