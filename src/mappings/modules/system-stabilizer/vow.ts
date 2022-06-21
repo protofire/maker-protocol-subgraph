@@ -1,6 +1,6 @@
 import { BigDecimal } from '@graphprotocol/graph-ts'
-import { address, bytes, units } from '@protofire/subgraph-toolkit'
-import { SystemState, VowFlapLog, VowFlopLog } from '../../../../generated/schema'
+import { bytes, units } from '@protofire/subgraph-toolkit'
+import { VowFlapLog, VowFlopLog } from '../../../../generated/schema'
 import { LogNote, Vow } from '../../../../generated/Vow/Vow'
 import { system as systemModule } from '../../../entities'
 import { Address } from '@graphprotocol/graph-ts'
