@@ -483,7 +483,17 @@ dataSources:
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0xd4e8be8300000000000000000000000000000000000000000000000000000000'
           handler: handleFile
-          
+
+        # function join(uint wad)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x049878f300000000000000000000000000000000000000000000000000000000'
+          handler: handleJoin
+
+        # function exit(uint wad)
+        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
+          topic0: '0x7f8661a100000000000000000000000000000000000000000000000000000000'
+          handler: handleExit
+
   #
   # Proxy Module
   #
