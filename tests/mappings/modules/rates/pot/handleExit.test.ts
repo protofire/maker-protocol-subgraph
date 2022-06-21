@@ -26,7 +26,7 @@ describe('Pot#handleExit', () => {
       ]),
     )
 
-    let initAmount = BigDecimal.fromString("201")
+    let initAmount = BigDecimal.fromString('201')
     let user = users.getOrCreateUser(event.transaction.from)
     user.savings = initAmount
     user.save()

@@ -7,7 +7,7 @@ import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 var defaultAmount: string
 
-function createEvent(amount: string): LogNote{
+function createEvent(amount: string): LogNote {
   let sig = '0x7f8661a1'
   let wad = Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString(amount)).reverse())
   return changetype<LogNote>(
@@ -41,7 +41,7 @@ describe('Pot#handleJoin', () => {
     assert.fieldEquals('SystemState', 'current', 'totalSavingsInPot', '201')
   })
 
-  afterAll(()=>{
+  afterAll(() => {
     clearStore()
   })
 })
