@@ -487,7 +487,7 @@ dataSources:
         # function exit(uint wad)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0x7f8661a100000000000000000000000000000000000000000000000000000000'
-          handler: handleJoin
+          handler: handleExit
 
   #
   # Proxy Module
