@@ -14,7 +14,7 @@ export function handleTransfer(event: TransferEvent): void {
   let value = event.params.value
   let amount = units.fromWad(value)
 
-  let mkrMoveLogId = from
+  let mkrTransferId = from
     .toString()
     .concat('-')
     .concat(to.toString())
@@ -27,15 +27,15 @@ export function handleTransfer(event: TransferEvent): void {
   let dstUser = users.getOrCreateUser(to)
   dstUser.totalMkrBalance = dstUser.totalMkrBalance.plus(amount)
 
-  let transfer = new MkrTransfer(mkrMoveLogId)
-  transfer.src = srcUser.id
-  transfer.dst = dstUser.id
-  transfer.amount = amount
-  transfer.block = event.block.number
-  transfer.transaction = event.transaction.hash
-  transfer.timestamp = event.block.timestamp
+  let mkrTransfer = new MkrTransfer(mkrTransferId)
+  mkrTransfer.src = srcUser.id
+  mkrTransfer.dst = dstUser.id
+  mkrTransfer.amount = amount
+  mkrTransfer.block = event.block.number
+  mkrTransfer.transaction = event.transaction.hash
+  mkrTransfer.timestamp = event.block.timestamp
 
-  transfer.save()
+  mkrTransfer.save()
   srcUser.save()
   dstUser.save()
 }
@@ -47,12 +47,12 @@ export function handleApproval(event: ApprovalEvent): void {
 
   let amount = units.fromWad(value)
 
-  let id = owner
+  let mkrApprovalId = owner
     .toString()
     .concat('-')
     .concat(spender.toString())
 
-  let mkrApproval = new MkrApproval(id)
+  let mkrApproval = new MkrApproval(mkrApprovalId)
   mkrApproval.owner = owner.toHexString()
   mkrApproval.spender = spender.toHexString()
   mkrApproval.amount = amount

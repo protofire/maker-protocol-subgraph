@@ -30,7 +30,7 @@ describe('Mkr#handleTransfer', () => {
 
     let event = createEvent(srcAddress, dstAddress, amount)
 
-    let id = srcAddress
+    let mkrTransferId = srcAddress
       .toString()
       .concat('-')
       .concat(dstAddress.toString())
@@ -42,12 +42,12 @@ describe('Mkr#handleTransfer', () => {
     assert.fieldEquals('User', '0x60b86af869f23aeb552fb7f3cabd11b829f6ab2f', 'totalMkrBalance', '4900')
     assert.fieldEquals('User', '0x04f7c549cbef0d1be860dc334a307c260179c34c', 'totalMkrBalance', '200')
 
-    assert.fieldEquals('MkrTransfer', id, 'src', srcUser.id)
-    assert.fieldEquals('MkrTransfer', id, 'dst', dstUser.id)
-    assert.fieldEquals('MkrTransfer', id, 'amount', '100')
-    assert.fieldEquals('MkrTransfer', id, 'transaction', event.transaction.hash.toHexString())
-    assert.fieldEquals('MkrTransfer', id, 'block', event.block.number.toString())
-    assert.fieldEquals('MkrTransfer', id, 'timestamp', event.block.timestamp.toString())
+    assert.fieldEquals('MkrTransfer', mkrTransferId, 'src', srcUser.id)
+    assert.fieldEquals('MkrTransfer', mkrTransferId, 'dst', dstUser.id)
+    assert.fieldEquals('MkrTransfer', mkrTransferId, 'amount', '100')
+    assert.fieldEquals('MkrTransfer', mkrTransferId, 'transaction', event.transaction.hash.toHexString())
+    assert.fieldEquals('MkrTransfer', mkrTransferId, 'block', event.block.number.toString())
+    assert.fieldEquals('MkrTransfer', mkrTransferId, 'timestamp', event.block.timestamp.toString())
 
     clearStore()
   })
