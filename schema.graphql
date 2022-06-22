@@ -201,7 +201,7 @@ type User @entity {
   totalVaultDai: BigDecimal!
 
   " User's Total Erc20.DAI "
-  TotalErc20Dai: BigDecimal!
+  totalDaiBalance: BigDecimal!
 
   " Number of user proxies associated to the user "
   proxyCount: BigInt!
@@ -217,6 +217,15 @@ type User @entity {
 
   " User's collaterals "
   collaterals: [Collateral!] @derivedFrom(field: "owner")
+
+  " User's Outgoing Transfers for DAI "
+  daiOutgoingTransfers: [DaiTransfer!] @derivedFrom(field: "src")
+
+  " User's Incoming Transfers for DAI "
+  daiIncomingTransfers: [DaiTransfer!] @derivedFrom(field: "dst")
+
+  " User's dai approvals "
+  daiApprovals: [DaiApproval!] @derivedFrom(field: "owner")
 }
 
 " Contract used to execute transactions and sequences of transactions on behalf of a user "
@@ -622,11 +631,11 @@ type DaiTransfer @entity {
   " timestamp of the transfer "
   createdAt: BigInt!
   " User of the sender "
-  from: User!
+  src: User!
   " User of the receiver "
-  to: User!
+  dst: User!
   " Amount of DAI transferred "
-  value: BigDecimal!
+  amount: BigDecimal!
 }
 
 type DaiApproval @entity {
@@ -636,5 +645,9 @@ type DaiApproval @entity {
   " User account authorized to spend DAI "
   spender: User!
   " Amount of DAI approved "
-  value: BigDecimal!
+  amount: BigDecimal!
+  " Timestamp of the approval "
+  createdAt: BigInt!
+  " Timestamp of the update approval "
+  updatedAt: BigInt!
 }

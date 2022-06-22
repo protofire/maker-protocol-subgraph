@@ -16,7 +16,7 @@ export namespace users {
         user = new User(id)
         user.address = address
         user.totalVaultDai = BigDecimal.zero()
-        user.TotalErc20Dai = BigDecimal.zero()
+        user.totalDaiBalance = BigDecimal.zero()
         user.proxyCount = integer.ZERO
         user.vaultCount = integer.ZERO
       }
@@ -28,13 +28,13 @@ export namespace users {
   export function plusBalanceERC20Dai(to: Address, value: BigDecimal): void {
     let user = getOrCreateUser(to)
 
-    user.TotalErc20Dai = user.TotalErc20Dai.plus(value)
+    user.totalDaiBalance = user.totalDaiBalance.plus(value)
     user.save()
   }
 
   export function minusBalanceERC20Dai(from: Address, value: BigDecimal): void {
     let user = getOrCreateUser(from)
-    user.TotalErc20Dai = user.TotalErc20Dai.minus(value)
+    user.totalDaiBalance = user.totalDaiBalance.minus(value)
     user.save()
   }
 

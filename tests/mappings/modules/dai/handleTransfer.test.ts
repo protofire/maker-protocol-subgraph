@@ -22,11 +22,11 @@ function createEntities(event: Transfer, src: Address, dst: Address): void {
   system.save()
 
   let userSrc = users.getOrCreateUser(src)
-  userSrc.TotalErc20Dai = BigDecimal.fromString('100')
+  userSrc.totalDaiBalance = BigDecimal.fromString('100')
   userSrc.save()
 
   let userDst = users.getOrCreateUser(dst)
-  userDst.TotalErc20Dai = BigDecimal.fromString('100')
+  userDst.totalDaiBalance = BigDecimal.fromString('100')
   userDst.save()
 }
 
@@ -51,11 +51,11 @@ describe('ERC.20-Dai#handleTransfer', () => {
       handleTransfer(event)
 
       assert.fieldEquals('SystemState', 'current', 'daiTotalSupply', '1100')
-      assert.fieldEquals('User', dstStr, 'TotalErc20Dai', '200')
+      assert.fieldEquals('User', dstStr, 'totalDaiBalance', '200')
 
-      assert.fieldEquals('DaiTransfer', idTransfer, 'from', srcStr)
-      assert.fieldEquals('DaiTransfer', idTransfer, 'to', dstStr)
-      assert.fieldEquals('DaiTransfer', idTransfer, 'value', '100')
+      assert.fieldEquals('DaiTransfer', idTransfer, 'src', srcStr)
+      assert.fieldEquals('DaiTransfer', idTransfer, 'dst', dstStr)
+      assert.fieldEquals('DaiTransfer', idTransfer, 'amount', '100')
 
       clearStore()
     })
@@ -77,11 +77,11 @@ describe('ERC.20-Dai#handleTransfer', () => {
       handleTransfer(event)
 
       assert.fieldEquals('SystemState', 'current', 'daiTotalSupply', '910')
-      assert.fieldEquals('User', srcStr, 'TotalErc20Dai', '10')
+      assert.fieldEquals('User', srcStr, 'totalDaiBalance', '10')
 
-      assert.fieldEquals('DaiTransfer', idTransfer, 'from', srcStr)
-      assert.fieldEquals('DaiTransfer', idTransfer, 'to', dstStr)
-      assert.fieldEquals('DaiTransfer', idTransfer, 'value', '90')
+      assert.fieldEquals('DaiTransfer', idTransfer, 'src', srcStr)
+      assert.fieldEquals('DaiTransfer', idTransfer, 'dst', dstStr)
+      assert.fieldEquals('DaiTransfer', idTransfer, 'amount', '90')
 
       clearStore()
     })
@@ -103,12 +103,12 @@ describe('ERC.20-Dai#handleTransfer', () => {
       handleTransfer(event)
 
       assert.fieldEquals('SystemState', 'current', 'daiTotalSupply', '1000')
-      assert.fieldEquals('User', srcStr, 'TotalErc20Dai', '10') // src
-      assert.fieldEquals('User', dstStr, 'TotalErc20Dai', '190') // dst
+      assert.fieldEquals('User', srcStr, 'totalDaiBalance', '10') // src
+      assert.fieldEquals('User', dstStr, 'totalDaiBalance', '190') // dst
 
-      assert.fieldEquals('DaiTransfer', idTransfer, 'from', srcStr)
-      assert.fieldEquals('DaiTransfer', idTransfer, 'to', dstStr)
-      assert.fieldEquals('DaiTransfer', idTransfer, 'value', '90')
+      assert.fieldEquals('DaiTransfer', idTransfer, 'src', srcStr)
+      assert.fieldEquals('DaiTransfer', idTransfer, 'dst', dstStr)
+      assert.fieldEquals('DaiTransfer', idTransfer, 'amount', '90')
 
       clearStore()
     })
