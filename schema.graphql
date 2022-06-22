@@ -221,8 +221,14 @@ type User @entity {
   " User's collaterals "
   collaterals: [Collateral!] @derivedFrom(field: "owner")
 
+  " User's mkr outgoing transfers "
   mkrOutgoingTransfers: [MkrTransfer!] @derivedFrom(field: "src")
-  mkrIngoingTransfers: [MkrTransfer!] @derivedFrom(field: "dst")
+
+  " User's mkr incoming transfers "
+  mkrIncomingTransfers: [MkrTransfer!] @derivedFrom(field: "dst")
+
+  " User's mkr approvals "
+  mkrApprovals: [MkrApproval!] @derivedFrom(field: "owner")
 }
 
 " Contract used to execute transactions and sequences of transactions on behalf of a user "
@@ -567,6 +573,7 @@ type DaiMoveLog @entity {
 }
 
 type MkrTransfer @entity {
+  " Equals to: <src>-<dst>-<tx> "
   id: ID!
   src: User!
   dst: User!
@@ -577,6 +584,7 @@ type MkrTransfer @entity {
 }
 
 type MkrApproval @entity {
+  " Equals to: <owner>-<spender> "
   id: ID!
   owner: User!
   spender: User!
