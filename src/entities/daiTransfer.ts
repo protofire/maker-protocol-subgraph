@@ -3,11 +3,13 @@ import { ethereum } from '@graphprotocol/graph-ts'
 
 export namespace daiTransfers {
   export function getOrCreateDaiTransfer(id: string, event: ethereum.Event): DaiTransfer {
-    let transfer = DaiTransfer.load(id)
-    if (!transfer) {
-      transfer = new DaiTransfer(id)
-      transfer.createdAt = event.block.timestamp
+    let daiTransfer = DaiTransfer.load(id)
+    if (!daiTransfer) {
+      daiTransfer = new DaiTransfer(id)
+      daiTransfer.timestamp = event.block.timestamp
+      daiTransfer.block = event.block.number
+      daiTransfer.transaction = event.transaction.hash
     }
-    return transfer
+    return daiTransfer
   }
 }

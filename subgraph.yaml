@@ -604,7 +604,6 @@ dataSources:
       file: ./src/mappings/modules/dai/dai.ts
       entities:
         - Approval
-        - LogNote
         - Transfer
       abis:
         - name: Dai
@@ -614,8 +613,6 @@ dataSources:
           handler: handleApproval
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          handler: handleLogNote
 
 templates:
   #  Collateral Auction

@@ -679,8 +679,10 @@ type VowFlopLog @entity {
 type DaiTransfer @entity {
   " Equals to: <transaction.hash>-<event.logindex>"
   id: ID!
+  block: BigInt!
+  transaction: Bytes!
   " timestamp of the transfer "
-  createdAt: BigInt!
+  timestamp: BigInt!
   " User of the sender "
   src: User!
   " User of the receiver "

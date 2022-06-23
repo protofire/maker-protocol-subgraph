@@ -1,4 +1,4 @@
-import { Address, BigDecimal, ethereum } from '@graphprotocol/graph-ts'
+import { Address, BigDecimal } from '@graphprotocol/graph-ts'
 import { integer } from '@protofire/subgraph-toolkit'
 import { User, UserProxy } from '../../generated/schema'
 

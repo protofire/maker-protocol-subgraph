@@ -4,11 +4,11 @@ import { mockDebt } from '../../../helpers/mockedFunctions'
 import { handleApproval } from '../../../../src/mappings/modules/dai/dai'
 import { tests } from '../../../../src/mappings/modules/tests'
 import { system as systemModule, users, daiApprovals } from '../../../../src/entities'
-import { Approval } from '../../../../generated/Dai/Dai'
+import { Approval as ApprovalEvent } from '../../../../generated/Dai/Dai'
 
 //(address indexed src, address indexed guy, uint wad);
-function createEvent(src: Address, guy: Address, wad: BigInt): Approval {
-  return changetype<Approval>(
+function createEvent(src: Address, guy: Address, wad: BigInt): ApprovalEvent {
+  return changetype<ApprovalEvent>(
     tests.helpers.events.getNewEvent([
       tests.helpers.params.getAddress('src', src),
       tests.helpers.params.getAddress('guy', guy),
@@ -17,7 +17,7 @@ function createEvent(src: Address, guy: Address, wad: BigInt): Approval {
   )
 }
 
-function createEntities(event: Approval, src: Address, guy: Address): void {
+function createEntities(event: ApprovalEvent, src: Address, guy: Address): void {
   let userSrc = users.getOrCreateUser(src)
   userSrc.save()
 
@@ -25,7 +25,7 @@ function createEntities(event: Approval, src: Address, guy: Address): void {
   userDst.save()
 }
 
-function createApproval(event: Approval, timeStamp: BigInt): void {
+function createApproval(event: ApprovalEvent, timeStamp: BigInt): void {
   let id = event.params.src.toHexString() + '-' + event.params.guy.toHexString()
   let daiApproval = daiApprovals.getOrCreateDaiApproval(id, event)
   daiApproval.owner = event.params.src.toHexString()
