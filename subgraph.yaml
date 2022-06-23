@@ -495,6 +495,40 @@ dataSources:
           handler: handleExit
 
   #
+  # MKR Module
+  #
+
+  # Mkr
+  - name: DSToken
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: DSToken
+      address: '0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2'
+      startBlock: 12805415
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/modules/mkr/dsToken.ts
+      abis:
+        - name: DSToken
+          file: ./abis/DSToken.json
+      entities:
+        - SystemState
+        - User
+        - MkrTransfer
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: Mint(indexed address,uint256)
+          handler: handleMint
+        - event: Burn(indexed address,uint256)
+          handler: handleBurn
+
+  #
   # Proxy Module
   #
 
