@@ -1,7 +1,7 @@
 import { Address, BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 import { clearStore, describe, test, assert, beforeEach, afterEach } from 'matchstick-as'
 import { MkrApproval, User } from '../../../../generated/schema'
-import { Approval as ApprovalEvent } from '../../../../generated/Token/DSToken'
+import { Approval as ApprovalEvent } from '../../../../generated/DSToken/DSToken'
 import { users } from '../../../../src/entities'
 import { handleApproval } from '../../../../src/mappings/modules/mkr/dsToken'
 import { tests } from '../../../../src/mappings/modules/tests'
