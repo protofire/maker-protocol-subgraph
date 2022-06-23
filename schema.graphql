@@ -200,6 +200,12 @@ type User @entity {
   " User's DAI "
   dai: BigDecimal!
 
+  " The user savings in DAI (Pot#pie) "
+  savings: BigDecimal!
+
+  " Total maker balance "
+  totalMkrBalance: BigDecimal!
+
   " Number of user proxies associated to the user "
   proxyCount: BigInt!
 
@@ -214,6 +220,15 @@ type User @entity {
 
   " User's collaterals "
   collaterals: [Collateral!] @derivedFrom(field: "owner")
+
+  " User's mkr outgoing transfers "
+  mkrOutgoingTransfers: [MkrTransfer!] @derivedFrom(field: "src")
+
+  " User's mkr incoming transfers "
+  mkrIncomingTransfers: [MkrTransfer!] @derivedFrom(field: "dst")
+
+  " User's mkr approvals "
+  mkrApprovals: [MkrApproval!] @derivedFrom(field: "owner")
 }
 
 " Contract used to execute transactions and sequences of transactions on behalf of a user "
@@ -239,6 +254,9 @@ type SystemState @entity {
   #
   # General protocol stats
   #
+
+  " Total mkr issued [MKR] DSToken._supply"
+  totalMkr: BigDecimal!
 
   " Total debt issued [DAI] (Vat.debt)"
   totalDebt: BigDecimal!
@@ -280,6 +298,16 @@ type SystemState @entity {
 
   " Total Debt Ceiling "
   totalDebtCeiling: BigDecimal!
+
+  #
+  # Balance Sheet paramters (vow)
+  #
+
+  " Address that conforms to a FlapLike interface "
+  vowFlapperContract: Bytes!
+
+  " Address that conforms to a Floplike interface "
+  vowFlopperContract: Bytes!
 
   #
   # Debt auction parameters (flop)
@@ -347,6 +375,9 @@ type SystemState @entity {
 
   " Address that conforms to a VowLike interface "
   potVowContract: Bytes!
+
+  " Total savings in DAI of all users (Pot#Pie) "
+  totalSavingsInPot: BigDecimal!
 
   #
   # Status fields
@@ -539,6 +570,27 @@ type DaiMoveLog @entity {
   block: BigInt!
   timestamp: BigInt!
   transaction: Bytes!
+}
+
+type MkrTransfer @entity {
+  " Equals to: <src>-<dst>-<tx> "
+  id: ID!
+  src: User!
+  dst: User!
+  amount: BigDecimal!
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+type MkrApproval @entity {
+  " Equals to: <owner>-<spender> "
+  id: ID!
+  owner: User!
+  spender: User!
+  amount: BigDecimal!
+  createdAt: BigInt!
+  updatedAt: BigInt!
 }
 
 type SpotParLog @entity {
