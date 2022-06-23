@@ -5,7 +5,7 @@ import {
   Approval as ApprovalEvent,
   Mint as MintEvent,
   Burn as BurnEvent,
-} from '../../../../generated/Token/DSToken'
+} from '../../../../generated/DSToken/DSToken'
 import { system as systemState, users } from '../../../entities'
 
 export function handleTransfer(event: TransferEvent): void {

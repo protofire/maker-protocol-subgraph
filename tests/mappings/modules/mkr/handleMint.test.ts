@@ -1,7 +1,7 @@
 import { Address, BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 import { clearStore, describe, test, assert, beforeEach, afterEach } from 'matchstick-as'
 import { SystemState, User } from '../../../../generated/schema'
-import { Mint as MintEvent } from '../../../../generated/Token/DSToken'
+import { Mint as MintEvent } from '../../../../generated/DSToken/DSToken'
 import { users } from '../../../../src/entities'
 import { handleMint } from '../../../../src/mappings/modules/mkr/dsToken'
 import { tests } from '../../../../src/mappings/modules/tests'

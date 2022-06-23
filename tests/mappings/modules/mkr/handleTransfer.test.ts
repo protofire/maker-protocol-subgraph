@@ -1,6 +1,6 @@
 import { Address, BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 import { clearStore, describe, test, assert } from 'matchstick-as'
-import { Transfer as TransferEvent } from '../../../../generated/Token/DSToken'
+import { Transfer as TransferEvent } from '../../../../generated/DSToken/DSToken'
 import { users } from '../../../../src/entities'
 import { handleTransfer } from '../../../../src/mappings/modules/mkr/dsToken'
 import { tests } from '../../../../src/mappings/modules/tests'

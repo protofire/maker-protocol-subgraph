@@ -1,7 +1,7 @@
 import { Address, BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 import { clearStore, describe, test, assert, beforeEach, afterEach } from 'matchstick-as'
 import { SystemState, User } from '../../../../generated/schema'
-import { Burn as BurnEvent } from '../../../../generated/Token/DSToken'
+import { Burn as BurnEvent } from '../../../../generated/DSToken/DSToken'
 import { users } from '../../../../src/entities'
 import { handleBurn } from '../../../../src/mappings/modules/mkr/dsToken'
 import { tests } from '../../../../src/mappings/modules/tests'
