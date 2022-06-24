@@ -1,27 +1,38 @@
 import { BigDecimal } from '@graphprotocol/graph-ts'
 import { bytes, units } from '@protofire/subgraph-toolkit'
-import { SystemState, VowFlapLog, VowFlopLog } from '../../../../generated/schema'
+import { VowFlapLog, VowFlopLog } from '../../../../generated/schema'
 import { LogNote, Vow } from '../../../../generated/Vow/Vow'
 import { system as systemModule } from '../../../entities'
 import { Address } from '@graphprotocol/graph-ts'
 import { LiveChangeLog, PushDebtQueueLog, PopDebtQueueLog } from '../../../../generated/schema'
 
 export function handleFile(event: LogNote): void {
+  let sig = event.params.sig.toHexString()
   let what = event.params.arg1.toString()
-  let data = bytes.toUnsignedInt(event.params.arg2)
 
   let system = systemModule.getSystemState(event)
 
-  if (what == 'wait') {
-    system.debtAuctionDelay = data
-  } else if (what == 'bump') {
-    system.surplusAuctionLotSize = units.fromRad(data)
-  } else if (what == 'sump') {
-    system.debtAuctionBidSize = units.fromRad(data)
-  } else if (what == 'dump') {
-    system.debtAuctionInitialLotSize = units.fromWad(data)
-  } else if (what == 'hump') {
-    system.surplusAuctionBuffer = units.fromRad(data)
+  if (sig == '0x29ae8114') {
+    let data = bytes.toUnsignedInt(event.params.arg2)
+    if (what == 'wait') {
+      system.debtAuctionDelay = data
+    } else if (what == 'bump') {
+      system.surplusAuctionLotSize = units.fromRad(data)
+    } else if (what == 'sump') {
+      system.debtAuctionBidSize = units.fromRad(data)
+    } else if (what == 'dump') {
+      system.debtAuctionInitialLotSize = units.fromWad(data)
+    } else if (what == 'hump') {
+      system.surplusAuctionBuffer = units.fromRad(data)
+    }
+  } else if (sig == '0xd4e8be83') {
+    // TODO: Register the address and start collecting events from these contracts
+    let data = Address.fromBytes(event.params.arg2)
+    if (what == 'flapper') {
+      system.vowFlapperContract = data
+    } else if (what == 'flopper') {
+      system.vowFlopperContract = data
+    }
   }
 
   system.save()
@@ -38,11 +49,10 @@ export function handleCage(event: LogNote): void {
   log.save()
 }
 
-
 export function handleFlog(event: LogNote): void {
   let era = bytes.toUnsignedInt(event.params.arg1)
   let system = systemModule.getSystemState(event)
-  let vowContract = Vow.bind(Address.fromString('0xa950524441892a31ebddf91d3ceefa04bf454466'));
+  let vowContract = Vow.bind(Address.fromString('0xa950524441892a31ebddf91d3ceefa04bf454466'))
   let amount = vowContract.sin(era)
   system.systemDebtInQueue = system.systemDebtInQueue.minus(units.fromRad(amount))
 
@@ -74,7 +84,7 @@ export function handleFess(event: LogNote): void {
 }
 
 export function handleFlap(event: LogNote): void {
-  let system = systemModule.getSystemState(event);
+  let system = systemModule.getSystemState(event)
   let bump = system.surplusAuctionLotSize
 
   if (bump) {
@@ -88,7 +98,7 @@ export function handleFlap(event: LogNote): void {
 }
 
 export function handleFlop(event: LogNote): void {
-  let system = systemModule.getSystemState(event);
+  let system = systemModule.getSystemState(event)
   let dump = system.debtAuctionInitialLotSize
   let sump = system.debtAuctionBidSize
   let ash = system.debtOnAuctionTotalAmount
