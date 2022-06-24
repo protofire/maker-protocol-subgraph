@@ -16,7 +16,7 @@ import {
   SystemDebt,
   SystemState,
   CollateralTransferLog,
-  LiveChangeLog
+  LiveChangeLog,
 } from '../../../../generated/schema'
 
 import { collaterals, collateralTypes, users, system as systemModule, vaults, systemDebts } from '../../../entities'
@@ -135,7 +135,6 @@ export function handleSlip(event: LogNote): void {
   log.collateralBefore = amountBefore
   log.save()
 
-
   collateralType.totalCollateral.plus(wad)
   collateralType.modifiedAt = event.block.timestamp
   collateralType.modifiedAtBlock = event.block.number
@@ -174,7 +173,7 @@ export function handleFlux(event: LogNote): void {
   srcLog.dst = dstAddress
   srcLog.amount = Δwad
   srcLog.collateral = srcCollateral.id
-  srcLog.direction = "OUT"
+  srcLog.direction = 'OUT'
   srcLog.block = event.block.number
   srcLog.timestamp = event.block.timestamp
   srcLog.transaction = event.transaction.hash
@@ -185,7 +184,7 @@ export function handleFlux(event: LogNote): void {
   dstLog.dst = dstAddress
   dstLog.amount = Δwad
   dstLog.collateral = dstCollateral.id
-  dstLog.direction = "IN"
+  dstLog.direction = 'IN'
   dstLog.block = event.block.number
   dstLog.timestamp = event.block.timestamp
   dstLog.transaction = event.transaction.hash
@@ -200,8 +199,8 @@ export function handleMove(event: LogNote): void {
 
   let srcUser = users.getOrCreateUser(srcAddress)
   let dstUser = users.getOrCreateUser(dstAddress)
-  srcUser.dai = srcUser.dai.minus(amount)
-  dstUser.dai = dstUser.dai.plus(amount)
+  srcUser.totalVaultDai = srcUser.totalVaultDai.minus(amount)
+  dstUser.totalVaultDai = dstUser.totalVaultDai.plus(amount)
   srcUser.save()
   dstUser.save()
 
@@ -333,8 +332,18 @@ export function handleFork(event: LogNote): void {
   let dink = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(100, 132)))
   let dart = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(132, 164)))
 
-  let vault1 = Vault.load(src.toHexString().concat("-").concat(ilk))
-  let vault2 = Vault.load(dst.toHexString().concat("-").concat(ilk))
+  let vault1 = Vault.load(
+    src
+      .toHexString()
+      .concat('-')
+      .concat(ilk),
+  )
+  let vault2 = Vault.load(
+    dst
+      .toHexString()
+      .concat('-')
+      .concat(ilk),
+  )
 
   if (vault1 && vault2) {
     vault1.collateral = vault1.collateral.minus(units.fromWad(dink))
@@ -409,7 +418,7 @@ export function handleHeal(event: LogNote): void {
   let user = User.load(event.address.toHexString())
 
   if (user) {
-    user.dai = user.dai.minus(rad)
+    user.totalVaultDai = user.totalVaultDai.minus(rad)
     user.save()
 
     let systemDebt = SystemDebt.load(event.address.toHexString())
@@ -422,7 +431,7 @@ export function handleHeal(event: LogNote): void {
     systemDebt.save()
   }
 
-  let system = SystemState.load("current")
+  let system = SystemState.load('current')
 
   if (system) {
     system.totalDebt = system.totalDebt.minus(rad)
@@ -453,7 +462,7 @@ export function handleSuck(event: LogNote): void {
   }
 
   if (user2) {
-    user2.dai = user2.dai.plus(rad)
+    user2.totalVaultDai = user2.totalVaultDai.plus(rad)
     user2.save()
   }
 
@@ -478,7 +487,7 @@ export function handleFold(event: LogNote): void {
     collateral.rate = collateral.rate.plus(rate)
     collateral.save()
 
-    user.dai = user.dai.plus(rad)
+    user.totalVaultDai = user.totalVaultDai.plus(rad)
     user.save()
 
     let system = systemModule.getSystemState(event)

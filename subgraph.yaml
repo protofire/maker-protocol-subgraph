@@ -264,6 +264,28 @@ dataSources:
           topic0: '0x26e027f100000000000000000000000000000000000000000000000000000000'
           handler: handleYank
 
+  #  Liquidation Module
+  - name: Dog
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Dog
+      address: '0x135954d155898D42C90D2a57824C690e0c7BEf1B'
+      startBlock: 12246358
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/modules/liquidation/dog.ts
+      abis:
+        - name: Dog
+          file: ./abis/Dog.json
+      entities:
+        - LiveChangeLog
+      eventHandlers:
+        - event: Cage()
+          handler: handleCage
+
   # Debt Auction
   - name: Flop
     kind: ethereum/contract
@@ -590,10 +612,37 @@ dataSources:
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0xfcafcc6800000000000000000000000000000000000000000000000000000000'
           handler: handleGive
+
+  #
+  # DAI Module
+  #
+  - name: Dai
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: '0x6b175474e89094c44da98b954eedeac495271d0f'
+      abi: Dai
+      startBlock: 8928158
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/modules/dai/dai.ts
+      entities:
+        - Approval
+        - Transfer
+      abis:
+        - name: Dai
+          file: ./abis/Dai.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+
   #
   # Liquidation Module
   #
-
   # Auction Initiation from Liquidation
   - name: Clipper
     kind: ethereum/contract

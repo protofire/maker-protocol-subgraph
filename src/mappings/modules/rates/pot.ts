@@ -3,6 +3,7 @@ import { bytes, units } from '@protofire/subgraph-toolkit'
 
 import { LogNote } from '../../../../generated/Pot/Pot'
 
+import { LiveChangeLog } from '../../../../generated/schema'
 import { system as systemModule, users } from '../../../entities'
 
 export function handleFile(event: LogNote): void {
@@ -30,11 +31,16 @@ export function handleFile(event: LogNote): void {
 
 export function handleCage(event: LogNote): void {
   let system = systemModule.getSystemState(event)
-
   system.savingsRate = BigDecimal.fromString('1') // Dai Savings Rate
-  system.dsrLive = false // Access Flag
-  system.dsrLiveLastUpdateAt = event.block.timestamp
+
+  let log = new LiveChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
+  log.contract = event.address
+  log.block = event.block.number
+  log.timestamp = event.block.timestamp
+  log.transaction = event.transaction.hash
+
   system.save()
+  log.save()
 }
 
 export function handleJoin(event: LogNote): void {
