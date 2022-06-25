@@ -1,7 +1,7 @@
-import { BigDecimal, Bytes } from '@graphprotocol/graph-ts'
+import { BigDecimal, Bytes, Address, log } from '@graphprotocol/graph-ts'
 import { bytes, units } from '@protofire/subgraph-toolkit'
 
-import { LogNote } from '../../../../generated/Pot/Pot'
+import { LogNote, Pot } from '../../../../generated/Pot/Pot'
 
 import { LiveChangeLog } from '../../../../generated/schema'
 import { system as systemModule, users } from '../../../entities'
@@ -64,5 +64,18 @@ export function handleExit(event: LogNote): void {
 
   let system = systemModule.getSystemState(event)
   system.totalSavingsInPot = system.totalSavingsInPot.minus(wad)
+  system.save()
+}
+
+export function handleDrip(event: LogNote): void {
+  let system = systemModule.getSystemState(event)
+  let potContract = Pot.bind(Address.fromString('0x197e90f9fad81970ba7976f33cbd77088e5d7cf7'))
+
+  let callResult = potContract.try_chi()
+  if (callResult.reverted) {
+    log.warning('handleDrip: try_chi reverted', [])
+  }
+  system.rateAccumulator = callResult.value
+  system.lastDripCall = event.block.timestamp
   system.save()
 }
