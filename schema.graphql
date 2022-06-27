@@ -398,6 +398,13 @@ type SystemState @entity {
   daiTotalSupply: BigDecimal!
 
   #
+  #Liquidation 2.0 parameters (Dog)
+  #
+
+  " Amount of DAI needed to cover debt + fees of active auctions (Dog#Dirt) "
+  totalAuctionDebtAndFees: BigDecimal!
+
+  #
   # Status fields
   #
 

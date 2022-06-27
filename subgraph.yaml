@@ -285,6 +285,8 @@ dataSources:
       eventHandlers:
         - event: Cage()
           handler: handleCage
+        - event: Digs(indexed bytes32,uint256)
+          handler: handleDigs
 
   # Debt Auction
   - name: Flop
