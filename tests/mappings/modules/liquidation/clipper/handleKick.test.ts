@@ -7,9 +7,6 @@ import { Kick } from '../../../../../generated/Clipper/Clipper'
 import { handleKick } from '../../../../../src/mappings/modules/liquidation/clipper'
 
 describe('Clipper#handleKick', () => {
-  beforeEach(() => {
-    mockDebt()
-  })
   test('Creates a SaveAuction entity', () => {
     let id = BigInt.fromString('2')
     let top = BigInt.fromString('10000000000000000000000000000') // 10 ray
