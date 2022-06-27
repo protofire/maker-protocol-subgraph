@@ -1,6 +1,7 @@
 import { Cage, Digs } from '../../../../generated/Dog/Dog'
-import { LiveChangeLog } from '../../../../generated/schema'
+import { LiveChangeLog, CollateralType } from '../../../../generated/schema'
 import { system } from '../../../entities/System'
+import { collateralTypes } from '../../../entities/collateralTypes'
 import { address, units } from '@protofire/subgraph-toolkit'
 
 export function handleCage(event: Cage): void {
@@ -18,4 +19,8 @@ export function handleDigs(event: Digs): void {
   let amount = units.fromRad(event.params.rad)
   systemState.totalAuctionDebtAndFees = systemState.totalAuctionDebtAndFees.minus(amount)
   systemState.save()
+
+  let collType = collateralTypes.loadOrCreateCollateralType(event.params.ilk.toString())
+  collType.dirt = collType.dirt.minus(amount)
+  collType.save()
 }

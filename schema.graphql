@@ -91,7 +91,9 @@ type CollateralType @entity {
   # TODO : clip;  // Liquidator
   # TODO : clip;  // Liquidator
   # TODO: uint256 hole;  // Max DAI needed to cover debt+fees of active auctions per ilk [rad]
-  # TODO: uint256 dirt;  // Amt DAI needed to cover debt+fees of active auctions per ilk [rad]
+
+  " Amt DAI needed to cover debt+fees of active auctions per ilk [rad] "
+  dirt: BigDecimal!
 
   #
   # Collateral auctions

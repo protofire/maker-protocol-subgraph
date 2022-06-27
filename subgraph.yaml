@@ -282,6 +282,8 @@ dataSources:
           file: ./abis/Dog.json
       entities:
         - LiveChangeLog
+        - CollateralType
+        - SystemState
       eventHandlers:
         - event: Cage()
           handler: handleCage
