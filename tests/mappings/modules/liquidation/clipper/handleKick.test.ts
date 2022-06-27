@@ -27,6 +27,8 @@ describe('Clipper#handleKick', () => {
       ]),
     )
 
+    event.block.timestamp = BigInt.fromI32(1001)
+
     handleKick(event)
 
     assert.fieldEquals('SaleAuction', id.toString(), 'amountDaiToRaise', '5')
@@ -39,6 +41,7 @@ describe('Clipper#handleKick', () => {
     )
     assert.fieldEquals('SaleAuction', id.toString(), 'userIncentives', '0x000000000000000000000000000000000000aaaa')
     assert.fieldEquals('SaleAuction', id.toString(), 'priceStarting', '10')
+    assert.fieldEquals('SaleAuction', id.toString(), 'updatedAt', '1001')
 
     clearStore()
   })
