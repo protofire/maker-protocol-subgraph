@@ -1,35 +1,23 @@
-import { dataSource } from '@graphprotocol/graph-ts'
-import { bytes, integer, units } from '@protofire/subgraph-toolkit'
-import { CollateralAuction, CollateralType } from '../../../../generated/schema'
-
+import { units } from '@protofire/subgraph-toolkit'
 import { Kick } from '../../../../generated/Clipper/Clipper'
-
-import { system as systemModule } from '../../../entities'
+import { SaleAuctions } from '../../../entities'
 
 export function handleKick(event: Kick): void {
-    /* 
-    uint256 tab,  // Debt                   [rad]
-    uint256 lot,  // Collateral             [wad]
-    address usr,  // Address that will receive any leftover collateral
-    address kpr   // Address that will receive incentives 
-    */
+  let idStr = event.params.id.toString()
+  let tab = units.fromRad(event.params.tab)
+  let lot = units.fromWad(event.params.lot)
+  let usr = event.params.usr.toHexString()
+  let kpr = event.params.kpr.toHexString()
+  let top = units.fromRay(event.params.top)
 
+  let saleAuction = SaleAuctions.loadOrCreateSaleAuction(idStr, event)
+  saleAuction.amountDaiToRaise = tab
+  saleAuction.amountCollateralToSell = lot
+  saleAuction.userExcessCollateral = usr
+  saleAuction.userIncentives = kpr
+  saleAuction.priceStarting = top
 
-/*   let ilk = dataSource.context().getString('collateral')
-  let collateral = CollateralType.load(ilk)
+  saleAuction.save()
 
-  if (collateral != null) {
-    let bid = new CollateralAuction(event.params.id.toString())
-    bid.collateral = collateral.id
-
-    collateral.auctionCount = collateral.auctionCount.plus(integer.ONE)
-
-    bid.save()
-    collateral.save()
-
-    // Update system state
-    let state = systemModule.getSystemState(event)
-    state.collateralAuctionCount = state.collateralAuctionCount.plus(integer.ONE)
-    state.save() */
-  }
+  // FYI not saving the COIN value.
 }

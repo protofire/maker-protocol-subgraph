@@ -662,8 +662,6 @@ dataSources:
       entities:
         - SystemState
       eventHandlers:
-        - event: Deny(indexed address)
-          handler: handleDeny
         - event: File(indexed bytes32,uint256)
           handler: handleFile
         - event: File(indexed bytes32,address)
@@ -672,8 +670,6 @@ dataSources:
           handler: handleKick
         - event: Redo(indexed uint256,uint256,uint256,uint256,indexed address,indexed address,uint256)
           handler: handleRedo
-        - event: Rely(indexed address)
-          handler: handleRely
         - event: Take(indexed uint256,uint256,uint256,uint256,uint256,uint256,indexed address)
           handler: handleTake
         - event: Yank(uint256)

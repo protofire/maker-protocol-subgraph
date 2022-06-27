@@ -1,0 +1,48 @@
+import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { test, assert, clearStore, beforeEach, describe } from 'matchstick-as'
+import { tests } from '../../../../../src/mappings/modules/tests'
+import { mockDebt } from '../../../../helpers/mockedFunctions'
+import { system as systemModule } from '../../../../../src/entities'
+import { Kick } from '../../../../../generated/Clipper/Clipper'
+import { handleKick } from '../../../../../src/mappings/modules/liquidation/clipper'
+
+describe('Clipper#handleKick', () => {
+  beforeEach(() => {
+    mockDebt()
+  })
+  test('Creates a SaveAuction entity', () => {
+    let id = BigInt.fromString('2')
+    let top = BigInt.fromString('10000000000000000000000000000') // 10 ray
+    let tab = BigInt.fromString('5000000000000000000000000000000000000000000000') // 5 rad
+    let lot = BigInt.fromString('101000000000000000000') // 101 wad
+    let usr = Address.fromString('0x0000000000000000000000000000000000001111')
+    let kpr = Address.fromString('0x000000000000000000000000000000000000aaaa')
+    let coin = BigInt.fromString('0')
+    let event = changetype<Kick>(
+      tests.helpers.events.getNewEvent([
+        tests.helpers.params.getBigInt('id', id),
+        tests.helpers.params.getBigInt('top', top),
+        tests.helpers.params.getBigInt('tab', tab),
+        tests.helpers.params.getBigInt('lot', lot),
+        tests.helpers.params.getAddress('usr', usr),
+        tests.helpers.params.getAddress('kpr', kpr),
+        tests.helpers.params.getBigInt('coin', coin),
+      ]),
+    )
+
+    handleKick(event)
+
+    assert.fieldEquals('SaleAuction', id.toString(), 'amountDaiToRaise', '5')
+    assert.fieldEquals('SaleAuction', id.toString(), 'amountCollateralToSell', '101')
+    assert.fieldEquals(
+      'SaleAuction',
+      id.toString(),
+      'userExcessCollateral',
+      '0x0000000000000000000000000000000000001111',
+    )
+    assert.fieldEquals('SaleAuction', id.toString(), 'userIncentives', '0x000000000000000000000000000000000000aaaa')
+    assert.fieldEquals('SaleAuction', id.toString(), 'priceStarting', '10')
+
+    clearStore()
+  })
+})

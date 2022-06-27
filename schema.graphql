@@ -704,3 +704,25 @@ type DaiApproval @entity {
   " Timestamp of the update approval "
   updatedAt: BigInt!
 }
+
+type SaleAuction @entity {
+  id: ID!
+  " The target DAI to raise from the auction [tab in SmartContract]"
+  amountDaiToRaise: BigDecimal!
+  " The amount of collateral available for purchase [lot in SmartContract]"
+  amountCollateralToSell: BigDecimal!
+  " User to return any excess collateral [usr in SmartContract]"
+  userExcessCollateral: User!
+  " User where DAI incentives will be sent [kpr in SmartContract]"
+  userIncentives: User!
+  " Auction inicial price [top in SmartContract]"
+  priceStarting: BigDecimal!
+  " Auction start time [tic in SmartContract]"
+  startedAt: BigInt!
+  " Last Update timesmatp"
+  updatedAt: BigInt!
+  " Auction reset time "
+  resetAt: BigInt!
+  " Auction buy time "
+  buyAt: BigInt!
+}
