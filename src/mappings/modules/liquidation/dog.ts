@@ -1,7 +1,6 @@
 import { Cage, File, File1, File2, File3 } from '../../../../generated/Dog/Dog'
 import { LiveChangeLog } from '../../../../generated/schema'
 import { collateralTypes, system as systemModule } from '../../../entities'
-import { Bytes } from '@graphprotocol/graph-ts'
 import { units } from '@protofire/subgraph-toolkit'
 
 export function handleCage(event: Cage): void {
