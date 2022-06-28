@@ -286,6 +286,20 @@ dataSources:
         - event: Cage()
           handler: handleCage
 
+        ### Administration ###
+
+        - event: File(indexed bytes32,address)
+          handler: handleFileVow
+
+        - event: File(indexed bytes32,indexed bytes32,address)
+          handler: handleFileHole
+
+        - event: File(indexed bytes32,indexed bytes32,uint256)
+          handler: handleFileChop
+
+        - event: File(indexed bytes32,uint256)
+          handler: handleFileClip
+
   # Debt Auction
   - name: Flop
     kind: ethereum/contract
