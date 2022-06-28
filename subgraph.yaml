@@ -612,6 +612,10 @@ dataSources:
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0xfcafcc6800000000000000000000000000000000000000000000000000000000'
           handler: handleGive
+
+  #
+  # DAI Module
+  #
   - name: Dai
     kind: ethereum/contract
     network: mainnet
