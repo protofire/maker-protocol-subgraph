@@ -725,6 +725,8 @@ type SaleAuction @entity {
   resetedAt: BigInt!
   " Auction buy time "
   boughtAt: BigInt!
+  " timestamp when the Auction was removed"
+  deletedAt: BigInt!
   " Auction is active "
   isActive: Boolean!
 }
