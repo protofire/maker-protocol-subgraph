@@ -661,6 +661,7 @@ dataSources:
           file: ./abis/Clipper.json
       entities:
         - SystemState
+        - SaleAuction
       eventHandlers:
         - event: File(indexed bytes32,uint256)
           handler: handleFile

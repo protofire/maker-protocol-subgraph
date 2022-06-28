@@ -15,7 +15,8 @@ export function handleKick(event: Kick): void {
   saleAuction.amountCollateralToSell = lot
   saleAuction.userExcessCollateral = usr
   saleAuction.userIncentives = kpr
-  saleAuction.priceStarting = top
+  saleAuction.startingPrice = top
+  saleAuction.isActive = true
 
   saleAuction.save()
 

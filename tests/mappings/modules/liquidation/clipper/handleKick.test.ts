@@ -1,13 +1,11 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts'
-import { test, assert, clearStore, beforeEach, describe } from 'matchstick-as'
+import { test, assert, clearStore, describe } from 'matchstick-as'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
-import { system as systemModule } from '../../../../../src/entities'
 import { Kick } from '../../../../../generated/Clipper/Clipper'
 import { handleKick } from '../../../../../src/mappings/modules/liquidation/clipper'
 
 describe('Clipper#handleKick', () => {
-  test('Creates a SaveAuction entity', () => {
+  test('Creates a SaleAuction entity', () => {
     let id = BigInt.fromString('2')
     let top = BigInt.fromString('10000000000000000000000000000') // 10 ray
     let tab = BigInt.fromString('5000000000000000000000000000000000000000000000') // 5 rad
@@ -40,7 +38,7 @@ describe('Clipper#handleKick', () => {
       '0x0000000000000000000000000000000000001111',
     )
     assert.fieldEquals('SaleAuction', id.toString(), 'userIncentives', '0x000000000000000000000000000000000000aaaa')
-    assert.fieldEquals('SaleAuction', id.toString(), 'priceStarting', '10')
+    assert.fieldEquals('SaleAuction', id.toString(), 'startingPrice', '10')
     assert.fieldEquals('SaleAuction', id.toString(), 'updatedAt', '1001')
 
     clearStore()

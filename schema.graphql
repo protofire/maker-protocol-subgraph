@@ -716,13 +716,15 @@ type SaleAuction @entity {
   " User where DAI incentives will be sent [kpr in SmartContract]"
   userIncentives: User!
   " Auction inicial price [top in SmartContract]"
-  priceStarting: BigDecimal!
+  startingPrice: BigDecimal!
   " Auction start time [tic in SmartContract]"
   startedAt: BigInt!
   " Last Update timesmatp"
   updatedAt: BigInt!
   " Auction reset time "
-  resetAt: BigInt!
+  resetedAt: BigInt!
   " Auction buy time "
-  buyAt: BigInt!
+  boughtAt: BigInt!
+  " Auction is active "
+  isActive: Boolean!
 }
