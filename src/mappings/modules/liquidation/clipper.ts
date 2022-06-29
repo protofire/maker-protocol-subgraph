@@ -1,8 +1,9 @@
 import { units } from '@protofire/subgraph-toolkit'
-import { Kick } from '../../../../generated/Clipper/Clipper'
+import { Kick as KickEvent, Yank as YankEvent } from '../../../../generated/Clipper/Clipper'
+import { SaleAuction } from '../../../../generated/schema'
 import { SaleAuctions } from '../../../entities'
 
-export function handleKick(event: Kick): void {
+export function handleKick(event: KickEvent): void {
   let idStr = event.params.id.toString()
   let tab = units.fromRad(event.params.tab)
   let lot = units.fromWad(event.params.lot)
@@ -21,4 +22,16 @@ export function handleKick(event: Kick): void {
   saleAuction.save()
 
   // FYI not saving the COIN value.
+}
+
+export function handleYank(event: YankEvent): void {
+  let id = event.params.id.toString()
+
+  let saleAuction = SaleAuction.load(id)
+
+  if (saleAuction) {
+    saleAuction.isActive = false
+    saleAuction.deletedAt = event.block.timestamp
+    saleAuction.save()
+  }
 }
