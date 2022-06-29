@@ -88,10 +88,17 @@ type CollateralType @entity {
   liquidationRatio: BigDecimal!
 
   # TODO check Dog and Vat Ilk definitions
-  # TODO : clip;  // Liquidator
-  # TODO : clip;  // Liquidator
-  # TODO: uint256 hole;  // Max DAI needed to cover debt+fees of active auctions per ilk [rad]
   # TODO: uint256 dirt;  // Amt DAI needed to cover debt+fees of active auctions per ilk [rad]
+
+  #
+  # Dog ilk
+  #
+
+  " Max DAI needed to cover debt+fees of active auctions per ilk [rad] (hole)"
+  maxDaiToCoverAuction: BigDecimal!
+
+  " The address of the Liquidator (clip)"
+  liquidatorAddress: Bytes!
 
   #
   # Collateral auctions
@@ -391,6 +398,14 @@ type SystemState @entity {
   totalSavingsInPot: BigDecimal!
 
   #
+  # Dog
+  #
+
+  " Max DAI needed to cover debt+fees of active auctions [rad] (Hole)"
+  maxDaiToCoverAuction: BigDecimal!
+
+  " Address that conforms to a VowLike interface "
+  dogVowContract: Bytes!
   # DAI ERC20 contract address
   #
 
