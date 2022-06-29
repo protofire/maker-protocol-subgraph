@@ -28,7 +28,7 @@ export function handleFileHole(event: File): void {
 
   if (what == 'Hole') {
     let system = systemModule.getSystemState(event)
-    system.maxDaiCoverForAuction = units.fromRad(event.params.data)
+    system.maxDaiToCoverAuction = units.fromRad(event.params.data)
     system.save()
   }
 }
@@ -41,7 +41,7 @@ export function handleFileChop(event: File2): void {
     ilk.liquidationPenalty = units.fromWad(event.params.data)
     ilk.save()
   } else if (what == 'hole') {
-    ilk.maxDaiCoverForAuction = units.fromRad(event.params.data)
+    ilk.maxDaiToCoverAuction = units.fromRad(event.params.data)
     ilk.save()
   }
 }

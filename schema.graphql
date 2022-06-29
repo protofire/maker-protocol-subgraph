@@ -95,7 +95,7 @@ type CollateralType @entity {
   #
 
   " Max DAI needed to cover debt+fees of active auctions per ilk [rad] (hole)"
-  maxDaiCoverForAuction: BigDecimal!
+  maxDaiToCoverAuction: BigDecimal!
 
   " The address of the Liquidator (clip)"
   liquidatorAddress: Bytes!
@@ -402,7 +402,7 @@ type SystemState @entity {
   #
 
   " Max DAI needed to cover debt+fees of active auctions [rad] (Hole)"
-  maxDaiCoverForAuction: BigDecimal!
+  maxDaiToCoverAuction: BigDecimal!
 
   " Address that conforms to a VowLike interface "
   dogVowContract: Bytes!

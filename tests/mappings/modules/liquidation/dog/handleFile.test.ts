@@ -50,7 +50,7 @@ describe('Dog#handleFile', () => {
 
       handleFileHole(event)
 
-      assert.fieldEquals('SystemState', 'current', 'maxDaiCoverForAuction', radAmount)
+      assert.fieldEquals('SystemState', 'current', 'maxDaiToCoverAuction', radAmount)
     })
   })
 
@@ -82,7 +82,7 @@ describe('Dog#handleFile', () => {
 
       handleFileChop(event)
 
-      assert.fieldEquals('CollateralType', ilk, 'maxDaiCoverForAuction', radAmount)
+      assert.fieldEquals('CollateralType', ilk, 'maxDaiToCoverAuction', radAmount)
     })
   })
 
