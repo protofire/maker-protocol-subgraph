@@ -47,7 +47,7 @@ describe('Clipper#handleTake', () => {
   })
 
   describe('When [tab] is 0', () => {
-    test('Set isActite to false from SaleAuction', () => {
+    test('Set isActive to false from SaleAuction', () => {
       let id = BigInt.fromString('2')
       let max = BigInt.fromString('10000000000000000000000000000') // 10 ray
       let price = BigInt.fromString('11000000000000000000000000000') // 11 ray
