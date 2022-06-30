@@ -46,7 +46,7 @@ export function handleTake(event: TakeEvent): void {
       saleAuction.amountDaiToRaise = tab
       saleAuction.amountCollateralToSell = lot
 
-      // TODO: Not incluining in the scheme parcial boughts.
+      // TODO: Not tracking parcial boughts.
       // price [ray]
       // owe: Amount DAI bought [rad]
       // timestamp
