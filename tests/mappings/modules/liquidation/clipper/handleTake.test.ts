@@ -16,7 +16,7 @@ function createSaleAuction(id: BigInt, event: TakeEvent): void {
 
 describe('Clipper#handleTake', () => {
   describe('When [lot] is 0', () => {
-    test('Set isActite to false from SaleAuction', () => {
+    test('Set isActive to false from SaleAuction', () => {
       let id = BigInt.fromString('2')
       let max = BigInt.fromString('10000000000000000000000000000') // 10 ray
       let price = BigInt.fromString('11000000000000000000000000000') // 11 ray
@@ -70,14 +70,14 @@ describe('Clipper#handleTake', () => {
 
       event.block.timestamp = BigInt.fromString('1001')
 
-      handleTake(event) // aca falla
+      handleTake(event)
 
       assert.fieldEquals('SaleAuction', id.toString(), 'isActive', 'false')
       assert.fieldEquals('SaleAuction', id.toString(), 'updatedAt', '1001')
     })
   })
 
-  describe('When [tab] and [lot] ar not 0', () => {
+  describe('When [tab] and [lot] are not 0', () => {
     test('Updates from SaleAuction the fields amountDaiToRaise, amountCollateralToSell, boughtAt & updatedAt', () => {
       let id = BigInt.fromString('2')
       let max = BigInt.fromString('10000000000000000000000000000') // 10 ray
