@@ -40,9 +40,9 @@ export function handleTake(event: TakeEvent): void {
     } else {
       saleAuction.amountDaiToRaise = tab
       saleAuction.amountCollateralToSell = lot
-      saleAuction.boughtAt = event.block.timestamp
     }
 
+    saleAuction.boughtAt = event.block.timestamp
     saleAuction.updatedAt = event.block.timestamp
     saleAuction.save()
   }
