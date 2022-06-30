@@ -1,8 +1,13 @@
+import { BigDecimal, Address } from '@graphprotocol/graph-ts'
 import { units } from '@protofire/subgraph-toolkit'
-import { BigDecimal } from '@graphprotocol/graph-ts'
-import { Kick as KickEvent, Take as TakeEvent, Yank as YankEvent } from '../../../../generated/Clipper/Clipper'
+import {
+  Kick as KickEvent,
+  Take as TakeEvent,
+  Yank as YankEvent,
+  Redo as RedoEvent,
+} from '../../../../generated/Clipper/Clipper'
 import { SaleAuction } from '../../../../generated/schema'
-import { SaleAuctions } from '../../../entities'
+import { saleAuctions } from '../../../entities'
 
 export function handleKick(event: KickEvent): void {
   let id = event.params.id.toString()
@@ -12,7 +17,7 @@ export function handleKick(event: KickEvent): void {
   let kpr = event.params.kpr.toHexString()
   let top = units.fromRay(event.params.top)
 
-  let saleAuction = SaleAuctions.loadOrCreateSaleAuction(id, event)
+  let saleAuction = saleAuctions.loadOrCreateSaleAuction(id, event)
   saleAuction.amountDaiToRaise = tab
   saleAuction.amountCollateralToSell = lot
   saleAuction.userExcessCollateral = usr
@@ -49,6 +54,19 @@ export function handleTake(event: TakeEvent): void {
 
     saleAuction.boughtAt = event.block.timestamp
     saleAuction.updatedAt = event.block.timestamp
+    saleAuction.save()
+  }
+}
+export function handleRedo(event: RedoEvent): void {
+  let id = event.params.id.toString()
+  let top = units.fromRay(event.params.top)
+
+  let saleAuction = SaleAuction.load(id)
+  if (saleAuction) {
+    saleAuction.resetedAt = event.block.timestamp
+    saleAuction.startingPrice = top
+    saleAuction.updatedAt = event.block.timestamp
+
     saleAuction.save()
   }
 }
