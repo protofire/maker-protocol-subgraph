@@ -34,7 +34,7 @@ export namespace system {
       state.dsrLive = true
 
       // dog parameters
-      state.totalAuctionDebtAndFees = decimal.ZERO
+      state.totalDaiAmountToCoverDebtAndFees = decimal.ZERO
     }
 
     // Hotfix for totalDebt

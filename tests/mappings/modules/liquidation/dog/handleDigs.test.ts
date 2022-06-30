@@ -5,12 +5,14 @@ import { handleDigs } from '../../../../../src/mappings/modules/liquidation/dog'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { CollateralType } from '../../../../../generated/schema'
+import { system as systemModule } from '../../../../../src/entities'
 
 function createEvent(): Digs {
-    let ilk = Bytes.fromHexString("4554482D41000000000000000000000000000000000000000000000000000000")
+    //let ilk = Bytes.fromHexString("4554482D41000000000000000000000000000000000000000000000000000000")
+    let ilk = "ETH-A"
     let rad = BigInt.fromString("10000000000000000000000000000000000000000000000000")
     let event = changetype<Digs>(tests.helpers.events.getNewEvent([
-        tests.helpers.params.getBytes("ilk", ilk),
+        tests.helpers.params.getBytes("ilk", Bytes.fromUTF8(ilk)),
         tests.helpers.params.getBigInt("rad", rad),
     ]))
 
@@ -22,15 +24,18 @@ describe('Dog#handleDigs', () => {
     let event = createEvent()
 
     let collateralType = new CollateralType("ETH-A")
-    collateralType.dirt = BigDecimal.fromString('0.0')
+    collateralType.daiAmountToCoverDebtAndFees = BigDecimal.fromString('20000.0')
     collateralType.save()
 
     mockDebt()
+    let systemState = systemModule.getSystemState(event)
+    systemState.totalDaiAmountToCoverDebtAndFees = BigDecimal.fromString('20000.0')
+    systemState.save()
 
     handleDigs(event)
 
-    assert.fieldEquals('SystemState', 'current', 'totalAuctionDebtAndFees', '-10000')
-    assert.fieldEquals('CollateralType', 'ETH-A', 'dirt', '-10000')
+    assert.fieldEquals('SystemState', 'current', 'totalDaiAmountToCoverDebtAndFees', '10000')
+    assert.fieldEquals('CollateralType', 'ETH-A', 'daiAmountToCoverDebtAndFees', '10000')
 
     clearStore()
   })

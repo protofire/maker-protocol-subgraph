@@ -93,7 +93,7 @@ type CollateralType @entity {
   # TODO: uint256 hole;  // Max DAI needed to cover debt+fees of active auctions per ilk [rad]
 
   " Amt DAI needed to cover debt+fees of active auctions per ilk [rad] "
-  dirt: BigDecimal!
+  daiAmountToCoverDebtAndFees: BigDecimal!
 
   #
   # Collateral auctions
@@ -404,7 +404,7 @@ type SystemState @entity {
   #
 
   " Amount of DAI needed to cover debt + fees of active auctions (Dog#Dirt) "
-  totalAuctionDebtAndFees: BigDecimal!
+  totalDaiAmountToCoverDebtAndFees: BigDecimal!
 
   #
   # Status fields

@@ -17,10 +17,10 @@ export function handleCage(event: Cage): void {
 export function handleDigs(event: Digs): void {
   let systemState = system.getSystemState(event)
   let amount = units.fromRad(event.params.rad)
-  systemState.totalAuctionDebtAndFees = systemState.totalAuctionDebtAndFees.minus(amount)
+  systemState.totalDaiAmountToCoverDebtAndFees = systemState.totalDaiAmountToCoverDebtAndFees.minus(amount)
   systemState.save()
 
-  let collType = collateralTypes.loadOrCreateCollateralType(event.params.ilk.toString())
-  collType.dirt = collType.dirt.minus(amount)
-  collType.save()
+  let collateralType = collateralTypes.loadOrCreateCollateralType(event.params.ilk.toString())
+  collateralType.daiAmountToCoverDebtAndFees = collateralType.daiAmountToCoverDebtAndFees.minus(amount)
+  collateralType.save()
 }
