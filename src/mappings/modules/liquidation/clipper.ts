@@ -40,6 +40,11 @@ export function handleTake(event: TakeEvent): void {
     } else {
       saleAuction.amountDaiToRaise = tab
       saleAuction.amountCollateralToSell = lot
+
+      // TODO: Not incluining in the scheme parcial boughts.
+      // price [ray]
+      // owe: Amount DAI bought [rad]
+      // timestamp
     }
 
     saleAuction.boughtAt = event.block.timestamp
