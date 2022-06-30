@@ -1,7 +1,7 @@
 import { Approval as ApprovalEvent, Transfer as TransferEvent } from '../../../../generated/Dai/Dai'
 import { daiTransfers } from '../../../entities/daiTransfer'
 import { address, units } from '@protofire/subgraph-toolkit'
-import { system } from '../../../entities/System'
+import { system } from '../../../entities/system'
 import { daiApprovals } from '../../../entities/daiApproval'
 import { users } from '../../../entities'
 

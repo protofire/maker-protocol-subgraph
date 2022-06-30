@@ -96,6 +96,16 @@ type CollateralType @entity {
   daiAmountToCoverDebtAndFees: BigDecimal!
 
   #
+  # Dog ilk
+  #
+
+  " Max DAI needed to cover debt+fees of active auctions per ilk [rad] (hole)"
+  maxDaiToCoverAuction: BigDecimal!
+
+  " The address of the Liquidator (clip)"
+  liquidatorAddress: Bytes!
+
+  #
   # Collateral auctions
   #
 
@@ -393,6 +403,14 @@ type SystemState @entity {
   totalSavingsInPot: BigDecimal!
 
   #
+  # Dog
+  #
+
+  " Max DAI needed to cover debt+fees of active auctions [rad] (Hole)"
+  maxDaiToCoverAuction: BigDecimal!
+
+  " Address that conforms to a VowLike interface "
+  dogVowContract: Bytes!
   # DAI ERC20 contract address
   #
 
@@ -712,4 +730,30 @@ type DaiApproval @entity {
   createdAt: BigInt!
   " Timestamp of the update approval "
   updatedAt: BigInt!
+}
+
+type SaleAuction @entity {
+  id: ID!
+  " The target DAI to raise from the auction [tab in SmartContract]"
+  amountDaiToRaise: BigDecimal!
+  " The amount of collateral available for purchase [lot in SmartContract]"
+  amountCollateralToSell: BigDecimal!
+  " User to return any excess collateral [usr in SmartContract]"
+  userExcessCollateral: User!
+  " User where DAI incentives will be sent [kpr in SmartContract]"
+  userIncentives: User!
+  " Auction inicial price [top in SmartContract]"
+  startingPrice: BigDecimal!
+  " Auction start time [tic in SmartContract]"
+  startedAt: BigInt!
+  " Last Update timesmatp"
+  updatedAt: BigInt!
+  " Auction reset time "
+  resetedAt: BigInt!
+  " Auction buy time "
+  boughtAt: BigInt!
+  " timestamp when the Auction was removed"
+  deletedAt: BigInt!
+  " Auction is active "
+  isActive: Boolean!
 }

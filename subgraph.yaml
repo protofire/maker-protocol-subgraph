@@ -281,6 +281,7 @@ dataSources:
         - name: Dog
           file: ./abis/Dog.json
       entities:
+        - SystemState
         - LiveChangeLog
         - CollateralType
         - SystemState
@@ -289,6 +290,20 @@ dataSources:
           handler: handleCage
         - event: Digs(indexed bytes32,uint256)
           handler: handleDigs
+
+        ### Administration ###
+
+        - event: File(indexed bytes32,address)
+          handler: handleFileVow
+
+        - event: File(indexed bytes32,indexed bytes32,address)
+          handler: handleFileHole
+
+        - event: File(indexed bytes32,indexed bytes32,uint256)
+          handler: handleFileChop
+
+        - event: File(indexed bytes32,uint256)
+          handler: handleFileClip
 
   # Debt Auction
   - name: Flop
@@ -616,6 +631,10 @@ dataSources:
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0xfcafcc6800000000000000000000000000000000000000000000000000000000'
           handler: handleGive
+
+  #
+  # DAI Module
+  #
   - name: Dai
     kind: ethereum/contract
     network: mainnet
@@ -639,7 +658,41 @@ dataSources:
           handler: handleApproval
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-
+  #
+  # Liquidation Module
+  #
+  # Auction Initiation from Liquidation
+  - name: Clipper
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Clipper
+      address: '0xc67963a226eddd77B91aD8c421630A1b0AdFF270'
+      startBlock: 12329686
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/modules/liquidation/clipper.ts
+      abis:
+        - name: Clipper
+          file: ./abis/Clipper.json
+      entities:
+        - SystemState
+        - SaleAuction
+      eventHandlers:
+        - event: File(indexed bytes32,uint256)
+          handler: handleFile
+        - event: File(indexed bytes32,address)
+          handler: handleFile
+        - event: Kick(indexed uint256,uint256,uint256,uint256,indexed address,indexed address,uint256)
+          handler: handleKick
+        - event: Redo(indexed uint256,uint256,uint256,uint256,indexed address,indexed address,uint256)
+          handler: handleRedo
+        - event: Take(indexed uint256,uint256,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleTake
+        - event: Yank(uint256)
+          handler: handleYank
 templates:
   #  Collateral Auction
   - name: Flip
