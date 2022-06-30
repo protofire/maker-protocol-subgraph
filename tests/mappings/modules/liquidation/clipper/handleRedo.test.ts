@@ -50,33 +50,35 @@ describe('Clipper#handleRedo', () => {
     clearStore()
   })
 
-  test('If auction does not exist, check not to be created', () => {
-    let id = BigInt.fromString('2')
-    let top = BigInt.fromString('10000000000000000000000000000') // 10 ray
-    let tab = BigInt.fromString('5000000000000000000000000000000000000000000000') // 5 rad
-    let lot = BigInt.fromString('101000000000000000000') // 101 wad
-    let usr = Address.fromString('0x0000000000000000000000000000000000001111')
-    let kpr = Address.fromString('0x000000000000000000000000000000000000aaaa')
-    let coin = BigInt.fromString('0')
+  describe('When SaleAuction does not exist', () => {
+    test('does not create SaleAuction', () => {
+      let id = BigInt.fromString('2')
+      let top = BigInt.fromString('10000000000000000000000000000') // 10 ray
+      let tab = BigInt.fromString('5000000000000000000000000000000000000000000000') // 5 rad
+      let lot = BigInt.fromString('101000000000000000000') // 101 wad
+      let usr = Address.fromString('0x0000000000000000000000000000000000001111')
+      let kpr = Address.fromString('0x000000000000000000000000000000000000aaaa')
+      let coin = BigInt.fromString('0')
 
-    let event = changetype<RedoEvent>(
-      tests.helpers.events.getNewEvent([
-        tests.helpers.params.getBigInt('id', id),
-        tests.helpers.params.getBigInt('top', top),
-        tests.helpers.params.getBigInt('tab', tab),
-        tests.helpers.params.getBigInt('lot', lot),
-        tests.helpers.params.getAddress('usr', usr),
-        tests.helpers.params.getAddress('kpr', kpr),
-        tests.helpers.params.getBigInt('coin', coin),
-      ]),
-    )
+      let event = changetype<RedoEvent>(
+        tests.helpers.events.getNewEvent([
+          tests.helpers.params.getBigInt('id', id),
+          tests.helpers.params.getBigInt('top', top),
+          tests.helpers.params.getBigInt('tab', tab),
+          tests.helpers.params.getBigInt('lot', lot),
+          tests.helpers.params.getAddress('usr', usr),
+          tests.helpers.params.getAddress('kpr', kpr),
+          tests.helpers.params.getBigInt('coin', coin),
+        ]),
+      )
 
-    event.block.timestamp = BigInt.fromI32(1001)
+      event.block.timestamp = BigInt.fromI32(1001)
 
-    handleRedo(event)
+      handleRedo(event)
 
-    assert.notInStore('SaleAuction', id.toString())
+      assert.notInStore('SaleAuction', id.toString())
 
-    clearStore()
+      clearStore()
+    })
   })
 })
