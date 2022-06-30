@@ -51,7 +51,7 @@ describe('Clipper#handleRedo', () => {
   })
 
   describe('When SaleAuction does not exist', () => {
-    test('does not create SaleAuction', () => {
+    test('Does not create SaleAuction', () => {
       let id = BigInt.fromString('2')
       let top = BigInt.fromString('10000000000000000000000000000') // 10 ray
       let tab = BigInt.fromString('5000000000000000000000000000000000000000000000') // 5 rad
