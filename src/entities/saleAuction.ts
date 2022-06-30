@@ -1,7 +1,7 @@
 import { SaleAuction } from '../../generated/schema'
 import { ethereum } from '@graphprotocol/graph-ts'
 
-export namespace SaleAuctions {
+export namespace saleAuctions {
   export function loadOrCreateSaleAuction(id: string, event: ethereum.Event): SaleAuction {
     let saleAuction = SaleAuction.load(id)
     if (!saleAuction) {

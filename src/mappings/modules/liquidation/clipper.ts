@@ -2,7 +2,7 @@ import { BigDecimal, Address } from '@graphprotocol/graph-ts'
 import { units } from '@protofire/subgraph-toolkit'
 import { Kick as KickEvent, Yank as YankEvent, Redo as RedoEvent } from '../../../../generated/Clipper/Clipper'
 import { SaleAuction } from '../../../../generated/schema'
-import { SaleAuctions } from '../../../entities'
+import { saleAuctions } from '../../../entities'
 
 export function handleKick(event: KickEvent): void {
   let idStr = event.params.id.toString()
@@ -12,7 +12,7 @@ export function handleKick(event: KickEvent): void {
   let kpr = event.params.kpr.toHexString()
   let top = units.fromRay(event.params.top)
 
-  let saleAuction = SaleAuctions.loadOrCreateSaleAuction(idStr, event)
+  let saleAuction = saleAuctions.loadOrCreateSaleAuction(idStr, event)
   saleAuction.amountDaiToRaise = tab
   saleAuction.amountCollateralToSell = lot
   saleAuction.userExcessCollateral = usr

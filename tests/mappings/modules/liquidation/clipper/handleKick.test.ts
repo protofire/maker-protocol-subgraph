@@ -1,7 +1,7 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts'
 import { test, assert, clearStore, describe } from 'matchstick-as'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { Kick } from '../../../../../generated/Clipper/Clipper'
+import { Kick as KickEvent } from '../../../../../generated/Clipper/Clipper'
 import { handleKick } from '../../../../../src/mappings/modules/liquidation/clipper'
 
 describe('Clipper#handleKick', () => {
@@ -13,7 +13,7 @@ describe('Clipper#handleKick', () => {
     let usr = Address.fromString('0x0000000000000000000000000000000000001111')
     let kpr = Address.fromString('0x000000000000000000000000000000000000aaaa')
     let coin = BigInt.fromString('0')
-    let event = changetype<Kick>(
+    let event = changetype<KickEvent>(
       tests.helpers.events.getNewEvent([
         tests.helpers.params.getBigInt('id', id),
         tests.helpers.params.getBigInt('top', top),
