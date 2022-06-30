@@ -3,13 +3,13 @@ import { test, assert, clearStore, describe, afterAll } from 'matchstick-as'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { Take as TakeEvent } from '../../../../../generated/Clipper/Clipper'
 import { handleTake } from '../../../../../src/mappings/modules/liquidation/clipper'
-import { SaleAuctions } from '../../../../../src/entities'
+import { saleAuctions } from '../../../../../src/entities'
 
 function createSaleAuction(id: BigInt, event: TakeEvent): void {
   let idStr = id.toString()
 
   event.block.timestamp = BigInt.fromI32(1)
-  let saleAuction = SaleAuctions.loadOrCreateSaleAuction(idStr, event)
+  let saleAuction = saleAuctions.loadOrCreateSaleAuction(idStr, event)
   saleAuction.isActive = true
   saleAuction.save()
 }
