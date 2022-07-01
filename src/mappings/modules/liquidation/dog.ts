@@ -1,6 +1,5 @@
 import { Cage, Digs, File, File1, File2, File3 } from '../../../../generated/Dog/Dog'
-import { LiveChangeLog, CollateralType } from '../../../../generated/schema'
-import { system } from '../../../entities/System'
+import { LiveChangeLog } from '../../../../generated/schema'
 import { collateralTypes, system as systemModule } from '../../../entities'
 import { units } from '@protofire/subgraph-toolkit'
 
@@ -66,4 +65,4 @@ export function handleFileClip(event: File3): void {
     ilk.liquidatorAddress = event.params.clip
     ilk.save()
   }
- }
+}
