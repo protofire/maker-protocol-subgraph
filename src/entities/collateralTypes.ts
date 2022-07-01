@@ -27,6 +27,8 @@ export namespace collateralTypes {
 
       entity.unmanagedVaultCount = integer.ZERO
       entity.vaultCount = integer.ZERO
+
+      entity.daiAmountToCoverDebtAndFees = decimal.ZERO
       // TODO: metadata relationships
     }
     return entity as CollateralType

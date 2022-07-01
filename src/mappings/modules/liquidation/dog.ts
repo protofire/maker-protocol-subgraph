@@ -1,5 +1,6 @@
-import { Cage, File, File1, File2, File3 } from '../../../../generated/Dog/Dog'
-import { LiveChangeLog } from '../../../../generated/schema'
+import { Cage, Digs, File, File1, File2, File3 } from '../../../../generated/Dog/Dog'
+import { LiveChangeLog, CollateralType } from '../../../../generated/schema'
+import { system } from '../../../entities/System'
 import { collateralTypes, system as systemModule } from '../../../entities'
 import { units } from '@protofire/subgraph-toolkit'
 
@@ -11,6 +12,17 @@ export function handleCage(event: Cage): void {
   log.transaction = event.transaction.hash
 
   log.save()
+}
+
+export function handleDigs(event: Digs): void {
+  let systemState = systemModule.getSystemState(event)
+  let amount = units.fromRad(event.params.rad)
+  systemState.totalDaiAmountToCoverDebtAndFees = systemState.totalDaiAmountToCoverDebtAndFees.minus(amount)
+  systemState.save()
+
+  let collateralType = collateralTypes.loadOrCreateCollateralType(event.params.ilk.toString())
+  collateralType.daiAmountToCoverDebtAndFees = collateralType.daiAmountToCoverDebtAndFees.minus(amount)
+  collateralType.save()
 }
 
 export function handleFileVow(event: File1): void {
@@ -54,4 +66,4 @@ export function handleFileClip(event: File3): void {
     ilk.liquidatorAddress = event.params.clip
     ilk.save()
   }
-}
+ }

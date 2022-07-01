@@ -88,7 +88,12 @@ type CollateralType @entity {
   liquidationRatio: BigDecimal!
 
   # TODO check Dog and Vat Ilk definitions
-  # TODO: uint256 dirt;  // Amt DAI needed to cover debt+fees of active auctions per ilk [rad]
+  # TODO : clip;  // Liquidator
+  # TODO : clip;  // Liquidator
+  # TODO: uint256 hole;  // Max DAI needed to cover debt+fees of active auctions per ilk [rad]
+
+  " Amt DAI needed to cover debt+fees of active auctions per ilk [rad] "
+  daiAmountToCoverDebtAndFees: BigDecimal!
 
   #
   # Dog ilk
@@ -411,6 +416,13 @@ type SystemState @entity {
 
   " Total supply of ERC20.DAI "
   daiTotalSupply: BigDecimal!
+
+  #
+  #Liquidation 2.0 parameters (Dog)
+  #
+
+  " Amount of DAI needed to cover debt + fees of active auctions (Dog#Dirt) "
+  totalDaiAmountToCoverDebtAndFees: BigDecimal!
 
   #
   # Status fields

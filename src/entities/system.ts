@@ -32,6 +32,9 @@ export namespace system {
       // pot parameters
       state.dsrLiveLastUpdateAt = event.block.timestamp
       state.dsrLive = true
+
+      // dog parameters
+      state.totalDaiAmountToCoverDebtAndFees = decimal.ZERO
     }
 
     // Hotfix for totalDebt

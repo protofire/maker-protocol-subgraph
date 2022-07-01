@@ -284,9 +284,12 @@ dataSources:
         - SystemState
         - LiveChangeLog
         - CollateralType
+        - SystemState
       eventHandlers:
         - event: Cage()
           handler: handleCage
+        - event: Digs(indexed bytes32,uint256)
+          handler: handleDigs
 
         ### Administration ###
 
