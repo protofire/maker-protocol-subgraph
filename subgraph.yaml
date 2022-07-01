@@ -161,46 +161,6 @@ dataSources:
           topic0: '0x6924500900000000000000000000000000000000000000000000000000000000'
           handler: handleCage
 
-  #  Liquidation Agent
-  - name: Cat
-    kind: ethereum/contract
-    network: mainnet
-    source:
-      abi: Cat
-      address: '0x78f2c2af65126834c51822f56be0d7469d7a523e'
-      startBlock: 8928165
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      file: ./src/mappings/modules/core/cat.ts
-      abis:
-        - name: Cat
-          file: ./abis/Cat.json
-        - name: Vat
-          file: ./abis/Vat.json
-      entities:
-        - CollateralType
-        - SystemState
-      eventHandlers:
-        ### Administration ###
-
-        # function file(bytes32 ilk, bytes32 what, uint256 data)
-        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x1a0b287e00000000000000000000000000000000000000000000000000000000'
-          handler: handleFile
-
-        # function file(bytes32 ilk, bytes32 what, address flip)
-        - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0xebecb39d00000000000000000000000000000000000000000000000000000000'
-          handler: handleFile
-
-        ### CDP Liquidation ###
-
-        # function bite(bytes32 ilk, address urn)
-        - event: Bite(indexed bytes32,indexed address,uint256,uint256,uint256,address,uint256)
-          handler: handleBite
-
   #
   # System Stabilizer Module
   #
