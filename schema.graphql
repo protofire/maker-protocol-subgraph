@@ -4,16 +4,6 @@ type SystemDebt @entity {
   amount: BigDecimal!
 }
 
-" Collateral auctions are used to sell collateral from Vaults that have become undercollateralized "
-type CollateralAuction @entity {
-  id: ID!
-
-  " Collateral type "
-  collateral: CollateralType!
-
-  # TODO
-}
-
 " Collateral tokens (Gem)"
 type Collateral @entity {
   " Collateral tokens (Gem) : ${user.id}-${collateralType.id} "
@@ -106,31 +96,13 @@ type CollateralType @entity {
   liquidatorAddress: Bytes!
 
   #
-  # Collateral auctions
-  #
-
-  " Collateral auctions for this collateral type "
-  auctions: [CollateralAuction!] @derivedFrom(field: "collateral")
-
-  " Number of collateral auctions started for this collateral type "
-  auctionCount: BigInt!
-
-  " Maximum auction duration [seconds] "
-  auctionDuration: BigInt!
-
-  " Max bid duration in a collateral auction [seconds] "
-  bidDuration: BigInt!
-
-  " Minimum bid increase in a collateral auction "
-  minimumBidIncrease: BigDecimal!
-
-  #
   # Stability rates
   #
 
   " Stability fee rate per second "
   stabilityFee: BigDecimal!
   stabilityFeeUpdatedAt: BigInt!
+
   #
   # Vaults
   #
@@ -296,9 +268,6 @@ type SystemState @entity {
 
   " Number of collateral types registered "
   collateralCount: BigInt!
-
-  " Number of collateral auctions started "
-  collateralAuctionCount: BigInt!
 
   " Number of user proxies created "
   userProxyCount: BigInt!
