@@ -736,6 +736,10 @@ type SaleAuction @entity {
   id: ID!
   " The target DAI to raise from the auction [tab in SmartContract]"
   amountDaiToRaise: BigDecimal!
+  " The Vault that gets liquidated "
+  vault: Vault!
+  " The Collateral that gets auctioned off "
+  collateralType: CollateralType!
   " The amount of collateral available for purchase [lot in SmartContract]"
   amountCollateralToSell: BigDecimal!
   " User to return any excess collateral [usr in SmartContract]"
@@ -756,4 +760,6 @@ type SaleAuction @entity {
   deletedAt: BigInt!
   " Auction is active "
   isActive: Boolean!
+  " Clipper cpntract addres "
+  clipperContract: Bytes!
 }
