@@ -437,26 +437,60 @@ interface Auction {
 }
 
 type DebtAuction implements Auction @entity {
+  " incrementing number. Equals to the String of the Flopper#ID "
   id: ID!
+
+  " Bid amount in DAI "
   bidAmount: BigInt!
+
+  " auction quantity up for sale (lot) "
   quantity: BigInt!
+
+  " the highest auction bidder (guy) "
   highestBidder: Bytes!
+
+  " TS when the auction ends "
   endTime: BigInt!
+
+  " TS CreatedAt (kick time) "
   createdAt: BigInt!
+
+  " TS modifiedAt "
   lastUpdate: BigInt!
+
+  "False if Auction was deleted "
   active: Boolean!
+
+  "Timestamp when the auction was deleted"
   deleteAt: BigInt!
 }
 
 type SurplusAuction implements Auction @entity {
+  " incrementing number. Equals to the String of the Flapper#ID "
   id: ID!
+
+  " Bid amount in DAI "
   bidAmount: BigInt!
+
+  " auction quantity up for sale (lot) "
   quantity: BigInt!
+
+  " the highest auction bidder (guy) "
   highestBidder: Bytes!
+
+  " TS when the auction ends "
   endTime: BigInt!
+
+  " TS CreatedAt (kick time) "
   createdAt: BigInt!
+
+  " TS modifiedAt "
   lastUpdate: BigInt!
+
+  "False if Auction was deleted "
   active: Boolean!
+
+  "Timestamp when the auction was deleted"
   deleteAt: BigInt!
 }
 
