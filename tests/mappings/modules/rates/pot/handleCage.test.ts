@@ -1,5 +1,4 @@
 import { Bytes, Address } from '@graphprotocol/graph-ts'
-import { units, bytes } from '@protofire/subgraph-toolkit'
 import { test, clearStore, assert, log, describe, beforeEach } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Pot/Pot'
 import { handleCage } from '../../../../../src/mappings/modules/rates/pot'
@@ -25,14 +24,12 @@ describe('Pot#handleCage', () => {
 
     event.address = address
 
-
     mockDebt()
 
     handleCage(event)
 
     assert.fieldEquals('SystemState', 'current', 'savingsRate', '1')
     assert.fieldEquals('LiveChangeLog', id, 'contract', addressString)
-
 
     clearStore()
   })

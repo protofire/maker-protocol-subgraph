@@ -1,9 +1,7 @@
 import { bytes, units } from '@protofire/subgraph-toolkit'
 import { Kick, LogNote } from '../../../../generated/Flop/Flopper'
 import { system as systemModule } from '../../../entities'
-
-import { Auctions } from '../../../entities/auction'
-
+import { auctions } from '../../../entities/auctions'
 import { LiveChangeLog } from '../../../../generated/schema'
 import { BigInt } from '@graphprotocol/graph-ts'
 
@@ -42,7 +40,7 @@ export function handleTick(event: LogNote): void {
   let ONE = units.WAD // 1E18 from https://github.com/protofire/subgraph-toolkit
   let id = bytes.toUnsignedInt(event.params.arg1)
 
-  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
+  let auction = auctions.loadOrCreateDebtAuction(id.toString(), event)
   let system = systemModule.getSystemState(event)
 
   let lotSizeIncrease = system.debtAuctionLotSizeIncrease // pad (name in contract)
@@ -62,7 +60,7 @@ export function handleTick(event: LogNote): void {
 //  claim a winning bid / settles a completed auction
 export function handleDeal(event: LogNote): void {
   let id = bytes.toUnsignedInt(event.params.arg1)
-  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
+  let auction = auctions.loadOrCreateDebtAuction(id.toString(), event)
 
   //auction to inactive "delete"
   auction.deleteAt = event.block.timestamp
@@ -77,7 +75,7 @@ export function handleKick(event: Kick): void {
   let bid = event.params.bid
   let gal = event.params.gal
 
-  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
+  let auction = auctions.loadOrCreateDebtAuction(id.toString(), event)
   auction.bidAmount = bid
   auction.quantity = lot
   auction.highestBidder = gal
@@ -91,7 +89,7 @@ export function handleKick(event: Kick): void {
 
 export function handleDent(event: LogNote): void {
   let id = bytes.toUnsignedInt(event.params.arg1)
-  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
+  let auction = auctions.loadOrCreateDebtAuction(id.toString(), event)
   auction.highestBidder = event.transaction.from
   auction.quantity = BigInt.fromUnsignedBytes(event.params.arg2)
 
@@ -105,7 +103,7 @@ export function handleDent(event: LogNote): void {
 export function handleYank(event: LogNote): void {
   let id = bytes.toUnsignedInt(event.params.arg1)
 
-  let auction = Auctions.loadOrCreateAuction(id.toString() + '-1', event)
+  let auction = auctions.loadOrCreateDebtAuction(id.toString(), event)
   auction.active = false
   auction.deleteAt = event.block.timestamp
   auction.save()

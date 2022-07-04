@@ -407,7 +407,7 @@ type SystemState @entity {
   transaction: Bytes!
 }
 
-type Auction @entity {
+interface Auction {
   " incrementing number. Equals to the String of the Flapper#ID "
   id: ID!
 
@@ -433,6 +433,30 @@ type Auction @entity {
   active: Boolean!
 
   "Timestamp when the auction was deleted"
+  deleteAt: BigInt!
+}
+
+type DebtAuction implements Auction @entity {
+  id: ID!
+  bidAmount: BigInt!
+  quantity: BigInt!
+  highestBidder: Bytes!
+  endTime: BigInt!
+  createdAt: BigInt!
+  lastUpdate: BigInt!
+  active: Boolean!
+  deleteAt: BigInt!
+}
+
+type SurplusAuction implements Auction @entity {
+  id: ID!
+  bidAmount: BigInt!
+  quantity: BigInt!
+  highestBidder: Bytes!
+  endTime: BigInt!
+  createdAt: BigInt!
+  lastUpdate: BigInt!
+  active: Boolean!
   deleteAt: BigInt!
 }
 

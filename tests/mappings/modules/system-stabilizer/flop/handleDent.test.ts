@@ -1,7 +1,7 @@
 import { Bytes, Address, BigInt } from '@graphprotocol/graph-ts'
 import { test, clearStore, assert, describe } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Flop/Flopper'
-import { Auctions, system as systemModule } from '../../../../../src/entities'
+import { auctions, system as systemModule } from '../../../../../src/entities'
 import { handleDent } from '../../../../../src/mappings/modules/system-stabilizer/flop'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { mockDebt } from '../../../../helpers/mockedFunctions'
@@ -24,7 +24,7 @@ describe('Flopper#handleDent', () => {
     )
     event.block.timestamp = BigInt.fromString('250')
 
-    let auction = Auctions.loadOrCreateAuction(id + '-1', event)
+    let auction = auctions.loadOrCreateDebtAuction(id, event)
     auction.highestBidder = Address.fromString('0x4d95a049d5b0b7d32058cd3f2163015747522e99')
     auction.quantity = BigInt.fromString('15')
     auction.save()
@@ -36,9 +36,9 @@ describe('Flopper#handleDent', () => {
 
     handleDent(event)
 
-    assert.fieldEquals('Auction', auction.id, 'highestBidder', event.transaction.from.toHexString())
-    assert.fieldEquals('Auction', auction.id, 'quantity', lot)
-    assert.fieldEquals('Auction', auction.id, 'endTime', event.block.timestamp.plus(defaultTTL).toString())
+    assert.fieldEquals('DebtAuction', auction.id, 'highestBidder', event.transaction.from.toHexString())
+    assert.fieldEquals('DebtAuction', auction.id, 'quantity', lot)
+    assert.fieldEquals('DebtAuction', auction.id, 'endTime', event.block.timestamp.plus(defaultTTL).toString())
 
     clearStore()
   })
