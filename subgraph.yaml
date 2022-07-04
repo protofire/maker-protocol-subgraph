@@ -216,7 +216,7 @@ dataSources:
 
         # function tend(uint256 id, uint256 bid)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x4712f8030000000000000000000000000000000000000000000000000000000000'
+          topic0: '0x4712f80300000000000000000000000000000000000000000000000000000000'
           handler: handleTend
 
         # function yank(uint256 id)
@@ -389,7 +389,7 @@ dataSources:
 
         # function kiss(uint rad)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
-          topic0: '0x2506855a000000000000000000000000000000000000000000000000000000000000000a'
+          topic0: '0x2506855a00000000000000000000000000000000000000000000000000000000'
           handler: handlekiss
 
   #
