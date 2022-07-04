@@ -12,11 +12,6 @@ export namespace collateralTypes {
       entity.totalDebt = decimal.ZERO
       entity.debtNormalized = decimal.ZERO
 
-      entity.auctionCount = integer.ZERO
-      entity.auctionDuration = integer.fromNumber(172800) // 2 days
-      entity.bidDuration = integer.fromNumber(10800) // 3 hours
-      entity.minimumBidIncrease = decimal.fromNumber(1.05) // 5% minimum bid increase
-
       entity.liquidationLotSize = decimal.ZERO
       entity.liquidationPenalty = decimal.ZERO
       entity.liquidationRatio = decimal.ZERO
