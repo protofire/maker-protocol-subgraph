@@ -1,11 +1,11 @@
-import { Bytes, Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
-import { units, bytes } from '@protofire/subgraph-toolkit'
+import { Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
+import { units } from '@protofire/subgraph-toolkit'
 import { test, clearStore, assert, log } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Flop/Flopper'
 import { handleTick } from '../../../../../src/mappings/modules/system-stabilizer/flop'
 import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { Auctions, system as systemModule } from '../../../../../src/entities'
+import { auctions, system as systemModule } from '../../../../../src/entities'
 
 function createEvent(id: BigInt): LogNote {
   let sig = tests.helpers.params.getBytes('sig', Bytes.fromHexString('0xfc7b6aee'))
@@ -20,7 +20,7 @@ function createEvent(id: BigInt): LogNote {
 
 test('Flopper#handleTick updates Auction.quantity, Auction.endTime and Auction.lasUpdate', () => {
   let bidId = BigInt.fromString('1')
-  let auctionId = bidId.toString() + '-1'
+  let auctionId = bidId.toString()
 
   let ONE = units.WAD
   let auctionBidDuration = BigInt.fromI32(172800) // 2 days | ttl
@@ -30,7 +30,7 @@ test('Flopper#handleTick updates Auction.quantity, Auction.endTime and Auction.l
 
   let event = createEvent(bidId)
 
-  let auction = Auctions.loadOrCreateAuction(auctionId, event) // load the Auction with the quantity value
+  let auction = auctions.loadOrCreateDebtAuction(auctionId, event) // load the Auction with the quantity value
   auction.endTime = event.block.timestamp
   auction.quantity = quantity
   auction.lastUpdate = BigInt.fromI32(0)
@@ -49,9 +49,9 @@ test('Flopper#handleTick updates Auction.quantity, Auction.endTime and Auction.l
   let endTime = event.block.timestamp.plus(auctionBidDuration)
 
   // Test
-  assert.fieldEquals('Auction', auctionId, 'endTime', endTime.toString()) //'172801'
-  assert.fieldEquals('Auction', auctionId, 'quantity', '15')
-  assert.fieldEquals('Auction', auctionId, 'lastUpdate', event.block.timestamp.toString())
+  assert.fieldEquals('DebtAuction', auctionId, 'endTime', endTime.toString()) //'172801'
+  assert.fieldEquals('DebtAuction', auctionId, 'quantity', '15')
+  assert.fieldEquals('DebtAuction', auctionId, 'lastUpdate', event.block.timestamp.toString())
 
   clearStore()
 })

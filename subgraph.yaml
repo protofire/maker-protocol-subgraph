@@ -185,6 +185,7 @@ dataSources:
           file: ./abis/Vat.json
       entities:
         - SystemState
+        - SurplusAuction
       eventHandlers:
         ### Admin ###
 
@@ -285,6 +286,7 @@ dataSources:
           file: ./abis/Vat.json
       entities:
         - SystemState
+        - DebtAuction
       eventHandlers:
         ### Admin ###
 

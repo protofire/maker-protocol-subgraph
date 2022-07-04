@@ -1,11 +1,9 @@
-import { Bytes, Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
-import { units, bytes } from '@protofire/subgraph-toolkit'
-import { test, clearStore, assert, log, describe, beforeEach } from 'matchstick-as'
+import { Bytes, Address, BigInt } from '@graphprotocol/graph-ts'
+import { test, clearStore, assert, describe, beforeEach } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Jug/Jug'
 import { handleFile } from '../../../../../src/mappings/modules/rates/jug'
 import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { Auctions, system as systemModule } from '../../../../../src/entities'
 import { collateralTypes } from '../../../../../src/entities/collateralTypes'
 
 function strRadToBytes(value: string): Bytes {

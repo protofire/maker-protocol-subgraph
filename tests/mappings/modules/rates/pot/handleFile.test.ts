@@ -1,6 +1,5 @@
-import { Bytes, Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
-import { units, bytes } from '@protofire/subgraph-toolkit'
-import { test, clearStore, assert, log, describe, beforeEach } from 'matchstick-as'
+import { Bytes, Address, BigInt } from '@graphprotocol/graph-ts'
+import { test, clearStore, assert, describe, beforeEach } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Pot/Pot'
 import { handleFile } from '../../../../../src/mappings/modules/rates/pot'
 import { mockDebt } from '../../../../helpers/mockedFunctions'

@@ -3,7 +3,6 @@ import { test, assert, clearStore } from 'matchstick-as'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { LogNote } from '../../../../../generated/Flap/Flapper'
 import { handleYank } from '../../../../../src/mappings/modules/system-stabilizer/flap'
-import { Auction } from '../../../../../generated/schema'
 import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { system as systemModule } from '../../../../../src/entities'
 
@@ -19,7 +18,7 @@ function createEvent(id: BigInt): LogNote {
   return event
 }
 
-test('Flapper#handleYank: Sets the Auction-active to false', () => {
+test('Flapper#handleYank: Sets active to false', () => {
   let id = BigInt.fromString('50')
 
   let event = createEvent(id)
@@ -29,7 +28,7 @@ test('Flapper#handleYank: Sets the Auction-active to false', () => {
   system.save()
   handleYank(event)
 
-  assert.fieldEquals('Auction', id.toString() + '-0', 'active', 'false')
-  assert.fieldEquals('Auction', id.toString() + '-0', 'deleteAt', event.block.timestamp.toString())
+  assert.fieldEquals('SurplusAuction', id.toString(), 'active', 'false')
+  assert.fieldEquals('SurplusAuction', id.toString(), 'deleteAt', event.block.timestamp.toString())
   clearStore()
 })
