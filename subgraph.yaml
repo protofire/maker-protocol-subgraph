@@ -241,6 +241,8 @@ dataSources:
       abis:
         - name: Dog
           file: ./abis/Dog.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - SystemState
         - LiveChangeLog
@@ -517,6 +519,8 @@ dataSources:
       abis:
         - name: DSToken
           file: ./abis/DSToken.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - SystemState
         - User
@@ -612,9 +616,12 @@ dataSources:
       entities:
         - Approval
         - Transfer
+        - SystemState
       abis:
         - name: Dai
           file: ./abis/Dai.json
+        - name: Vat
+          file: ./abis/Vat.json
       eventHandlers:
         - event: Approval(indexed address,indexed address,uint256)
           handler: handleApproval
@@ -639,6 +646,8 @@ dataSources:
       abis:
         - name: Clipper
           file: ./abis/Clipper.json
+        - name: Vat
+          file: ./abis/Vat.json
       entities:
         - SystemState
         - SaleAuction
