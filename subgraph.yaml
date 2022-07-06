@@ -253,7 +253,8 @@ dataSources:
           handler: handleCage
         - event: Digs(indexed bytes32,uint256)
           handler: handleDigs
-
+        - event: Bark(indexed bytes32,indexed address,uint256,uint256,uint256,address,indexed uint256)
+          handler: handleBark
         ### Administration ###
 
         - event: File(indexed bytes32,address)

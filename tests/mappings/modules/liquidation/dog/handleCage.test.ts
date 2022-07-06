@@ -1,6 +1,5 @@
-import { Bytes, Address } from '@graphprotocol/graph-ts'
+import { Address } from '@graphprotocol/graph-ts'
 import { test, clearStore, assert, describe } from 'matchstick-as'
-import { LogNote } from '../../../../../generated/Spot/Spotter'
 import { handleCage } from '../../../../../src/mappings/modules/liquidation/dog'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { Cage } from '../../../../../generated/Dog/Dog'
