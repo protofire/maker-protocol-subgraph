@@ -78,24 +78,15 @@ export function handleBark(event: Bark): void {
   saleAuction.clipperContract = event.params.clip
   saleAuction.save()
 
-  let dogContract = Dog.bind(Address.fromString('0x135954d155898D42C90D2a57824C690e0c7BEf1B'))
-  let callResult = dogContract.try_Dirt()
-  let callResult2 = dogContract.try_ilks(event.params.ilk)
-  let ilkDirt = units.fromRad(callResult2.value.value3)
-
-  if (callResult.reverted) {
-    log.warning('handleBark: try_Dirt reverted', [])
-  }
-  let amount = units.fromRad(callResult.value)
-  let system = systemModule.getSystemState(event)
-  system.totalDaiAmountToCoverDebtAndFees = amount
-  system.save()
-
-  if (callResult2.reverted) {
-    log.warning('handleBark: try_ilks reverted', [])
-  }
+  let due = units.fromWad(event.params.due)
 
   let collateralType = collateralTypes.loadOrCreateCollateralType(collateralTypeId)
-  collateralType.daiAmountToCoverDebtAndFees = ilkDirt
+  let liquidationPenalty = collateralType.liquidationPenalty
+  let tab = liquidationPenalty.times(due)
+  collateralType.daiAmountToCoverDebtAndFees = collateralType.daiAmountToCoverDebtAndFees.plus(tab)
   collateralType.save()
+
+  let system = systemModule.getSystemState(event)
+  system.totalDaiAmountToCoverDebtAndFees = system.totalDaiAmountToCoverDebtAndFees.plus(tab)
+  system.save()
 }
