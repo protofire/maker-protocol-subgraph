@@ -34,23 +34,22 @@ describe('Dog#handleBark', () => {
     mockDebt()
 
     let collateralType = new CollateralType('ETH-A')
-    collateralType.daiAmountToCoverDebtAndFees = BigDecimal.fromString('5000.0')
-    collateralType.liquidationPenalty = BigDecimal.fromString('5.0')
+    collateralType.daiAmountToCoverDebtAndFees = BigDecimal.fromString('100.0')
+    collateralType.liquidationPenalty = BigDecimal.fromString('20.0')
     collateralType.save()
 
     let systemState = systemModule.getSystemState(event)
-    systemState.totalDaiAmountToCoverDebtAndFees = BigDecimal.fromString('5000.0')
+    systemState.totalDaiAmountToCoverDebtAndFees = BigDecimal.fromString('100.0')
     systemState.save()
 
     handleBark(event)
 
-    assert.fieldEquals('SystemState', 'current', 'totalDaiAmountToCoverDebtAndFees', '5025')
+    assert.fieldEquals('SystemState', 'current', 'totalDaiAmountToCoverDebtAndFees', '200')
 
     assert.fieldEquals('SaleAuction', id.toString(), 'vault', urn + '-' + ilk.toString())
     assert.fieldEquals('SaleAuction', id.toString(), 'collateralType', ilk.toString())
-    assert.fieldEquals('SaleAuction', id.toString(), 'clipperContract', clip)
 
-    assert.fieldEquals('CollateralType', 'ETH-A', 'daiAmountToCoverDebtAndFees', '5025')
+    assert.fieldEquals('CollateralType', 'ETH-A', 'daiAmountToCoverDebtAndFees', '200')
 
     clearStore()
   })

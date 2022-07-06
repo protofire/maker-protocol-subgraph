@@ -75,7 +75,6 @@ export function handleBark(event: Bark): void {
   let saleAuction = saleAuctions.loadOrCreateSaleAuction(idStr, event)
   saleAuction.vault = vaultId
   saleAuction.collateralType = collateralTypeId
-  saleAuction.clipperContract = event.params.clip
   saleAuction.save()
 
   let due = units.fromWad(event.params.due)
