@@ -1,8 +1,7 @@
-import { Cage, Digs, File, File1, File2, File3, Bark, Dog } from '../../../../generated/Dog/Dog'
-import { LiveChangeLog, Vault } from '../../../../generated/schema'
-import { collateralTypes, system as systemModule, saleAuctions, collaterals } from '../../../entities'
+import { Cage, Digs, File, File1, File2, File3, Bark } from '../../../../generated/Dog/Dog'
+import { LiveChangeLog } from '../../../../generated/schema'
+import { collateralTypes, system as systemModule, saleAuctions } from '../../../entities'
 import { units } from '@protofire/subgraph-toolkit'
-import { Address, log } from '@graphprotocol/graph-ts'
 
 export function handleCage(event: Cage): void {
   let log = new LiveChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')

@@ -1,5 +1,5 @@
 import { Bytes, BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts'
-import { describe, test, assert, clearStore, beforeAll, afterAll } from 'matchstick-as'
+import { describe, test, assert, clearStore } from 'matchstick-as'
 import { Bark } from '../../../../../generated/Dog/Dog'
 import { handleBark } from '../../../../../src/mappings/modules/liquidation/dog'
 import { tests } from '../../../../../src/mappings/modules/tests'
@@ -39,12 +39,12 @@ describe('Dog#handleBark', () => {
     collateralType.save()
 
     let systemState = systemModule.getSystemState(event)
-    systemState.totalDaiAmountToCoverDebtAndFees = BigDecimal.fromString('100.0')
+    systemState.totalDaiAmountToCoverDebtAndFees = BigDecimal.fromString('500.0')
     systemState.save()
 
     handleBark(event)
 
-    assert.fieldEquals('SystemState', 'current', 'totalDaiAmountToCoverDebtAndFees', '200')
+    assert.fieldEquals('SystemState', 'current', 'totalDaiAmountToCoverDebtAndFees', '600')
 
     assert.fieldEquals('SaleAuction', id.toString(), 'vault', urn + '-' + ilk.toString())
     assert.fieldEquals('SaleAuction', id.toString(), 'collateralType', ilk.toString())

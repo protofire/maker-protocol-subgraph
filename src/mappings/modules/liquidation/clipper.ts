@@ -1,4 +1,4 @@
-import { BigDecimal, Address } from '@graphprotocol/graph-ts'
+import { BigDecimal } from '@graphprotocol/graph-ts'
 import { units } from '@protofire/subgraph-toolkit'
 import {
   Kick as KickEvent,
