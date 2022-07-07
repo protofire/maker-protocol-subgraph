@@ -1,6 +1,6 @@
-import { Cage, Digs, File, File1, File2, File3 } from '../../../../generated/Dog/Dog'
+import { Cage, Digs, File, File1, File2, File3, Bark } from '../../../../generated/Dog/Dog'
 import { LiveChangeLog } from '../../../../generated/schema'
-import { collateralTypes, system as systemModule } from '../../../entities'
+import { collateralTypes, system as systemModule, saleAuctions } from '../../../entities'
 import { units } from '@protofire/subgraph-toolkit'
 
 export function handleCage(event: Cage): void {
@@ -65,4 +65,26 @@ export function handleFileClip(event: File3): void {
     ilk.liquidatorAddress = event.params.clip
     ilk.save()
   }
+}
+
+export function handleBark(event: Bark): void {
+  let idStr = event.params.id.toString()
+  let vaultId = event.params.urn.toHexString() + '-' + event.params.ilk.toString()
+  let collateralTypeId = event.params.ilk.toString()
+  let saleAuction = saleAuctions.loadOrCreateSaleAuction(idStr, event)
+  saleAuction.vault = vaultId
+  saleAuction.collateralType = collateralTypeId
+  saleAuction.save()
+
+  let due = units.fromWad(event.params.due)
+
+  let collateralType = collateralTypes.loadOrCreateCollateralType(collateralTypeId)
+  let liquidationPenalty = collateralType.liquidationPenalty
+  let tab = liquidationPenalty.times(due)
+  collateralType.daiAmountToCoverDebtAndFees = collateralType.daiAmountToCoverDebtAndFees.plus(tab)
+  collateralType.save()
+
+  let system = systemModule.getSystemState(event)
+  system.totalDaiAmountToCoverDebtAndFees = system.totalDaiAmountToCoverDebtAndFees.plus(tab)
+  system.save()
 }
