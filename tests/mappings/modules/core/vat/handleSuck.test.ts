@@ -38,6 +38,7 @@ test('Vat#handleSuck', () => {
 
   assert.fieldEquals('SystemState', 'current', 'totalDebt', '100.5')
   assert.fieldEquals('SystemState', 'current', 'totalSystemDebt', '100.5')
+  assert.fieldEquals('SystemState', 'current', 'dsrLiveUpdatedAt', event.block.timestamp.toString())
 
   clearStore()
 })

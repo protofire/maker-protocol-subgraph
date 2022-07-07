@@ -3,7 +3,13 @@ import { bytes, units } from '@protofire/subgraph-toolkit'
 
 import { LogNote, Poke } from '../../../../generated/Spot/Spotter'
 
-import { CollateralPrice, CollateralType, SpotParLog, CollateralPriceUpdateLog, LiveChangeLog } from '../../../../generated/schema'
+import {
+  CollateralPrice,
+  CollateralType,
+  SpotParLog,
+  CollateralPriceUpdateLog,
+  LiveChangeLog,
+} from '../../../../generated/schema'
 
 import { system } from '../../../entities'
 
@@ -18,19 +24,19 @@ export function handleFile(event: LogNote): void {
     if (collateralType != null) {
       collateralType.liquidationRatio = units.fromRay(data)
 
-      collateralType.modifiedAt = event.block.timestamp
-      collateralType.modifiedAtBlock = event.block.number
-      collateralType.modifiedAtTransaction = event.transaction.hash
+      collateralType.updatedAt = event.block.timestamp
+      collateralType.updatedAtBlock = event.block.number
+      collateralType.updatedAtTransaction = event.transaction.hash
 
       collateralType.save()
 
       let state = system.getSystemState(event)
       state.save()
     }
-  }else if (what == 'pip'){
+  } else if (what == 'pip') {
     let collateralType = CollateralType.load(ilk)
 
-    if (collateralType != null){
+    if (collateralType != null) {
       let price = new CollateralPrice(event.block.number.toString() + '-' + ilk)
       price.block = event.block.number
       price.timestamp = event.block.timestamp
@@ -44,7 +50,7 @@ export function handleFile(event: LogNote): void {
       let state = system.getSystemState(event)
       state.save()
     }
-  }else if (what == 'par'){
+  } else if (what == 'par') {
     let log = new SpotParLog(event.transaction.hash.toHexString())
     log.block = event.block.number
     log.timestamp = event.block.timestamp
@@ -81,7 +87,7 @@ export function handlePoke(event: Poke): void {
     log.collateral = ilk
     log.newValue = value
     log.newSpotPrice = spotPrice
-    
+
     log.block = event.block.number
     log.timestamp = event.block.timestamp
     log.transaction = event.transaction.hash
@@ -91,7 +97,7 @@ export function handlePoke(event: Poke): void {
 }
 
 // Change Liveness of Spot Contract
-export function handleCage(event: LogNote): void{
+export function handleCage(event: LogNote): void {
   let log = new LiveChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
   log.contract = event.address
   log.block = event.block.number
@@ -100,4 +106,3 @@ export function handleCage(event: LogNote): void{
 
   log.save()
 }
-

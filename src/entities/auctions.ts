@@ -18,7 +18,7 @@ export namespace auctions {
       auction.active = true
     }
 
-    auction.lastUpdate = event.block.timestamp
+    auction.updatedAt = event.block.timestamp
     return auction
   }
 
@@ -38,7 +38,7 @@ export namespace auctions {
       auction.active = true
     }
 
-    auction.lastUpdate = event.block.timestamp
+    auction.updatedAt = event.block.timestamp
     return auction
   }
 }

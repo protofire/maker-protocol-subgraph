@@ -31,7 +31,7 @@ describe('Flopper#handleKick', () => {
     assert.fieldEquals('DebtAuction', id.toString(), 'quantity', lot.toString())
     assert.fieldEquals('DebtAuction', id.toString(), 'bidAmount', bid.toString())
     assert.fieldEquals('DebtAuction', id.toString(), 'highestBidder', gal)
-    assert.fieldEquals('DebtAuction', id.toString(), 'endTime', '2500')
+    assert.fieldEquals('DebtAuction', id.toString(), 'endTimeAt', '2500')
     clearStore()
   })
 })

@@ -7,7 +7,7 @@ import { tests } from '../../../../../src/mappings/modules/tests'
 import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 describe('Flopper#handleDent', () => {
-  test('updates the highestBidder, quantity and endTime', () => {
+  test('updates the highestBidder, quantity and endTimeAt', () => {
     let signature = '0x5ff3a382'
 
     let id = '50'
@@ -38,7 +38,7 @@ describe('Flopper#handleDent', () => {
 
     assert.fieldEquals('DebtAuction', auction.id, 'highestBidder', event.transaction.from.toHexString())
     assert.fieldEquals('DebtAuction', auction.id, 'quantity', lot)
-    assert.fieldEquals('DebtAuction', auction.id, 'endTime', event.block.timestamp.plus(defaultTTL).toString())
+    assert.fieldEquals('DebtAuction', auction.id, 'endTimeAt', event.block.timestamp.plus(defaultTTL).toString())
 
     clearStore()
   })
