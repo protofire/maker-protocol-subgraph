@@ -50,9 +50,9 @@ export function handleTick(event: LogNote): void {
   if (lotSizeIncrease && auctionBidDuration) {
     let mul = lotSizeIncrease.times(quantity.toBigDecimal())
     auction.quantity = units.toWad(mul.div(ONE)) // WAD
-    auction.endTime = event.block.timestamp.plus(auctionBidDuration)
+    auction.endTimeAt = event.block.timestamp.plus(auctionBidDuration)
 
-    auction.lastUpdate = event.block.timestamp
+    auction.updatedAt = event.block.timestamp
     auction.save()
   }
 }
@@ -63,7 +63,7 @@ export function handleDeal(event: LogNote): void {
   let auction = auctions.loadOrCreateDebtAuction(id.toString(), event)
 
   //auction to inactive "delete"
-  auction.deleteAt = event.block.timestamp
+  auction.deletedAt = event.block.timestamp
   auction.active = false
 
   auction.save()
@@ -82,7 +82,7 @@ export function handleKick(event: Kick): void {
 
   let system = systemModule.getSystemState(event)
   if (system.debtAuctionBidDuration) {
-    auction.endTime = event.block.timestamp.plus(system.debtAuctionBidDuration!)
+    auction.endTimeAt = event.block.timestamp.plus(system.debtAuctionBidDuration!)
   }
   auction.save()
 }
@@ -95,7 +95,7 @@ export function handleDent(event: LogNote): void {
 
   let system = systemModule.getSystemState(event)
   if (system.debtAuctionBidDuration) {
-    auction.endTime = event.block.timestamp.plus(system.debtAuctionBidDuration!)
+    auction.endTimeAt = event.block.timestamp.plus(system.debtAuctionBidDuration!)
   }
   auction.save()
 }
@@ -105,6 +105,6 @@ export function handleYank(event: LogNote): void {
 
   let auction = auctions.loadOrCreateDebtAuction(id.toString(), event)
   auction.active = false
-  auction.deleteAt = event.block.timestamp
+  auction.deletedAt = event.block.timestamp
   auction.save()
 }

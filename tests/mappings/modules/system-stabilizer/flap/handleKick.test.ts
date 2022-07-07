@@ -28,6 +28,6 @@ test('Flapper#handleKick: Creates the entity Auction.', () => {
   assert.fieldEquals('SurplusAuction', id.toString(), 'quantity', lot.toString())
   assert.fieldEquals('SurplusAuction', id.toString(), 'bidAmount', bid.toString())
   assert.fieldEquals('SurplusAuction', id.toString(), 'highestBidder', event.transaction.from.toHexString())
-  assert.fieldEquals('SurplusAuction', id.toString(), 'endTime', '2500')
+  assert.fieldEquals('SurplusAuction', id.toString(), 'endTimeAt', '2500')
   clearStore()
 })

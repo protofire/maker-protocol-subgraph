@@ -29,6 +29,6 @@ test('Flapper#handleTick: Updates the end-time of an auction', () => {
   system.save()
   handleTick(event)
 
-  assert.fieldEquals('SurplusAuction', id.toString(), 'endTime', '1001')
+  assert.fieldEquals('SurplusAuction', id.toString(), 'endTimeAt', '1001')
   clearStore()
 })

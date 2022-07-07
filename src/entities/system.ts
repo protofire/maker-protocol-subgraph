@@ -29,7 +29,7 @@ export namespace system {
       state.daiTotalSupply = decimal.ZERO
 
       // pot parameters
-      state.dsrLiveLastUpdateAt = event.block.timestamp
+      state.dsrLiveUpdatedAt = event.block.timestamp
       state.dsrLive = true
 
       // dog parameters
