@@ -16,7 +16,7 @@ function createEvent(): LogNote {
 }
 
 describe('Pot#handleDrip', () => {
-  test('Updates SystemState.rateAccumulator and SystemState.lastDripAt', () => {
+  test('Updates SystemState.rateAccumulator and SystemState.lastPotDripAt', () => {
     let event = createEvent()
     mockChi()
     mockDebt()
@@ -24,7 +24,7 @@ describe('Pot#handleDrip', () => {
     handleDrip(event)
 
     assert.fieldEquals('SystemState', 'current', 'rateAccumulator', '10')
-    assert.fieldEquals('SystemState', 'current', 'lastDripAt', event.block.timestamp.toString())
+    assert.fieldEquals('SystemState', 'current', 'lastPotDripAt', event.block.timestamp.toString())
 
     clearStore()
   })

@@ -76,6 +76,6 @@ export function handleDrip(event: LogNote): void {
     log.warning('handleDrip: try_chi reverted', [])
   }
   system.rateAccumulator = callResult.value
-  system.lastDripAt = event.block.timestamp
+  system.lastPotDripAt = event.block.timestamp
   system.save()
 }

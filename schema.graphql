@@ -375,7 +375,7 @@ type SystemState @entity {
   rateAccumulator: BigInt
 
   " last time the drip() function was called "
-  lastDripAt: BigInt
+  lastPotDripAt: BigInt
 
   #
   # Dog
