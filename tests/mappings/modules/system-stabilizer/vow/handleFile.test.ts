@@ -5,10 +5,11 @@ import { LogNote } from '../../../../../generated/Vow/Vow'
 import { handleFile } from '../../../../../src/mappings/modules/system-stabilizer/vow'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { mockDebt } from '../../../../helpers/mockedFunctions'
+import { system as systemModule } from '../../../../../src/entities'
 
 let amount = '100500000000000000000000000000000000000000000000' // 100.5 (rad) 100500000000000000000000000000 (wad)
 let address = '0xa4f79bc4a5612bdda35904fdf55fc4cb53d1bff6'
-
+let bigAddress = '0000000000000000000000004d95a049d5b0b7d32058cd3f2163015747522e99'
 type TransformAmount = (n: BigInt) => BigDecimal
 
 function createEvent(sig: string, what: string, data: Bytes): LogNote {
@@ -42,6 +43,19 @@ function checkAddressHandleFile(what: string, field: string, data: Address): voi
   assert.fieldEquals('SystemState', 'current', field, data.toHexString())
 }
 
+function checkSameAddressHandleFile(what: string, field: string, data: String): void {
+  let sig = '0xd4e8be83'
+  let dataBytes = changetype<Bytes>(data)
+  let event = createEvent(sig, what, dataBytes)
+
+  //vowFlopperContract must be the same as before handleFile
+  let system = systemModule.getSystemState(event)
+  let vowAddress = system.vowFlopperContract.toHexString()
+  handleFile(event)
+
+  assert.fieldEquals('SystemState', 'current', 'vowFlopperContract', vowAddress)
+}
+
 function returnPlainAmount(amount: BigInt): BigDecimal {
   return amount.toBigDecimal()
 }
@@ -73,13 +87,17 @@ describe('Vow#handleFile', () => {
     })
   })
 
-  describe('For file(bytes32 what, address data) with what=(flapper,flopper)', () => {
+  describe('For file(bytes32 what, address data) with what=(flapper,flopper,"")', () => {
     test('For what=Flapper', () => {
       checkAddressHandleFile('flapper', 'vowFlapperContract', Address.fromString(address))
     })
 
     test('For what=Flopper', () => {
       checkAddressHandleFile('flopper', 'vowFlopperContract', Address.fromString(address))
+    })
+
+    test('For what=(empty) and a 64bytes String in Adress ', () => {
+      checkSameAddressHandleFile('', 'vowFlopperContract', bigAddress)
     })
   })
 
