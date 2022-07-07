@@ -18,7 +18,7 @@ function createEvent(id: BigInt): LogNote {
   return event
 }
 
-test('Flopper#handleTick updates Auction.quantity, Auction.endTime and Auction.lasUpdate', () => {
+test('Flopper#handleTick updates Auction.quantity, Auction.endTimeAt and Auction.updatedAt', () => {
   let bidId = BigInt.fromString('1')
   let auctionId = bidId.toString()
 
@@ -31,9 +31,9 @@ test('Flopper#handleTick updates Auction.quantity, Auction.endTime and Auction.l
   let event = createEvent(bidId)
 
   let auction = auctions.loadOrCreateDebtAuction(auctionId, event) // load the Auction with the quantity value
-  auction.endTime = event.block.timestamp
+  auction.endTimeAt = event.block.timestamp
   auction.quantity = quantity
-  auction.lastUpdate = BigInt.fromI32(0)
+  auction.updatedAt = BigInt.fromI32(0)
   auction.save()
 
   mockDebt()
@@ -46,12 +46,12 @@ test('Flopper#handleTick updates Auction.quantity, Auction.endTime and Auction.l
   handleTick(event)
 
   // Make the calcs that are inside the handleTick function
-  let endTime = event.block.timestamp.plus(auctionBidDuration)
+  let endTimeAt = event.block.timestamp.plus(auctionBidDuration)
 
   // Test
-  assert.fieldEquals('DebtAuction', auctionId, 'endTime', endTime.toString()) //'172801'
+  assert.fieldEquals('DebtAuction', auctionId, 'endTimeAt', endTimeAt.toString()) //'172801'
   assert.fieldEquals('DebtAuction', auctionId, 'quantity', '15')
-  assert.fieldEquals('DebtAuction', auctionId, 'lastUpdate', event.block.timestamp.toString())
+  assert.fieldEquals('DebtAuction', auctionId, 'updatedAt', event.block.timestamp.toString())
 
   clearStore()
 })

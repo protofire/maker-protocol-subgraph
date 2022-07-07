@@ -17,22 +17,22 @@ function createEvent(id: BigInt): LogNote {
 }
 
 describe('Flopper#handleDeal', () => {
-  test('Updates Auction.active and Auction.deleteAt ', () => {
+  test('Updates Auction.active and Auction.deletedAt ', () => {
     let id = BigInt.fromString('50')
     let auctionId = id.toString()
 
     let event = createEvent(id)
 
     let auction = auctions.loadOrCreateDebtAuction(auctionId, event) // load the Auction with the quantity value
-    auction.endTime = event.block.timestamp
+    auction.endTimeAt = event.block.timestamp
     auction.highestBidder = event.transaction.from
     auction.quantity = BigInt.fromString('100')
-    auction.lastUpdate = BigInt.fromI32(0)
+    auction.updatedAt = BigInt.fromI32(0)
     auction.save()
 
     handleDeal(event)
 
-    assert.fieldEquals('DebtAuction', auctionId, 'deleteAt', event.block.timestamp.toString())
+    assert.fieldEquals('DebtAuction', auctionId, 'deletedAt', event.block.timestamp.toString())
     assert.fieldEquals('DebtAuction', auctionId, 'active', 'false')
 
     clearStore()

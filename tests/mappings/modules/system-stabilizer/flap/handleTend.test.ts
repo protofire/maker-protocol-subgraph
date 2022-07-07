@@ -7,7 +7,7 @@ import { tests } from '../../../../../src/mappings/modules/tests'
 import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 describe('Flapper#handleTend', () => {
-  test('updates the highestBidder, bidAmount and the endTime', () => {
+  test('updates the highestBidder, bidAmount and the endTimeAt', () => {
     let signature = '0x4712f803'
 
     let id = '50'
@@ -37,7 +37,7 @@ describe('Flapper#handleTend', () => {
     handleTend(event)
 
     assert.fieldEquals('SurplusAuction', auction.id, 'highestBidder', event.transaction.from.toHexString())
-    assert.fieldEquals('SurplusAuction', auction.id, 'endTime', event.block.timestamp.plus(defaultTTL).toString())
+    assert.fieldEquals('SurplusAuction', auction.id, 'endTimeAt', event.block.timestamp.plus(defaultTTL).toString())
     assert.fieldEquals('SurplusAuction', auction.id, 'bidAmount', bid)
 
     clearStore()

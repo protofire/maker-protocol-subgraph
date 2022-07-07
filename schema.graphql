@@ -28,13 +28,13 @@ type Collateral @entity {
   createdAtTransaction: Bytes
 
   " Timestamp of the block in which this collateral was last modified [seconds] "
-  modifiedAt: BigInt
+  updatedAt: BigInt
 
   " Block number in which this collateral was last modified "
-  modifiedAtBlock: BigInt
+  updatedAtBlock: BigInt
 
   " Transaction hash in which this collateral was last modified "
-  modifiedAtTransaction: Bytes
+  updatedAtTransaction: Bytes
 
   " UserCollateral action history "
   logs: [CollateralLog!] @derivedFrom(field: "collateral")
@@ -143,13 +143,13 @@ type CollateralType @entity {
   addedAtTransaction: Bytes!
 
   " Timestamp of the block in which this collateral type was last modified [seconds] "
-  modifiedAt: BigInt
+  updatedAt: BigInt
 
   " Block number in which this collateral type was last modified "
-  modifiedAtBlock: BigInt
+  updatedAtBlock: BigInt
 
   " Transaction hash in which this collateral type was last modified "
-  modifiedAtTransaction: Bytes
+  updatedAtTransaction: Bytes
 }
 
 " Collateral market price at a given block "
@@ -363,13 +363,19 @@ type SystemState @entity {
   dsrLive: Boolean!
 
   " Dai Savings Rate Live LastUpdate"
-  dsrLiveLastUpdateAt: BigInt!
+  dsrLiveUpdatedAt: BigInt!
 
   " Address that conforms to a VowLike interface "
   potVowContract: Bytes!
 
   " Total savings in DAI of all users (Pot#Pie) "
   totalSavingsInPot: BigDecimal!
+
+  " Value which decides how much dai - given when drip() is called "
+  rateAccumulator: BigInt
+
+  " last time the drip() function was called "
+  lastPotDripAt: BigInt
 
   #
   # Dog
@@ -421,19 +427,19 @@ interface Auction {
   highestBidder: Bytes!
 
   " TS when the auction ends "
-  endTime: BigInt!
+  endTimeAt: BigInt!
 
   " TS CreatedAt (kick time) "
   createdAt: BigInt!
 
   " TS modifiedAt "
-  lastUpdate: BigInt!
+  updatedAt: BigInt!
 
   "False if Auction was deleted "
   active: Boolean!
 
   "Timestamp when the auction was deleted"
-  deleteAt: BigInt!
+  deletedAt: BigInt!
 }
 
 type DebtAuction implements Auction @entity {
@@ -450,19 +456,19 @@ type DebtAuction implements Auction @entity {
   highestBidder: Bytes!
 
   " TS when the auction ends "
-  endTime: BigInt!
+  endTimeAt: BigInt!
 
   " TS CreatedAt (kick time) "
   createdAt: BigInt!
 
   " TS modifiedAt "
-  lastUpdate: BigInt!
+  updatedAt: BigInt!
 
   "False if Auction was deleted "
   active: Boolean!
 
   "Timestamp when the auction was deleted"
-  deleteAt: BigInt!
+  deletedAt: BigInt!
 }
 
 type SurplusAuction implements Auction @entity {
@@ -479,19 +485,19 @@ type SurplusAuction implements Auction @entity {
   highestBidder: Bytes!
 
   " TS when the auction ends "
-  endTime: BigInt!
+  endTimeAt: BigInt!
 
   " TS CreatedAt (kick time) "
   createdAt: BigInt!
 
   " TS modifiedAt "
-  lastUpdate: BigInt!
+  updatedAt: BigInt!
 
   "False if Auction was deleted "
   active: Boolean!
 
   "Timestamp when the auction was deleted"
-  deleteAt: BigInt!
+  deletedAt: BigInt!
 }
 
 " Maker Vault (formerly collateralized debt position or CDPs) "
@@ -527,13 +533,13 @@ type Vault @entity {
   openedAtTransaction: Bytes
 
   " Timestamp of the block in which this vault was last modified [seconds] "
-  modifiedAt: BigInt
+  updatedAt: BigInt
 
   " Block number in which this vault was last modified "
-  modifiedAtBlock: BigInt
+  updatedAtBlock: BigInt
 
   " Transaction hash in which this vault was last modified "
-  modifiedAtTransaction: Bytes
+  updatedAtTransaction: Bytes
 
   " Vault action history "
   logs: [VaultLog!] @derivedFrom(field: "vault")

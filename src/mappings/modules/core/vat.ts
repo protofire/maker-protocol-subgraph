@@ -81,9 +81,9 @@ export function handleFile(event: LogNote): void {
         collateral.vaultDebtFloor = units.fromRad(data)
       }
 
-      collateral.modifiedAt = event.block.timestamp
-      collateral.modifiedAtBlock = event.block.number
-      collateral.modifiedAtTransaction = event.transaction.hash
+      collateral.updatedAt = event.block.timestamp
+      collateral.updatedAtBlock = event.block.number
+      collateral.updatedAtTransaction = event.transaction.hash
 
       collateral.save()
     }
@@ -118,9 +118,9 @@ export function handleSlip(event: LogNote): void {
 
   let amountBefore = collateral.amount
   collateral.amount = collateral.amount.plus(wad)
-  collateral.modifiedAt = event.block.timestamp
-  collateral.modifiedAtBlock = event.block.number
-  collateral.modifiedAtTransaction = event.transaction.hash
+  collateral.updatedAt = event.block.timestamp
+  collateral.updatedAtBlock = event.block.number
+  collateral.updatedAtTransaction = event.transaction.hash
   collateral.save()
 
   let log = new CollateralChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
@@ -131,9 +131,9 @@ export function handleSlip(event: LogNote): void {
   log.save()
 
   collateralType.totalCollateral.plus(wad)
-  collateralType.modifiedAt = event.block.timestamp
-  collateralType.modifiedAtBlock = event.block.number
-  collateralType.modifiedAtTransaction = event.transaction.hash
+  collateralType.updatedAt = event.block.timestamp
+  collateralType.updatedAtBlock = event.block.number
+  collateralType.updatedAtTransaction = event.transaction.hash
   collateralType.save()
 }
 
@@ -151,16 +151,16 @@ export function handleFlux(event: LogNote): void {
 
   let srcCollateral = collaterals.loadOrCreateCollateral(event, ilk, srcUser.id)
   srcCollateral.amount = srcCollateral.amount.minus(Δwad)
-  srcCollateral.modifiedAt = event.block.timestamp
-  srcCollateral.modifiedAtBlock = event.block.number
-  srcCollateral.modifiedAtTransaction = event.transaction.hash
+  srcCollateral.updatedAt = event.block.timestamp
+  srcCollateral.updatedAtBlock = event.block.number
+  srcCollateral.updatedAtTransaction = event.transaction.hash
   srcCollateral.save()
 
   let dstCollateral = collaterals.loadOrCreateCollateral(event, ilk, dstUser.id)
   dstCollateral.amount = dstCollateral.amount.plus(Δwad)
-  dstCollateral.modifiedAt = event.block.timestamp
-  dstCollateral.modifiedAtBlock = event.block.number
-  dstCollateral.modifiedAtTransaction = event.transaction.hash
+  dstCollateral.updatedAt = event.block.timestamp
+  dstCollateral.updatedAtBlock = event.block.number
+  dstCollateral.updatedAtTransaction = event.transaction.hash
   dstCollateral.save()
 
   let srcLog = new CollateralTransferLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-5.0')
@@ -267,9 +267,9 @@ export function handleFrob(event: LogNote): void {
       // We are adding normalized debt values. Not sure whether multiplying by rate works here.
       vault.debt = vault.debt.plus(Δdebt)
 
-      vault.modifiedAt = event.block.timestamp
-      vault.modifiedAtBlock = event.block.number
-      vault.modifiedAtTransaction = event.transaction.hash
+      vault.updatedAt = event.block.timestamp
+      vault.updatedAtBlock = event.block.number
+      vault.updatedAtTransaction = event.transaction.hash
 
       if (!Δcollateral.equals(decimal.ZERO)) {
         let log = new VaultCollateralChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-1')
@@ -301,17 +301,17 @@ export function handleFrob(event: LogNote): void {
     }
 
     // Track total collateral
-    collateral.totalCollateral = collateral.totalCollateral + Δcollateral
+    collateral.totalCollateral = collateral.totalCollateral.plus(Δcollateral)
 
     // Debt normalized should coincide with Ilk.Art
-    collateral.debtNormalized = collateral.debtNormalized + Δdebt
+    collateral.debtNormalized = collateral.debtNormalized.plus(Δdebt)
 
     // Total debt is Art * rate (like on DAIStats)
-    collateral.totalDebt = collateral.debtNormalized * collateral.rate
+    collateral.totalDebt = collateral.debtNormalized.times(collateral.rate)
 
-    collateral.modifiedAt = event.block.timestamp
-    collateral.modifiedAtBlock = event.block.number
-    collateral.modifiedAtTransaction = event.transaction.hash
+    collateral.updatedAt = event.block.timestamp
+    collateral.updatedAtBlock = event.block.number
+    collateral.updatedAtTransaction = event.transaction.hash
 
     vault.save()
     collateral.save()
@@ -327,18 +327,8 @@ export function handleFork(event: LogNote): void {
   let dink = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(100, 132)))
   let dart = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(132, 164)))
 
-  let vault1 = Vault.load(
-    src
-      .toHexString()
-      .concat('-')
-      .concat(ilk),
-  )
-  let vault2 = Vault.load(
-    dst
-      .toHexString()
-      .concat('-')
-      .concat(ilk),
-  )
+  let vault1 = Vault.load(src.toHexString().concat('-').concat(ilk))
+  let vault2 = Vault.load(dst.toHexString().concat('-').concat(ilk))
 
   if (vault1 && vault2) {
     vault1.collateral = vault1.collateral.minus(units.fromWad(dink))

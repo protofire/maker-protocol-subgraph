@@ -29,6 +29,6 @@ test('Flopper#handleYank: Sets active to false', () => {
   handleYank(event)
 
   assert.fieldEquals('DebtAuction', id.toString(), 'active', 'false')
-  assert.fieldEquals('DebtAuction', id.toString(), 'deleteAt', event.block.timestamp.toString())
+  assert.fieldEquals('DebtAuction', id.toString(), 'deletedAt', event.block.timestamp.toString())
   clearStore()
 })

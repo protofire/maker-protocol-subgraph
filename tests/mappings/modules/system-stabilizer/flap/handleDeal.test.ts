@@ -17,22 +17,22 @@ function createEvent(id: BigInt): LogNote {
 }
 
 describe('Flapper#handleDeal', () => {
-  test('Updates Auction.active and Auction.deleteAt ', () => {
+  test('Updates Auction.active and Auction.deletedAt ', () => {
     let id = BigInt.fromString('50')
     let auctionId = id.toString()
 
     let event = createEvent(id)
 
     let auction = auctions.loadOrCreateSurplusAuction(auctionId, event) // load the Auction with the quantity value
-    auction.endTime = event.block.timestamp
+    auction.endTimeAt = event.block.timestamp
     auction.highestBidder = event.transaction.from
     auction.quantity = BigInt.fromString('100')
-    auction.lastUpdate = BigInt.fromI32(0)
+    auction.updatedAt = BigInt.fromI32(0)
     auction.save()
 
     handleDeal(event)
 
-    assert.fieldEquals('SurplusAuction', auctionId, 'deleteAt', event.block.timestamp.toString())
+    assert.fieldEquals('SurplusAuction', auctionId, 'deletedAt', event.block.timestamp.toString())
     assert.fieldEquals('SurplusAuction', auctionId, 'active', 'false')
 
     clearStore()

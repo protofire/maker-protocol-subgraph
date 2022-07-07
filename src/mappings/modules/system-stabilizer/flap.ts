@@ -46,7 +46,7 @@ export function handleKick(event: Kick): void {
 
   let system = systemModule.getSystemState(event)
   if (system.surplusAuctionBidDuration) {
-    auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
+    auction.endTimeAt = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
   }
   auction.active = true
   auction.save()
@@ -58,10 +58,10 @@ export function handleTick(event: LogNote): void {
 
   let system = systemModule.getSystemState(event)
   if (system.surplusAuctionBidDuration) {
-    auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
+    auction.endTimeAt = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
   }
 
-  auction.lastUpdate = event.block.timestamp
+  auction.updatedAt = event.block.timestamp
 
   auction.save()
 }
@@ -72,7 +72,7 @@ export function handleDeal(event: LogNote): void {
   let auction = auctions.loadOrCreateSurplusAuction(id.toString(), event)
 
   //auction to inactive "delete"
-  auction.deleteAt = event.block.timestamp
+  auction.deletedAt = event.block.timestamp
   auction.active = false
 
   auction.save()
@@ -89,7 +89,7 @@ export function handleTend(event: LogNote): void {
   let system = systemModule.getSystemState(event)
   auction.bidAmount = BigInt.fromByteArray(event.params.arg2)
   if (system.surplusAuctionBidDuration) {
-    auction.endTime = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
+    auction.endTimeAt = event.block.timestamp.plus(system.surplusAuctionBidDuration!)
   }
   auction.save()
 }
@@ -99,7 +99,7 @@ export function handleYank(event: LogNote): void {
 
   let auction = auctions.loadOrCreateSurplusAuction(id.toString(), event)
   auction.active = false
-  auction.deleteAt = event.block.timestamp
+  auction.deletedAt = event.block.timestamp
 
   auction.save()
 }
