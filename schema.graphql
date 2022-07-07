@@ -371,6 +371,12 @@ type SystemState @entity {
   " Total savings in DAI of all users (Pot#Pie) "
   totalSavingsInPot: BigDecimal!
 
+  " Value which decides how much dai - given when drip() is called "
+  rateAccumulator: BigInt
+
+  " last time the drip() function was called "
+  lastPotDripAt: BigInt
+
   #
   # Dog
   #
