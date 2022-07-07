@@ -1,5 +1,5 @@
-import { Bytes, BigInt, ethereum, Address } from '@graphprotocol/graph-ts'
-import { describe, test, assert, clearStore, beforeAll, afterAll } from 'matchstick-as'
+import { BigInt, Bytes } from '@graphprotocol/graph-ts'
+import { describe, test, assert, clearStore } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Pot/Pot'
 import { handleDrip } from '../../../../../src/mappings/modules/rates/pot'
 import { tests } from '../../../../../src/mappings/modules/tests'
@@ -10,12 +10,13 @@ function createEvent(): LogNote {
   let usr = tests.helpers.params.getBytes('usr', Bytes.fromUTF8(''))
 
   let event = changetype<LogNote>(tests.helpers.events.getNewEvent([sig, usr]))
+  event.block.timestamp = BigInt.fromI32(100)
 
   return event
 }
 
 describe('Pot#handleDrip', () => {
-  test('Updates SystemState.rateAccumulator', () => {
+  test('Updates SystemState.rateAccumulator and SystemState.lastDripAt', () => {
     let event = createEvent()
     mockChi()
     mockDebt()
@@ -23,6 +24,7 @@ describe('Pot#handleDrip', () => {
     handleDrip(event)
 
     assert.fieldEquals('SystemState', 'current', 'rateAccumulator', '10')
+    assert.fieldEquals('SystemState', 'current', 'lastDripAt', event.block.timestamp.toString())
 
     clearStore()
   })
