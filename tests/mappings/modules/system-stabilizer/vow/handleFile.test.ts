@@ -1,16 +1,12 @@
-import { Bytes, BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts'
-import { units } from '@protofire/subgraph-toolkit'
-import { test, clearStore, assert, describe, beforeAll, afterAll } from 'matchstick-as'
+import { Bytes, BigInt, Address } from '@graphprotocol/graph-ts'
+import { test, clearStore, assert, describe, beforeAll, afterAll, beforeEach } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Vow/Vow'
 import { handleFile } from '../../../../../src/mappings/modules/system-stabilizer/vow'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { system as systemModule } from '../../../../../src/entities'
 
-let amount = '100500000000000000000000000000000000000000000000' // 100.5 (rad) 100500000000000000000000000000 (wad)
-let address = '0xa4f79bc4a5612bdda35904fdf55fc4cb53d1bff6'
-let bigAddress = '0000000000000000000000004d95a049d5b0b7d32058cd3f2163015747522e99'
-type TransformAmount = (n: BigInt) => BigDecimal
+let signature: string
 
 function createEvent(sig: string, what: string, data: Bytes): LogNote {
   return changetype<LogNote>(
@@ -21,26 +17,6 @@ function createEvent(sig: string, what: string, data: Bytes): LogNote {
       tests.helpers.params.getBytes('arg2', data),
     ]),
   )
-}
-
-function checkUintHandleFile(what: string, field: string, transformAmount: TransformAmount): void {
-  let sig = '0x29ae8114'
-  let data = Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString(amount)).reverse())
-  let event = createEvent(sig, what, data)
-
-  handleFile(event)
-
-  assert.fieldEquals('SystemState', 'current', field, transformAmount(BigInt.fromString(amount)).toString())
-}
-
-function checkAddressHandleFile(what: string, field: string, data: Address): void {
-  let sig = '0xd4e8be83'
-  let dataBytes = changetype<Bytes>(data)
-  let event = createEvent(sig, what, dataBytes)
-
-  handleFile(event)
-
-  assert.fieldEquals('SystemState', 'current', field, data.toHexString())
 }
 
 function checkSameAddressHandleFile(what: string, field: string, data: String): void {
@@ -56,52 +32,113 @@ function checkSameAddressHandleFile(what: string, field: string, data: String): 
   assert.fieldEquals('SystemState', 'current', 'vowFlopperContract', vowAddress)
 }
 
-function returnPlainAmount(amount: BigInt): BigDecimal {
-  return amount.toBigDecimal()
-}
-
 describe('Vow#handleFile', () => {
   beforeAll(() => {
     mockDebt()
   })
 
-  describe('For file(bytes32 what, uint256 data) with what=(wait,bump,sump,dump,hump)', () => {
-    test('For what=wait.', () => {
-      checkUintHandleFile('wait', 'debtAuctionDelay', returnPlainAmount)
+  afterAll(() => {
+    clearStore()
+  })
+
+  describe('when [signature]=0x29ae8114', () => {
+    beforeEach(() => {
+      signature = '0x29ae8114'
     })
 
-    test('For what=bump', () => {
-      checkUintHandleFile('bump', 'surplusAuctionLotSize', units.fromRad)
+    describe('when [what]=wait.', () => {
+      test('updates SystemState.debtAuctionDelay', () => {
+        let value = BigInt.fromString('3500')
+        let data = Bytes.fromUint8Array(Bytes.fromBigInt(value).reverse())
+        let event = createEvent(signature, 'wait', data)
+
+        handleFile(event)
+
+        assert.fieldEquals('SystemState', 'current', 'debtAuctionDelay', value.toString())
+      })
     })
 
-    test('For what=sump', () => {
-      checkUintHandleFile('sump', 'debtAuctionBidSize', units.fromRad)
+    describe('when [what]=bump', () => {
+      test('updates SystemState.surplusAuctionLotSize', () => {
+        let value = BigInt.fromString('100500000000000000000000000000000000000000000000')
+        let data = Bytes.fromUint8Array(Bytes.fromBigInt(value).reverse())
+        let event = createEvent(signature, 'bump', data)
+
+        handleFile(event)
+
+        assert.fieldEquals('SystemState', 'current', 'surplusAuctionLotSize', '100.5')
+      })
     })
 
-    test('For what=dump', () => {
-      checkUintHandleFile('dump', 'debtAuctionInitialLotSize', units.fromWad)
+    describe('when [what]=sump', () => {
+      test('updates SystemState.debtAuctionBidSize', () => {
+        let value = BigInt.fromString('100500000000000000000000000000000000000000000000')
+        let data = Bytes.fromUint8Array(Bytes.fromBigInt(value).reverse())
+        let event = createEvent(signature, 'sump', data)
+
+        handleFile(event)
+
+        assert.fieldEquals('SystemState', 'current', 'debtAuctionBidSize', '100.5')
+      })
     })
 
-    test('For what=hump', () => {
-      checkUintHandleFile('hump', 'surplusAuctionBuffer', units.fromRad)
+    describe('when [what]=dump', () => {
+      test('updates SystemState.debtAuctionInitialLotSize', () => {
+        let value = BigInt.fromString('100700000000000000000') // 100.7 wad
+        let data = Bytes.fromUint8Array(Bytes.fromBigInt(value).reverse())
+        let event = createEvent(signature, 'dump', data)
+
+        handleFile(event)
+
+        assert.fieldEquals('SystemState', 'current', 'debtAuctionInitialLotSize', '100.7')
+      })
+    })
+
+    describe('when [what]=hump', () => {
+      test('updates SystemState.surplusAuctionBuffer', () => {
+        let value = BigInt.fromString('100500000000000000000000000000000000000000000000')
+        let data = Bytes.fromUint8Array(Bytes.fromBigInt(value).reverse())
+        let event = createEvent(signature, 'hump', data)
+
+        handleFile(event)
+
+        assert.fieldEquals('SystemState', 'current', 'surplusAuctionBuffer', '100.5')
+      })
     })
   })
 
-  describe('For file(bytes32 what, address data) with what=(flapper,flopper,"")', () => {
-    test('For what=Flapper', () => {
-      checkAddressHandleFile('flapper', 'vowFlapperContract', Address.fromString(address))
+  describe('when [signature]=0xd4e8be83', () => {
+    beforeEach(() => {
+      signature = '0xd4e8be83'
     })
 
-    test('For what=Flopper', () => {
-      checkAddressHandleFile('flopper', 'vowFlopperContract', Address.fromString(address))
+    describe('when [what]=flapper', () => {
+      test('updates SystemState.vowFlapperContract', () => {
+        let address = Address.fromHexString('0xa4f79bc4a5612bdda35904fdf55fc4cb53d1bff6')
+        let dataBytes = changetype<Bytes>(address)
+        let event = createEvent(signature, 'flapper', dataBytes)
+
+        handleFile(event)
+
+        assert.fieldEquals('SystemState', 'current', 'vowFlapperContract', address.toHexString())
+      })
     })
 
     test('For what=(empty) and a 64bytes String in Adress ', () => {
+      let bigAddress = '0000000000000000000000004d95a049d5b0b7d32058cd3f2163015747522e99'
       checkSameAddressHandleFile('', 'vowFlopperContract', bigAddress)
     })
   })
 
-  afterAll(() => {
-    clearStore()
+  describe('when [what]=flopper', () => {
+    test('updates SystemState.vowFlopperContract', () => {
+      let address = Address.fromHexString('0xa4f79bc4a5612bdda35904fdf55fc4cb53d1bff6')
+      let dataBytes = changetype<Bytes>(address)
+      let event = createEvent(signature, 'flopper', dataBytes)
+
+      handleFile(event)
+
+      assert.fieldEquals('SystemState', 'current', 'vowFlopperContract', address.toHexString())
+    })
   })
 })
