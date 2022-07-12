@@ -33,7 +33,7 @@ describe('Dog#handleBark', () => {
 
     mockDebt()
 
-    let collateralType = new CollateralType('ETH-A')
+    let collateralType = new CollateralType(ilk)
     collateralType.daiAmountToCoverDebtAndFees = BigDecimal.fromString('100.0')
     collateralType.liquidationPenalty = BigDecimal.fromString('20.0')
     collateralType.save()
@@ -49,7 +49,7 @@ describe('Dog#handleBark', () => {
     assert.fieldEquals('SaleAuction', id.toString(), 'vault', urn + '-' + ilk.toString())
     assert.fieldEquals('SaleAuction', id.toString(), 'collateralType', ilk.toString())
 
-    assert.fieldEquals('CollateralType', 'ETH-A', 'daiAmountToCoverDebtAndFees', '200')
+    assert.fieldEquals('CollateralType', ilk, 'daiAmountToCoverDebtAndFees', '200')
 
     clearStore()
   })
