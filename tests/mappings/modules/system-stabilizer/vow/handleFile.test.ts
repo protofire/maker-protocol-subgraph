@@ -19,19 +19,6 @@ function createEvent(sig: string, what: string, data: Bytes): LogNote {
   )
 }
 
-function checkSameAddressHandleFile(what: string, field: string, data: String): void {
-  let sig = '0xd4e8be83'
-  let dataBytes = changetype<Bytes>(data)
-  let event = createEvent(sig, what, dataBytes)
-
-  //vowFlopperContract must be the same as before handleFile
-  let system = systemModule.getSystemState(event)
-  let vowAddress = system.vowFlopperContract.toHexString()
-  handleFile(event)
-
-  assert.fieldEquals('SystemState', 'current', 'vowFlopperContract', vowAddress)
-}
-
 describe('Vow#handleFile', () => {
   beforeAll(() => {
     mockDebt()
@@ -124,9 +111,24 @@ describe('Vow#handleFile', () => {
       })
     })
 
-    test('For what=(empty) and a 64bytes String in Adress ', () => {
-      let bigAddress = '0000000000000000000000004d95a049d5b0b7d32058cd3f2163015747522e99'
-      checkSameAddressHandleFile('', 'vowFlopperContract', bigAddress)
+    describe('when [what]=(empty) and 64bytes String in Address', () => {
+      test('does not update neither SystemState.vowFlopperContract or SystemState.vowFlapperContract', () => {
+        let address = '0000000000000000000000004d95a049d5b0b7d32058cd3f2163015747522e99'
+        let dataBytes = changetype<Bytes>(address)
+        let event = createEvent(signature, '', dataBytes)
+
+        let prevAddress = Address.fromHexString('0xa4f79bc4a5612bdda35904fdf55fc4cb53d1bff6')
+
+        let systemState = systemModule.getSystemState(event)
+        systemState.vowFlapperContract = prevAddress
+        systemState.vowFlopperContract = prevAddress
+        systemState.save()
+
+        handleFile(event)
+
+        assert.fieldEquals('SystemState', 'current', 'vowFlopperContract', prevAddress.toHexString())
+        assert.fieldEquals('SystemState', 'current', 'vowFlapperContract', prevAddress.toHexString())
+      })
     })
   })
 
