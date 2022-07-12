@@ -4,6 +4,7 @@ import { LogNote } from '../../../../../generated/Vow/Vow'
 import { handleFile } from '../../../../../src/mappings/modules/system-stabilizer/vow'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { mockDebt } from '../../../../helpers/mockedFunctions'
+import { system as systemModule } from '../../../../../src/entities'
 
 let signature: string
 
@@ -110,16 +111,36 @@ describe('Vow#handleFile', () => {
       })
     })
 
-    describe('when [what]=flopper', () => {
-      test('updates SystemState.vowFlopperContract', () => {
-        let address = Address.fromHexString('0xa4f79bc4a5612bdda35904fdf55fc4cb53d1bff6')
+    describe('when [what]=(empty) and 64bytes String in Address', () => {
+      test('does not update neither SystemState.vowFlopperContract or SystemState.vowFlapperContract', () => {
+        let address = '0000000000000000000000004d95a049d5b0b7d32058cd3f2163015747522e99'
         let dataBytes = changetype<Bytes>(address)
-        let event = createEvent(signature, 'flopper', dataBytes)
+        let event = createEvent(signature, '', dataBytes)
+
+        let prevAddress = Address.fromHexString('0xa4f79bc4a5612bdda35904fdf55fc4cb53d1bff6')
+
+        let systemState = systemModule.getSystemState(event)
+        systemState.vowFlapperContract = prevAddress
+        systemState.vowFlopperContract = prevAddress
+        systemState.save()
 
         handleFile(event)
 
-        assert.fieldEquals('SystemState', 'current', 'vowFlopperContract', address.toHexString())
+        assert.fieldEquals('SystemState', 'current', 'vowFlopperContract', prevAddress.toHexString())
+        assert.fieldEquals('SystemState', 'current', 'vowFlapperContract', prevAddress.toHexString())
       })
+    })
+  })
+
+  describe('when [what]=flopper', () => {
+    test('updates SystemState.vowFlopperContract', () => {
+      let address = Address.fromHexString('0xa4f79bc4a5612bdda35904fdf55fc4cb53d1bff6')
+      let dataBytes = changetype<Bytes>(address)
+      let event = createEvent(signature, 'flopper', dataBytes)
+
+      handleFile(event)
+
+      assert.fieldEquals('SystemState', 'current', 'vowFlopperContract', address.toHexString())
     })
   })
 })

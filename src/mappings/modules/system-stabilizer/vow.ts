@@ -27,10 +27,12 @@ export function handleFile(event: LogNote): void {
     }
   } else if (sig == '0xd4e8be83') {
     // TODO: Register the address and start collecting events from these contracts
-    let data = Address.fromBytes(event.params.arg2)
+
     if (what == 'flapper') {
+      let data = bytes.toAddress(event.params.arg2)
       system.vowFlapperContract = data
     } else if (what == 'flopper') {
+      let data = bytes.toAddress(event.params.arg2)
       system.vowFlopperContract = data
     }
   }
