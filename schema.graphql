@@ -120,6 +120,13 @@ type CollateralType @entity {
   unmanagedVaultCount: BigInt!
 
   #
+  # Sale Auction
+  #
+
+  " Sale auctions for the collateral type "
+  saleAuctions: [SaleAuction!] @derivedFrom(field: "collateralType")
+
+  #
   # Asset price
   #
 
