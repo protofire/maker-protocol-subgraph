@@ -5,9 +5,50 @@ import {
   Take as TakeEvent,
   Yank as YankEvent,
   Redo as RedoEvent,
+  File as FileBigIntEvent,
+  File1 as FileAddressEvent,
 } from '../../../../generated/Clipper/Clipper'
 import { SaleAuction } from '../../../../generated/schema'
-import { saleAuctions } from '../../../entities'
+import { saleAuctions, system as systemModule } from '../../../entities'
+
+export function handleFile1(event: FileBigIntEvent): void {
+  let what = event.params.what.toString()
+  let data = event.params.data
+
+  let systemState = systemModule.getSystemState(event)
+
+  if (what == 'buf') {
+    systemState.startingPriceFactor = units.fromRay(data)
+  } else if (what == 'tail') {
+    systemState.auctionResetTime = data
+  } else if (what == 'cusp') {
+    systemState.auctionDropPercentage = units.fromRay(data)
+  } else if (what == 'chip') {
+    systemState.daiToRaisePercentage = units.fromWad(data)
+  } else if (what == 'tip') {
+    systemState.auctionFlatFee = units.fromRad(data)
+  }
+  systemState.save()
+}
+
+export function handleFile2(event: FileAddressEvent): void {
+  let what = event.params.what.toString()
+  let data = event.params.data
+
+  let systemState = systemModule.getSystemState(event)
+
+  if (what == 'spotter') {
+    systemState.clipperSpotterContract = data
+  } else if (what == 'dog') {
+    systemState.clipperDogContract = data
+  } else if (what == 'vow') {
+    systemState.clipperVowContract = data
+  } else if (what == 'calc') {
+    systemState.clipperCalcContract = data
+  }
+
+  systemState.save()
+}
 
 export function handleKick(event: KickEvent): void {
   let id = event.params.id.toString()

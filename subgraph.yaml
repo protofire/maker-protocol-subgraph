@@ -659,9 +659,9 @@ dataSources:
         - SaleAuction
       eventHandlers:
         - event: File(indexed bytes32,uint256)
-          handler: handleFile
+          handler: handleFile1
         - event: File(indexed bytes32,address)
-          handler: handleFile
+          handler: handleFile2
         - event: Kick(indexed uint256,uint256,uint256,uint256,indexed address,indexed address,uint256)
           handler: handleKick
         - event: Redo(indexed uint256,uint256,uint256,uint256,indexed address,indexed address,uint256)
