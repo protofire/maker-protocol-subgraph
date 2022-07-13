@@ -670,3 +670,31 @@ dataSources:
           handler: handleTake
         - event: Yank(uint256)
           handler: handleYank
+
+  #
+  # Liquidation Module
+  #
+  # Auction Initiation from Liquidation
+  - name: StairstepExponentialDecrease
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: StairstepExponentialDecrease
+      address: '0x7d9f92DAa9254Bbd1f479DBE5058f74C2381A898'
+      startBlock: 12329765
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/mappings/modules/liquidation/abacus.ts
+      abis:
+        - name: StairstepExponentialDecrease
+          file: ./abis/StairstepExponentialDecrease.json
+        - name: Vat
+          file: ./abis/Vat.json
+      entities:
+        - SystemState
+        - SaleAuction
+      eventHandlers:
+        - event: File(indexed bytes32,uint256)
+          handler: handleFile
