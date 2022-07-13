@@ -18,15 +18,15 @@ export function handleFile1(event: FileBigIntEvent): void {
   let systemState = systemModule.getSystemState(event)
 
   if (what == 'buf') {
-    systemState.startingPriceFactor = units.fromRay(data)
+    systemState.saleAuctionStartingPriceFactor = units.fromRay(data)
   } else if (what == 'tail') {
-    systemState.auctionResetTime = data
+    systemState.saleAuctionResetTime = data
   } else if (what == 'cusp') {
-    systemState.auctionDropPercentage = units.fromRay(data)
+    systemState.saleAuctionDropPercentage = units.fromRay(data)
   } else if (what == 'chip') {
-    systemState.daiToRaisePercentage = units.fromWad(data)
+    systemState.saleAuctionDaiToRaisePercentage = units.fromWad(data)
   } else if (what == 'tip') {
-    systemState.auctionFlatFee = units.fromRad(data)
+    systemState.saleAuctionFlatFee = units.fromRad(data)
   }
   systemState.save()
 }
@@ -38,13 +38,13 @@ export function handleFile2(event: FileAddressEvent): void {
   let systemState = systemModule.getSystemState(event)
 
   if (what == 'spotter') {
-    systemState.clipperSpotterContract = data
+    systemState.saleAuctionSpotterContract = data
   } else if (what == 'dog') {
-    systemState.clipperDogContract = data
+    systemState.saleAuctionDogContract = data
   } else if (what == 'vow') {
-    systemState.clipperVowContract = data
+    systemState.saleAuctionVowContract = data
   } else if (what == 'calc') {
-    systemState.clipperCalcContract = data
+    systemState.saleAuctionCalcContract = data
   }
 
   systemState.save()

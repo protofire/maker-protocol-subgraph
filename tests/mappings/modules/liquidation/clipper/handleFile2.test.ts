@@ -27,10 +27,10 @@ describe('Clipper#handleFile2', () => {
     mockDebt()
 
     systemState = new SystemState('current')
-    systemState.clipperSpotterContract = prevAddress
-    systemState.clipperDogContract = prevAddress
-    systemState.clipperCalcContract = prevAddress
-    systemState.clipperVowContract = prevAddress
+    systemState.saleAuctionSpotterContract = prevAddress
+    systemState.saleAuctionDogContract = prevAddress
+    systemState.saleAuctionCalcContract = prevAddress
+    systemState.saleAuctionVowContract = prevAddress
     systemState.save()
   })
 
@@ -43,58 +43,58 @@ describe('Clipper#handleFile2', () => {
 
       handleFile2(event)
 
-      assert.fieldEquals('SystemState', 'current', 'clipperSpotterContract', prevAddress.toHexString())
-      assert.fieldEquals('SystemState', 'current', 'clipperDogContract', prevAddress.toHexString())
-      assert.fieldEquals('SystemState', 'current', 'clipperCalcContract', prevAddress.toHexString())
-      assert.fieldEquals('SystemState', 'current', 'clipperVowContract', prevAddress.toHexString())
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionSpotterContract', prevAddress.toHexString())
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionDogContract', prevAddress.toHexString())
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionCalcContract', prevAddress.toHexString())
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionVowContract', prevAddress.toHexString())
     })
   })
 
   describe('when [what]=spotter', () => {
-    test('updates clipperSpotterContract', () => {
+    test('updates saleAuctionSpotterContract', () => {
       let what = 'spotter'
       let data = Address.fromString('0x0000000000000000000000000000000000000001')
       let event = createEvent(what, data)
 
       handleFile2(event)
 
-      assert.fieldEquals('SystemState', 'current', 'clipperSpotterContract', data.toHexString())
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionSpotterContract', data.toHexString())
     })
   })
 
   describe('when [what]=dog', () => {
-    test('updates clipperDogContract', () => {
+    test('updates saleAuctionDogContract', () => {
       let what = 'dog'
       let data = Address.fromString('0x0000000000000000000000000000000000000001')
       let event = createEvent(what, data)
 
       handleFile2(event)
 
-      assert.fieldEquals('SystemState', 'current', 'clipperDogContract', data.toHexString())
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionDogContract', data.toHexString())
     })
   })
 
   describe('when [what]=vow', () => {
-    test('updates clipperVowContract', () => {
+    test('updates saleAuctionVowContract', () => {
       let what = 'vow'
       let data = Address.fromString('0x0000000000000000000000000000000000000001')
       let event = createEvent(what, data)
 
       handleFile2(event)
 
-      assert.fieldEquals('SystemState', 'current', 'clipperVowContract', data.toHexString())
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionVowContract', data.toHexString())
     })
   })
 
   describe('when [what]=calc', () => {
-    test('updates clipperCalcContract', () => {
+    test('updates saleAuctionCalcContract', () => {
       let what = 'calc'
       let data = Address.fromString('0x0000000000000000000000000000000000000001')
       let event = createEvent(what, data)
 
       handleFile2(event)
 
-      assert.fieldEquals('SystemState', 'current', 'clipperCalcContract', data.toHexString())
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionCalcContract', data.toHexString())
     })
   })
 })

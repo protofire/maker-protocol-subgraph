@@ -27,11 +27,11 @@ describe('Clipper#handleFile1', () => {
     mockDebt()
 
     systemState = new SystemState('current')
-    systemState.startingPriceFactor = decimal.ONE
-    systemState.auctionResetTime = integer.ZERO
-    systemState.auctionDropPercentage = decimal.ZERO
-    systemState.daiToRaisePercentage = decimal.ZERO
-    systemState.auctionFlatFee = decimal.ZERO
+    systemState.saleAuctionStartingPriceFactor = decimal.ONE
+    systemState.saleAuctionResetTime = integer.ZERO
+    systemState.saleAuctionDropPercentage = decimal.ZERO
+    systemState.saleAuctionDaiToRaisePercentage = decimal.ZERO
+    systemState.saleAuctionFlatFee = decimal.ZERO
     systemState.save()
   })
 
@@ -43,71 +43,71 @@ describe('Clipper#handleFile1', () => {
 
       handleFile1(event)
 
-      assert.fieldEquals('SystemState', 'current', 'startingPriceFactor', '1')
-      assert.fieldEquals('SystemState', 'current', 'auctionResetTime', '0')
-      assert.fieldEquals('SystemState', 'current', 'auctionDropPercentage', '0')
-      assert.fieldEquals('SystemState', 'current', 'daiToRaisePercentage', '0')
-      assert.fieldEquals('SystemState', 'current', 'auctionFlatFee', '0')
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionStartingPriceFactor', '1')
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionResetTime', '0')
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionDropPercentage', '0')
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionDaiToRaisePercentage', '0')
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionFlatFee', '0')
     })
   })
 
   describe('when [what]=buf', () => {
-    test('updates startingPriceFactor', () => {
+    test('updates saleAuctionStartingPriceFactor', () => {
       let what = 'buf'
       let data = BigInt.fromString('5000000000000000000000000000') // 5 ray
       let event = createEvent(what, data)
 
       handleFile1(event)
 
-      assert.fieldEquals('SystemState', 'current', 'startingPriceFactor', '5')
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionStartingPriceFactor', '5')
     })
   })
 
   describe('when [what]=tail', () => {
-    test('updates auctionResetTime', () => {
+    test('updates saleAuctionResetTime', () => {
       let what = 'tail'
       let data = BigInt.fromString('60') // seconds
       let event = createEvent(what, data)
 
       handleFile1(event)
 
-      assert.fieldEquals('SystemState', 'current', 'auctionResetTime', '60')
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionResetTime', '60')
     })
   })
 
   describe('when [what]=cusp', () => {
-    test('updates auctionDropPercentage', () => {
+    test('updates saleAuctionDropPercentage', () => {
       let what = 'cusp'
       let data = BigInt.fromString('50000000000000000000000000000') // 50 ray
       let event = createEvent(what, data)
 
       handleFile1(event)
 
-      assert.fieldEquals('SystemState', 'current', 'auctionDropPercentage', '50')
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionDropPercentage', '50')
     })
   })
 
   describe('when [what]=chip', () => {
-    test('updates daiToRaisePercentage', () => {
+    test('updates saleAuctionDaiToRaisePercentage', () => {
       let what = 'chip'
       let data = BigInt.fromString('1500000000000000000') // 1.5 wad
       let event = createEvent(what, data)
 
       handleFile1(event)
 
-      assert.fieldEquals('SystemState', 'current', 'daiToRaisePercentage', '1.5')
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionDaiToRaisePercentage', '1.5')
     })
   })
 
   describe('when [what]=tip', () => {
-    test('updates auctionFlatFee', () => {
+    test('updates saleAuctionFlatFee', () => {
       let what = 'tip'
       let data = BigInt.fromString('2500000000000000000000000000000000000000000000') // 2.5 rad
       let event = createEvent(what, data)
 
       handleFile1(event)
 
-      assert.fieldEquals('SystemState', 'current', 'auctionFlatFee', '2.5')
+      assert.fieldEquals('SystemState', 'current', 'saleAuctionFlatFee', '2.5')
     })
   })
 })
