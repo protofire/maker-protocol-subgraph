@@ -1,5 +1,4 @@
-import { Address, Bytes, BigInt } from '@graphprotocol/graph-ts'
-import { units } from '@protofire/subgraph-toolkit'
+import { Bytes, BigInt } from '@graphprotocol/graph-ts'
 import { afterAll, beforeAll, clearStore, describe, test, assert } from 'matchstick-as'
 import { File } from '../../../../../generated/StairstepExponentialDecrease/StairstepExponentialDecrease'
 import { handleFile } from '../../../../../src/mappings/modules/liquidation/abacus'
@@ -30,7 +29,7 @@ describe('Abacus#handleFile', () => {
   })
 
   describe('When [what] = step', () => {
-    test('Updates secondsBetweenPriceDrops in SystemState', () => {
+    test('Updates multiplicatorFactorPerStep in SystemState', () => {
       let what = 'step'
       let data = '11000000000000000000000000000' // 11 ray
 

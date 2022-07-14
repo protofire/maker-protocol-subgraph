@@ -6,14 +6,13 @@ import { system as systemModule } from '../../../entities'
 export function handleFile(event: FileEvent): void {
   let what = event.params.what.toString()
 
+  let system = systemModule.getSystemState(event)
   if (what == 'cut') {
-    let system = systemModule.getSystemState(event)
     system.secondsBetweenPriceDrops = event.params.data
     system.save()
   }
 
   if (what == 'step') {
-    let system = systemModule.getSystemState(event)
     system.multiplicatorFactorPerStep = units.fromRay(event.params.data)
     system.save()
   }

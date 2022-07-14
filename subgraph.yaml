@@ -694,7 +694,6 @@ dataSources:
           file: ./abis/Vat.json
       entities:
         - SystemState
-        - SaleAuction
       eventHandlers:
         - event: File(indexed bytes32,uint256)
           handler: handleFile
