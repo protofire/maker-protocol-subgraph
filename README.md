@@ -29,10 +29,10 @@ This subgraph aims to track the status of the Multi-Collateral DAI (MCD) through
 ##### handleInit
 
 ```
-  function init(bytes32 ilk) external note auth {
-      require(ilks[ilk].rate == 0, "Vat/ilk-already-init");
-      ilks[ilk].rate = 10 ** 27;
-  }
+function init(bytes32 ilk) external note auth {
+  require(ilks[ilk].rate == 0, "Vat/ilk-already-init");
+  ilks[ilk].rate = 10 ** 27;
+}
 ```
 
 Creates new _CollateralType_
