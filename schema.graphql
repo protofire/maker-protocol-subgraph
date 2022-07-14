@@ -434,6 +434,16 @@ type SystemState @entity {
   saleAuctionCalcContract: Bytes!
 
   #
+  # Liquidation 2.0 parameters (Abacus)
+  #
+
+  " Length of time between price drops (cut)"
+  secondsBetweenPriceDrops: BigInt!
+
+  " Per-step multiplicative factor (step) [ray]"
+  multiplicatorFactorPerStep: BigDecimal!
+
+  #
   # Status fields
   #
 
