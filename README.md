@@ -56,9 +56,11 @@ Creates new _CollateralType_
 
 fill me with the description of the contract
 
-- handleFile
-- handlePoke
-- handleCage
+##### handleFile
+
+##### handlePoke
+
+##### handleCage
 
 ### Dai Module:
 
@@ -68,8 +70,9 @@ The DAI token contract and all of the adapters DaiJoin adapters.
 
 fill me with the description of the contract
 
-- handleTransfer
-- handleApproval
+##### handleTransfer
+
+##### handleApproval
 
 ### Liquidation Module:
 
@@ -79,24 +82,35 @@ The Maker Protocol's Collateral Auction House (Liquidation System 2.0)
 
 fill me with the description of the contract
 
-- handleFile1
-- handleFile2
-- handleKick
-- handleTake
-- handleRedo
-- handleYank
+##### handleFile1
+
+##### handleFile2
+
+##### handleKick
+
+##### handleTake
+
+##### handleRedo
+
+##### handleYank
 
 #### fill me (Dog)
 
 fill me with the description of the contract
 
-- handleCage
-- handleDigs
-- handleFileVow
-- handleFileHole
-- handleFileChop
-- handleFileClip
-- handleBark
+##### handleCage
+
+##### handleDigs
+
+##### handleFileVow
+
+##### handleFileHole
+
+##### handleFileChop
+
+##### handleFileClip
+
+##### handleBark
 
 ### MKR Module:
 
@@ -106,10 +120,13 @@ fill me with the description of the module
 
 fill me with the description of the contract
 
-- handleTransfer
-- handleApproval
-- handleMint
-- handleBurn
+##### handleTransfer
+
+##### handleApproval
+
+##### handleMint
+
+##### handleBurn
 
 ### Proxy Module:
 
@@ -119,7 +136,7 @@ fill me with the description of the module
 
 fill me with the description of the contract
 
-- ?
+##### handleCreated
 
 ### Rates Module:
 
@@ -129,19 +146,25 @@ fill me with the description of the module
 
 fill me with the description of the contract
 
-- handleInit
-- handleDrip
-- handleFile
+##### handleInit
+
+##### handleDrip
+
+##### handleFile
 
 #### The Dai Savings Rate (Pot)
 
 fill me with the description of the contract
 
-- handleFile
-- handleCage
-- handleJoin
-- handleExit
-- handleDrip
+##### handleFile
+
+##### handleCage
+
+##### handleJoin
+
+##### handleExit
+
+##### handleDrip
 
 ### System Stabilizer Module:
 
@@ -151,34 +174,52 @@ fill me with the description of the module
 
 fill me with the description of the contract
 
-- handleFile
-- handleCage
-- handleKick
-- handleTick
-- handleDeal
-- handleTend
-- handleYank
+##### handleFile
+
+##### handleCage
+
+##### handleKick
+
+##### handleTick
+
+##### handleDeal
+
+##### handleTend
+
+##### handleYank
 
 #### Debt Auction House (Flopper)
 
 fill me with the description of the contract
 
-- handleFile
-- handleCage
-- handleKick
-- handleTick
-- handleDeal
-- handleDent
-- handleYank
+##### handleFile
+
+##### handleCage
+
+##### handleKick
+
+##### handleTick
+
+##### handleDeal
+
+##### handleDent
+
+##### handleYank
 
 #### Balance Sheet (Vow)
 
 fill me with the description of the contract
 
-- handleFile
-- handleCage
-- handleFrog
-- handleFess
-- handleFlap
-- handleFlop
-- handleKiss
+##### handleFile
+
+##### handleCage
+
+##### handleFrog
+
+##### handleFess
+
+##### handleFlap
+
+##### handleFlop
+
+##### handleKiss
