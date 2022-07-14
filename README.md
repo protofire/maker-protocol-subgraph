@@ -22,7 +22,7 @@ This subgraph aims to track the status of the Multi-Collateral DAI (MCD) through
 
 The Core Module is crucial to the system as it contains the entire state of the Maker Protocol and controls the central mechanisms of the system while it is in the expected normal state of operation.
 
-##### Vault Engine (Vat)
+#### Vault Engine (Vat)
 
 - handleInit
 - handleFile
@@ -37,7 +37,7 @@ The Core Module is crucial to the system as it contains the entire state of the 
 - handleSuck
 - handleFold
 
-##### Liaison between the Oracles and Core Contracts (Spot)
+#### Liaison between the Oracles and Core Contracts (Spot)
 
 ### Dai Module:
 
@@ -47,28 +47,28 @@ The DAI token contract and all of the adapters DaiJoin adapters.
 
 The Maker Protocol's Collateral Auction House (Liquidation System 2.0)
 
-##### fill me (Clipper)
+#### fill me (Clipper)
 
-##### fill me (Dog)
+#### fill me (Dog)
 
 ### MKR Module:
 
-##### fill me (DsToken)
+#### fill me (DsToken)
 
 ### Proxy Module:
 
-##### Proxy registration (ProxyFactory)
+#### Proxy registration (ProxyFactory)
 
 ### Rates Module:
 
-##### Accumulation of Stability Fees for Collateral Types (Jug)
+#### Accumulation of Stability Fees for Collateral Types (Jug)
 
-##### The Dai Savings Rate (Pot)
+#### The Dai Savings Rate (Pot)
 
 ### System Stabilizer Module:
 
-##### Surplus Auction House (Flapper)
+#### Surplus Auction House (Flapper)
 
-##### Debt Auction House (Flopper)
+#### Debt Auction House (Flopper)
 
-##### Balance Sheet (Vow)
+#### Balance Sheet (Vow)
