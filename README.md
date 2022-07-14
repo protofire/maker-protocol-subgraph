@@ -30,6 +30,8 @@ This subgraph aims to track the status of the Multi-Collateral DAI (MCD) through
 
 Creates new _CollateralType_
 
+The _handleInit_ mapper function receives a _LogNote_ event as parameter. We pick the _collateralTypeId_ from the _arg1_ then we create the _CollateralType_ record.
+
 ##### handleFile
 
 ##### handleCage
