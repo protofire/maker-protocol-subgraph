@@ -26,21 +26,31 @@ The Core Module is crucial to the system as it contains the entire state of the 
 
 fill me with the description of the contract
 
-handleInit
+##### handleInit
 
 Creates new _CollateralType_
 
-handleFile
-handleCage
-handleSlip
-handleFlux
-handleMove
-handleFrob
-handleFork
-handleGrab
-handleHeal
-handleSuck
-handleFold
+##### handleFile
+
+##### handleCage
+
+##### handleSlip
+
+##### handleFlux
+
+##### handleMove
+
+##### handleFrob
+
+##### handleFork
+
+##### handleGrab
+
+##### handleHeal
+
+##### handleSuck
+
+##### handleFold
 
 #### Liaison between the Oracles and Core Contracts (Spot)
 
