@@ -28,9 +28,16 @@ This subgraph aims to track the status of the Multi-Collateral DAI (MCD) through
 
 ##### handleInit
 
+```
+  function init(bytes32 ilk) external note auth {
+      require(ilks[ilk].rate == 0, "Vat/ilk-already-init");
+      ilks[ilk].rate = 10 ** 27;
+  }
+```
+
 Creates new _CollateralType_
 
-The _handleInit_ mapper function receives a _LogNote_ event as parameter. We pick the _collateralTypeId_ from the _arg1_ then we create the _CollateralType_ record.
+The _handleInit_ mapper function receives a _LogNote_ event as parameter. We pick the _collateralTypeId_ from the _arg1_ then we create the _CollateralType_ record with some default values. Also, we track the _collateralType_ quantity by increasing the field _collateralCount_ on _SystemState_.
 
 ##### handleFile
 
