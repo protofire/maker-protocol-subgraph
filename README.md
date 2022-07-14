@@ -27,6 +27,9 @@ The Core Module is crucial to the system as it contains the entire state of the 
 fill me with the description of the contract
 
 - handleInit
+
+Creates new _CollateralType_
+
 - handleFile
 - handleCage
 - handleSlip
