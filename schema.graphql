@@ -406,6 +406,33 @@ type SystemState @entity {
   " Amount of DAI needed to cover debt + fees of active auctions (Dog#Dirt) "
   totalDaiAmountToCoverDebtAndFees: BigDecimal!
 
+  " Multiplicative factor to increase starting price (Clipper#buf)"
+  saleAuctionStartingPriceFactor: BigDecimal!
+
+  " Time elapsed before auction reset (Clipper#tail)"
+  saleAuctionResetTime: BigInt!
+
+  " Percentage drop before auction reset (Clipper#cusp) "
+  saleAuctionDropPercentage: BigDecimal!
+
+  " Percentage of tab to suck from vow to incentivize keepers (Clipper#chip) "
+  saleAuctionDaiToRaisePercentage: BigDecimal!
+
+  " Flat fee to suck from vow to incentivize keepers (Clipper#tip) "
+  saleAuctionFlatFee: BigDecimal!
+
+  " Spotter contract address on Clipper (Clipper#spotter) "
+  saleAuctionSpotterContract: Bytes!
+
+  " Dog contract address on Clipper (Clipper#dog) "
+  saleAuctionDogContract: Bytes!
+
+  " Vow contract address on Clipper (Clipper#vow) "
+  saleAuctionVowContract: Bytes!
+
+  " Calc contract address on Clipper (Clipper#calc) "
+  saleAuctionCalcContract: Bytes!
+
   #
   # Status fields
   #

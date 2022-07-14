@@ -5,9 +5,50 @@ import {
   Take as TakeEvent,
   Yank as YankEvent,
   Redo as RedoEvent,
+  File as FileBigIntEvent,
+  File1 as FileAddressEvent,
 } from '../../../../generated/Clipper/Clipper'
 import { SaleAuction } from '../../../../generated/schema'
-import { saleAuctions } from '../../../entities'
+import { saleAuctions, system as systemModule } from '../../../entities'
+
+export function handleFile1(event: FileBigIntEvent): void {
+  let what = event.params.what.toString()
+  let data = event.params.data
+
+  let systemState = systemModule.getSystemState(event)
+
+  if (what == 'buf') {
+    systemState.saleAuctionStartingPriceFactor = units.fromRay(data)
+  } else if (what == 'tail') {
+    systemState.saleAuctionResetTime = data
+  } else if (what == 'cusp') {
+    systemState.saleAuctionDropPercentage = units.fromRay(data)
+  } else if (what == 'chip') {
+    systemState.saleAuctionDaiToRaisePercentage = units.fromWad(data)
+  } else if (what == 'tip') {
+    systemState.saleAuctionFlatFee = units.fromRad(data)
+  }
+  systemState.save()
+}
+
+export function handleFile2(event: FileAddressEvent): void {
+  let what = event.params.what.toString()
+  let data = event.params.data
+
+  let systemState = systemModule.getSystemState(event)
+
+  if (what == 'spotter') {
+    systemState.saleAuctionSpotterContract = data
+  } else if (what == 'dog') {
+    systemState.saleAuctionDogContract = data
+  } else if (what == 'vow') {
+    systemState.saleAuctionVowContract = data
+  } else if (what == 'calc') {
+    systemState.saleAuctionCalcContract = data
+  }
+
+  systemState.save()
+}
 
 export function handleKick(event: KickEvent): void {
   let id = event.params.id.toString()
