@@ -41,6 +41,22 @@ The _handleInit_ mapper function receives a _LogNote_ event as parameter. We pic
 
 ##### handleFile
 
+```
+function file(bytes32 what, uint data) external note auth {
+  require(live == 1, "Vat/not-live");
+  if (what == "Line") Line = data;
+  else revert("Vat/file-unrecognized-param");
+}
+
+function file(bytes32 ilk, bytes32 what, uint data) external note auth {
+  require(live == 1, "Vat/not-live");
+  if (what == "spot") ilks[ilk].spot = data;
+  else if (what == "line") ilks[ilk].line = data;
+  else if (what == "dust") ilks[ilk].dust = data;
+  else revert("Vat/file-unrecognized-param");
+}
+```
+
 ##### handleCage
 
 ##### handleSlip
