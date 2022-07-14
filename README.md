@@ -24,6 +24,8 @@ The Core Module is crucial to the system as it contains the entire state of the 
 
 #### Vault Engine (Vat)
 
+fill me with the description of the contract
+
 - handleInit
 - handleFile
 - handleCage
@@ -39,9 +41,22 @@ The Core Module is crucial to the system as it contains the entire state of the 
 
 #### Liaison between the Oracles and Core Contracts (Spot)
 
+fill me with the description of the contract
+
+- handleFile
+- handlePoke
+- handleCage
+
 ### Dai Module:
 
 The DAI token contract and all of the adapters DaiJoin adapters.
+
+#### Token
+
+fill me with the description of the contract
+
+- handleTransfer
+- handleApproval
 
 ### Liquidation Module:
 
@@ -49,26 +64,108 @@ The Maker Protocol's Collateral Auction House (Liquidation System 2.0)
 
 #### fill me (Clipper)
 
+fill me with the description of the contract
+
+- handleFile1
+- handleFile2
+- handleKick
+- handleTake
+- handleRedo
+- handleYank
+
 #### fill me (Dog)
+
+fill me with the description of the contract
+
+- handleCage
+- handleDigs
+- handleFileVow
+- handleFileHole
+- handleFileChop
+- handleFileClip
+- handleBark
 
 ### MKR Module:
 
+fill me with the description of the module
+
 #### fill me (DsToken)
+
+fill me with the description of the contract
+
+- handleTransfer
+- handleApproval
+- handleMint
+- handleBurn
 
 ### Proxy Module:
 
+fill me with the description of the module
+
 #### Proxy registration (ProxyFactory)
+
+fill me with the description of the contract
+
+- ?
 
 ### Rates Module:
 
+fill me with the description of the module
+
 #### Accumulation of Stability Fees for Collateral Types (Jug)
+
+fill me with the description of the contract
+
+- handleInit
+- handleDrip
+- handleFile
 
 #### The Dai Savings Rate (Pot)
 
+fill me with the description of the contract
+
+- handleFile
+- handleCage
+- handleJoin
+- handleExit
+- handleDrip
+
 ### System Stabilizer Module:
+
+fill me with the description of the module
 
 #### Surplus Auction House (Flapper)
 
+fill me with the description of the contract
+
+- handleFile
+- handleCage
+- handleKick
+- handleTick
+- handleDeal
+- handleTend
+- handleYank
+
 #### Debt Auction House (Flopper)
 
+fill me with the description of the contract
+
+- handleFile
+- handleCage
+- handleKick
+- handleTick
+- handleDeal
+- handleDent
+- handleYank
+
 #### Balance Sheet (Vow)
+
+fill me with the description of the contract
+
+- handleFile
+- handleCage
+- handleFrog
+- handleFess
+- handleFlap
+- handleFlop
+- handleKiss
