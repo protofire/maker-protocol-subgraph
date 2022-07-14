@@ -57,6 +57,10 @@ function file(bytes32 ilk, bytes32 what, uint data) external note auth {
 }
 ```
 
+Updates a _CollateralType_
+
+The _handleFile_ mapper function receives a _LogNote_ event as parameter. This handler processes 2 contract functions with the same name _file_ but different arity. We use the _signature_ parameter to split the logic for those contract functions.
+
 ##### handleCage
 
 ##### handleSlip
