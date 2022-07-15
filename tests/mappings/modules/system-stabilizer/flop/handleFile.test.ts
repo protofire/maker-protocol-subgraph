@@ -2,7 +2,6 @@ import { Bytes, BigInt } from '@graphprotocol/graph-ts'
 import { test, clearStore, assert, log, describe } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Flop/Flopper'
 import { handleFile } from '../../../../../src/mappings/modules/system-stabilizer/flop'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { tests } from '../../../../../src/mappings/modules/tests'
 
 function createEvent(what: string, data: string): LogNote {
@@ -25,8 +24,6 @@ describe('Flopper#handleFile', () => {
 
       let event = createEvent(what, data)
 
-      mockDebt()
-
       handleFile(event)
 
       assert.fieldEquals('SystemState', 'current', 'debtAuctionMinimumBidIncrease', '100')
@@ -41,8 +38,6 @@ describe('Flopper#handleFile', () => {
       let data = '100000000000000000000' // 100 wad
 
       let event = createEvent(what, data)
-
-      mockDebt()
 
       handleFile(event)
 
@@ -59,8 +54,6 @@ describe('Flopper#handleFile', () => {
 
       let event = createEvent(what, data)
 
-      mockDebt()
-
       handleFile(event)
 
       assert.fieldEquals('SystemState', 'current', 'debtAuctionBidDuration', '60')
@@ -75,8 +68,6 @@ describe('Flopper#handleFile', () => {
       let data = '60' // 60 seconds
 
       let event = createEvent(what, data)
-
-      mockDebt()
 
       handleFile(event)
 

@@ -3,7 +3,7 @@ import { describe, test, assert, clearStore } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Pot/Pot'
 import { handleDrip } from '../../../../../src/mappings/modules/rates/pot'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt, mockChi } from '../../../../helpers/mockedFunctions'
+import { mockChi } from '../../../../helpers/mockedFunctions'
 
 function createEvent(): LogNote {
   let sig = tests.helpers.params.getBytes('sig', Bytes.fromHexString('0x58326b7a'))
@@ -19,7 +19,6 @@ describe('Pot#handleDrip', () => {
   test('Updates SystemState.rateAccumulator and SystemState.lastPotDripAt', () => {
     let event = createEvent()
     mockChi()
-    mockDebt()
 
     handleDrip(event)
 

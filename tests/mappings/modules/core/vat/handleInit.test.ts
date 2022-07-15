@@ -1,10 +1,9 @@
-import { Bytes, BigInt, Address, ethereum, TypedMap } from '@graphprotocol/graph-ts'
+import { Bytes, TypedMap } from '@graphprotocol/graph-ts'
 import { decimal, integer } from '@protofire/subgraph-toolkit'
-import { test, clearStore, log } from 'matchstick-as'
+import { test, clearStore } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Vat/Vat'
 import { handleInit } from '../../../../../src/mappings/modules/core/vat'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 test('Vat#handleInit creates initial CollateralType and updates SystemState', () => {
   let sig = tests.helpers.params.getBytes('sig', Bytes.fromUTF8('sig'))

@@ -3,7 +3,6 @@ import { describe, test, assert, clearStore, beforeAll, afterAll } from 'matchst
 import { LogNote } from '../../../../../generated/Pot/Pot'
 import { handleJoin } from '../../../../../src/mappings/modules/rates/pot'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 var defaultAmount: string
 
@@ -21,7 +20,6 @@ function createEvent(amount: string): LogNote {
 
 describe('Pot#handleJoin', () => {
   beforeAll(() => {
-    mockDebt()
     defaultAmount = '100500000000000000000' // 100.5
   })
 

@@ -4,7 +4,6 @@ import { File1 as FileAddressEvent } from '../../../../../generated/Clipper/Clip
 import { handleFile2 } from '../../../../../src/mappings/modules/liquidation/clipper'
 import { Address, Bytes } from '@graphprotocol/graph-ts'
 import { SystemState } from '../../../../../generated/schema'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 function createEvent(what: string, data: Address): FileAddressEvent {
   return changetype<FileAddressEvent>(
@@ -24,8 +23,6 @@ describe('Clipper#handleFile2', () => {
   })
 
   beforeEach(() => {
-    mockDebt()
-
     systemState = new SystemState('current')
     systemState.saleAuctionSpotterContract = prevAddress
     systemState.saleAuctionDogContract = prevAddress

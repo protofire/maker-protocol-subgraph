@@ -3,7 +3,6 @@ import { test, assert, clearStore } from 'matchstick-as'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { LogNote } from '../../../../../generated/Flap/Flapper'
 import { handleTick } from '../../../../../src/mappings/modules/system-stabilizer/flap'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { system as systemModule } from '../../../../../src/entities'
 
 function createEvent(id: BigInt): LogNote {
@@ -23,7 +22,6 @@ test('Flapper#handleTick: Updates the end-time of an auction', () => {
 
   let event = createEvent(id)
 
-  mockDebt()
   let system = systemModule.getSystemState(event)
   system.surplusAuctionBidDuration = BigInt.fromString('1000')
   system.save()

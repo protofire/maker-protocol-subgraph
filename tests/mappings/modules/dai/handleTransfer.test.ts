@@ -1,6 +1,5 @@
 import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
 import { test, clearStore, assert, log, describe, beforeEach } from 'matchstick-as'
-import { mockDebt } from '../../../helpers/mockedFunctions'
 import { handleTransfer } from '../../../../src/mappings/modules/dai/dai'
 import { tests } from '../../../../src/mappings/modules/tests'
 import { system as systemModule, users } from '../../../../src/entities'
@@ -31,10 +30,6 @@ function createEntities(event: TransferEvent, src: Address, dst: Address): void 
 }
 
 describe('ERC.20-Dai#handleTransfer', () => {
-  beforeEach(() => {
-    mockDebt()
-  })
-
   describe('When [src] is Address.zero', () => {
     test('Updates SystemState.daiTotalSupply and TotalErc20Dai from dst User Address. Creates DaiTransfer.', () => {
       let srcStr = '0x0000000000000000000000000000000000000000'

@@ -4,7 +4,6 @@ import { LogNote } from '../../../../../generated/Flop/Flopper'
 import { auctions, system as systemModule } from '../../../../../src/entities'
 import { handleDent } from '../../../../../src/mappings/modules/system-stabilizer/flop'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 describe('Flopper#handleDent', () => {
   test('updates the highestBidder, quantity and endTimeAt', () => {
@@ -29,7 +28,6 @@ describe('Flopper#handleDent', () => {
     auction.quantity = BigInt.fromString('15')
     auction.save()
 
-    mockDebt()
     let system = systemModule.getSystemState(event)
     system.debtAuctionBidDuration = defaultTTL
     system.save()

@@ -5,7 +5,6 @@ import { CollateralType, Vault } from '../../../../../generated/schema'
 import { LogNote } from '../../../../../generated/Vat/Vat'
 import { handleFrob } from '../../../../../src/mappings/modules/core/vat'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 // handleFrob
 // when collateralType exist
@@ -48,7 +47,6 @@ test('Vat#handleFrob: when both collateralType and vault exist, it updates both'
   let dart = Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString('200500000000000000000')).reverse())
   let event = createEvent(signature, collateralTypeId, urnId, dink, dart)
 
-  mockDebt()
   handleFrob(event)
 
   // test mapper is not creating new entities

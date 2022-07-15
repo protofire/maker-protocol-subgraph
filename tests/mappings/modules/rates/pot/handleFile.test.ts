@@ -2,7 +2,6 @@ import { Bytes, Address, BigInt } from '@graphprotocol/graph-ts'
 import { test, clearStore, assert, describe, beforeEach } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Pot/Pot'
 import { handleFile } from '../../../../../src/mappings/modules/rates/pot'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { tests } from '../../../../../src/mappings/modules/tests'
 
 function strRadToBytes(value: string): Bytes {
@@ -34,10 +33,6 @@ function createEventVow(what: string, data: string): LogNote {
 }
 
 describe('Pot#handleFile', () => {
-  beforeEach(() => {
-    mockDebt()
-  })
-
   describe("When [what] is 'dsr'", () => {
     test('Updates SystemState.savingsRate', () => {
       let what = 'dsr'

@@ -1,6 +1,5 @@
 import { Address, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
 import { test, clearStore, assert, log, describe, beforeEach } from 'matchstick-as'
-import { mockDebt } from '../../../helpers/mockedFunctions'
 import { handleApproval } from '../../../../src/mappings/modules/dai/dai'
 import { tests } from '../../../../src/mappings/modules/tests'
 import { system as systemModule, users, daiApprovals } from '../../../../src/entities'
@@ -38,9 +37,6 @@ function createApproval(event: ApprovalEvent, timeStamp: BigInt): void {
 }
 
 describe('ERC.20-Dai#handleApproval', () => {
-  beforeEach(() => {
-    mockDebt()
-  })
   test('Create DaiApproval', () => {
     let srcStr = '0x0000000000000000000000000000000111111111'
     let dstStr = '0x1111100000000000000000000000000000000000'

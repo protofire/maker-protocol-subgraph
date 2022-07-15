@@ -4,7 +4,6 @@ import { CollateralType } from '../../../../../generated/schema'
 import { LogNote } from '../../../../../generated/Vat/Vat'
 import { handleFile } from '../../../../../src/mappings/modules/core/vat'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 function strRadToBytes(value: string): Bytes {
   return Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString(value)).reverse())
@@ -21,7 +20,6 @@ test('Vat#handleFile updates SystemState.totalDebtCeiling when signature is 0x29
 
   let event = changetype<LogNote>(tests.helpers.events.getNewEvent([sig, arg1, arg2]))
 
-  mockDebt()
   handleFile(event)
 
   assert.fieldEquals('SystemState', 'current', 'totalDebtCeiling', '100.5')

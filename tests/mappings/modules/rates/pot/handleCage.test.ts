@@ -2,7 +2,6 @@ import { Bytes, Address } from '@graphprotocol/graph-ts'
 import { test, clearStore, assert, log, describe, beforeEach } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Pot/Pot'
 import { handleCage } from '../../../../../src/mappings/modules/rates/pot'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { tests } from '../../../../../src/mappings/modules/tests'
 
 function createEvent(): LogNote {
@@ -23,8 +22,6 @@ describe('Pot#handleCage', () => {
     let addressString = address.toHexString()
 
     event.address = address
-
-    mockDebt()
 
     handleCage(event)
 

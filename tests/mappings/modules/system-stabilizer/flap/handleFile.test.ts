@@ -3,7 +3,6 @@ import { test, clearStore, describe, assert } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Flap/Flapper'
 import { handleFile } from '../../../../../src/mappings/modules/system-stabilizer/flap'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 function createEvent(what: string, data: string): LogNote {
   let sig = tests.helpers.params.getBytes('sig', Bytes.fromHexString('0x1a0b287e'))
@@ -25,8 +24,6 @@ describe('Flapper#handleFile', () => {
 
       let event = createEvent(what, data)
 
-      mockDebt()
-
       handleFile(event)
 
       assert.fieldEquals('SystemState', 'current', 'surplusAuctionMinimumBidIncrease', '100')
@@ -42,8 +39,6 @@ describe('Flapper#handleFile', () => {
 
       let event = createEvent(what, data)
 
-      mockDebt()
-
       handleFile(event)
 
       assert.fieldEquals('SystemState', 'current', 'surplusAuctionBidDuration', '60')
@@ -58,8 +53,6 @@ describe('Flapper#handleFile', () => {
       let data = '120'
 
       let event = createEvent(what, data)
-
-      mockDebt()
 
       handleFile(event)
 
