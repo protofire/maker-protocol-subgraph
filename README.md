@@ -119,6 +119,27 @@ We track the collateral balance of the user by updating a record in the _Collate
 
 ##### handleMove
 
+Transfers stablecoin between users
+
+```
+function move(address src, address dst, uint256 rad) external note {
+  require(wish(src, msg.sender), "Vat/not-allowed");
+  dai[src] = sub(dai[src], rad);
+  dai[dst] = add(dai[dst], rad);
+}
+```
+
+Updates _User_ and _DaiMoveLog_
+
+- _User_.totalVaultDai
+- _DaiMoveLog_.amount
+- _DaiMoveLog_.src
+- _DaiMoveLog_.dst
+
+The _handleMove_ mapper function receives a _LogNote_ event as parameter. We receive 3 parameters; _src_ (source User), _dst_ (destination User) and the _rad_ (the amount of stablecoin) to transfer.
+
+We track the in vault dai of an user by updating field _totalVaultDai_ in _User_ entity. Then we track the movement by adding a record to _DaiMoveLog_.
+
 ##### handleFrob
 
 ##### handleFork
