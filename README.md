@@ -106,6 +106,13 @@ function flux(bytes32 ilk, address src, address dst, uint256 wad) external note 
 
 Updates _Collateral_ and _CollateralTransferLog_
 
+- _Collateral_.amount
+- _CollateralTransferLog_.amount
+- _CollateralTransferLog_.src
+- _CollateralTransferLog_.dst
+- _CollateralTransferLog_.collateral
+- _CollateralTransferLog_.direction
+
 The _handleFlux_ mapper function receives a _LogNote_ event as parameter. Here we receive 4 parameters; _ilk_ (the CollateralType id), _src_ (the source User), _dst_ (the destination User) and _wad_ (amount of Collateral) to transfer.
 
 We track the collateral balance of the user by updating a record in the _Collateral_ entity. Then we track the movement by adding a record in the _CollateralTransferLog_ entity.
