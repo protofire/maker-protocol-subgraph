@@ -36,13 +36,6 @@ export namespace system {
       state.totalDaiAmountToCoverDebtAndFees = decimal.ZERO
     }
 
-    // Hotfix for totalDebt
-    let debt = vatContract.try_debt()
-    state.totalDebt = debt.reverted ? state.totalDebt : units.fromRad(debt.value)
-    state.block = event.block.number
-    state.timestamp = event.block.timestamp
-    state.transaction = event.transaction.hash
-
     return state as SystemState
   }
 }
