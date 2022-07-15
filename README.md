@@ -142,6 +142,41 @@ We track the in vault dai of an user by updating field _totalVaultDai_ in _User_
 
 ##### handleFrob
 
+```
+function frob(bytes32 i, address u, address v, address w, int dink, int dart) external note {
+  // system is live
+  require(live == 1, "Vat/not-live");
+  Urn memory urn = urns[i][u];
+  Ilk memory ilk = ilks[i];
+  // ilk has been initialised
+  require(ilk.rate != 0, "Vat/ilk-not-init");
+  urn.ink = add(urn.ink, dink);
+  urn.art = add(urn.art, dart);
+  ilk.Art = add(ilk.Art, dart);
+  int dtab = mul(ilk.rate, dart);
+  uint tab = mul(ilk.rate, urn.art);
+  debt     = add(debt, dtab);
+  // either debt has decreased, or debt ceilings are not exceeded
+  require(either(dart <= 0, both(mul(ilk.Art, ilk.rate) <= ilk.line, debt <= Line)), "Vaceiling-exceeded");
+  // urn is either less risky than before, or it is safe
+  require(either(both(dart <= 0, dink >= 0), tab <= mul(urn.ink, ilk.spot)), "Vat/not-safe");
+  // urn is either more safe, or the owner consents
+  require(either(both(dart <= 0, dink >= 0), wish(u, msg.sender)), "Vat/not-allowed-u");
+  // collateral src consents
+  require(either(dink <= 0, wish(v, msg.sender)), "Vat/not-allowed-v");
+  // debt dst consents
+  require(either(dart >= 0, wish(w, msg.sender)), "Vat/not-allowed-w");
+  // urn has no debt, or a non-dusty amount
+  require(either(urn.art == 0, tab >= ilk.dust), "Vat/dust");
+  gem[i][v] = sub(gem[i][v], dink);
+  dai[w]    = add(dai[w],    dtab);
+  urns[i][u] = urn;
+  ilks[i]    = ilk;
+}
+```
+
+Creates or updates a Vault
+
 ##### handleFork
 
 ##### handleGrab
