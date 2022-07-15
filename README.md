@@ -67,7 +67,30 @@ The _handleFile_ mapper function receives a _LogNote_ event as parameter. This h
 
 ##### handleCage
 
+```
+function cage() external note auth {
+  live = 0;
+}
+```
+
+Creates a _LiveChangeLog_ entry for the contract address
+
 ##### handleSlip
+
+```
+  function slip(bytes32 ilk, address usr, int256 wad) external note auth {
+    gem[ilk][usr] = add(gem[ilk][usr], wad);
+  }
+```
+
+Updates _Collateral_, _CollateralType_ and _CollateralChangeLog_
+
+- _Collateral_.amount
+- _CollateralType_.totalCollateral
+- _CollateralChangeLog_.collateralAfter
+- _CollateralChangeLog_.collateralBefore
+
+The _handleSlip_ mapper function receives a _LogNote_ event as parameter. We pick the _collateralTypeId_ from _arg1_, _user_ from _arg2_ and the _amount_ from _arg3_. Then we update the _amount_ of _CollateralType_ for the _user_ and track the change in time adding an entry on _CollateralChangeLog_.
 
 ##### handleFlux
 
