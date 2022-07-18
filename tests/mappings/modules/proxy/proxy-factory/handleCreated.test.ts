@@ -3,7 +3,6 @@ import { describe, test, assert, clearStore } from 'matchstick-as'
 import { Created } from '../../../../../generated/ProxyFactory/DSProxyFactory'
 import { handleCreated } from '../../../../../src/mappings/modules/proxy/proxy-factory'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { users } from '../../../../../src/entities'
 import { system as systemModule } from '../../../../../src/entities'
 
@@ -23,7 +22,6 @@ describe('DSProxyFactory#handleCreated', () => {
       ]),
     )
 
-    mockDebt()
     let user = users.getOrCreateUser(event.params.owner)
     user.proxyCount = BigInt.fromString('1')
     user.save()
