@@ -29,10 +29,7 @@ This subgraph aims to track the status of the Multi-Collateral DAI (MCD) through
 ##### handleInit
 
 ```
-function init(bytes32 ilk) external note auth {
-  require(ilks[ilk].rate == 0, "Vat/ilk-already-init");
-  ilks[ilk].rate = 10 ** 27;
-}
+function init(bytes32 ilk)
 ```
 
 Creates new _CollateralType_
@@ -42,19 +39,9 @@ The _handleInit_ mapper function receives a _LogNote_ event as parameter. We pic
 ##### handleFile
 
 ```
-function file(bytes32 what, uint data) external note auth {
-  require(live == 1, "Vat/not-live");
-  if (what == "Line") Line = data;
-  else revert("Vat/file-unrecognized-param");
-}
+function file(bytes32 what, uint data)
 
-function file(bytes32 ilk, bytes32 what, uint data) external note auth {
-  require(live == 1, "Vat/not-live");
-  if (what == "spot") ilks[ilk].spot = data;
-  else if (what == "line") ilks[ilk].line = data;
-  else if (what == "dust") ilks[ilk].dust = data;
-  else revert("Vat/file-unrecognized-param");
-}
+function file(bytes32 ilk, bytes32 what, uint data)
 ```
 
 Updates _CollateralType_ and _SystemState_
@@ -68,9 +55,7 @@ The _handleFile_ mapper function receives a _LogNote_ event as parameter. This h
 ##### handleCage
 
 ```
-function cage() external note auth {
-  live = 0;
-}
+function cage()
 ```
 
 Creates a _LiveChangeLog_ entry for the contract address
@@ -78,9 +63,7 @@ Creates a _LiveChangeLog_ entry for the contract address
 ##### handleSlip
 
 ```
-  function slip(bytes32 ilk, address usr, int256 wad) external note auth {
-    gem[ilk][usr] = add(gem[ilk][usr], wad);
-  }
+function slip(bytes32 ilk, address usr, int256 wad)
 ```
 
 Updates _Collateral_, _CollateralType_ and _CollateralChangeLog_
@@ -97,11 +80,7 @@ The _handleSlip_ mapper function receives a _LogNote_ event as parameter. We pic
 Transfers collateral between users
 
 ```
-function flux(bytes32 ilk, address src, address dst, uint256 wad) external note {
-  require(wish(src, msg.sender), "Vat/not-allowed");
-  gem[ilk][src] = sub(gem[ilk][src], wad);
-  gem[ilk][dst] = add(gem[ilk][dst], wad);
-}
+function flux(bytes32 ilk, address src, address dst, uint256 wad)
 ```
 
 Updates _Collateral_ and _CollateralTransferLog_
@@ -122,11 +101,7 @@ We track the collateral balance of the user by updating a record in the _Collate
 Transfers stablecoin between users
 
 ```
-function move(address src, address dst, uint256 rad) external note {
-  require(wish(src, msg.sender), "Vat/not-allowed");
-  dai[src] = sub(dai[src], rad);
-  dai[dst] = add(dai[dst], rad);
-}
+function move(address src, address dst, uint256 rad)
 ```
 
 Updates _User_ and _DaiMoveLog_
@@ -143,36 +118,7 @@ We track the in vault dai of an user by updating field _totalVaultDai_ in _User_
 ##### handleFrob
 
 ```
-function frob(bytes32 i, address u, address v, address w, int dink, int dart) external note {
-  // system is live
-  require(live == 1, "Vat/not-live");
-  Urn memory urn = urns[i][u];
-  Ilk memory ilk = ilks[i];
-  // ilk has been initialised
-  require(ilk.rate != 0, "Vat/ilk-not-init");
-  urn.ink = add(urn.ink, dink);
-  urn.art = add(urn.art, dart);
-  ilk.Art = add(ilk.Art, dart);
-  int dtab = mul(ilk.rate, dart);
-  uint tab = mul(ilk.rate, urn.art);
-  debt     = add(debt, dtab);
-  // either debt has decreased, or debt ceilings are not exceeded
-  require(either(dart <= 0, both(mul(ilk.Art, ilk.rate) <= ilk.line, debt <= Line)), "Vaceiling-exceeded");
-  // urn is either less risky than before, or it is safe
-  require(either(both(dart <= 0, dink >= 0), tab <= mul(urn.ink, ilk.spot)), "Vat/not-safe");
-  // urn is either more safe, or the owner consents
-  require(either(both(dart <= 0, dink >= 0), wish(u, msg.sender)), "Vat/not-allowed-u");
-  // collateral src consents
-  require(either(dink <= 0, wish(v, msg.sender)), "Vat/not-allowed-v");
-  // debt dst consents
-  require(either(dart >= 0, wish(w, msg.sender)), "Vat/not-allowed-w");
-  // urn has no debt, or a non-dusty amount
-  require(either(urn.art == 0, tab >= ilk.dust), "Vat/dust");
-  gem[i][v] = sub(gem[i][v], dink);
-  dai[w]    = add(dai[w],    dtab);
-  urns[i][u] = urn;
-  ilks[i]    = ilk;
-}
+function frob(bytes32 i, address u, address v, address w, int dink, int dart)
 ```
 
 Creates or updates a Vault
@@ -196,6 +142,19 @@ The _handleFrob_ receives 4 parameters; _ilk_ (collateralTypeId), _urn_ (vaultId
 if the Vault exist, we update the Vault summing up the _collateral_ and _debt_ otherwise we create the Vault with default values then we track the unmanaged vault by increasing the _unmanagedVaultCount_ field.
 
 ##### handleFork
+
+```
+function fork(bytes32 ilk, address src, address dst, int dink, int dart)
+```
+
+Split a Vault
+
+- _Vault_
+- _VaultSplitChangeLog_
+
+The _handleFork_ function receives 5 parameters; _ilk_, _src_, _dst_, _dink_, _dart_
+
+We find the Vaults by using the _ilk_ (collateralTypeId), _src_ (source User) and _dst_ (destination User). Then we move collateral and debt from source Vault to destination Vault.
 
 ##### handleGrab
 
