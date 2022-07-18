@@ -8,7 +8,7 @@ import { users } from '../../../../../src/entities'
 import { system as systemModule } from '../../../../../src/entities'
 
 describe('DSProxyFactory#handleCreated', () => {
-  test('Updates SystemState.rateAccumulator and SystemState.lastPotDripAt', () => {
+  test('Creates UserProxy entity and updates its fields. Updates the SystemState#userProxyCount and the User#proxyCount fields', () => {
     let sender = '0x0000000000000000000000000000000000000001'
     let owner = '0x0000000000000000000000000000000000000002'
     let proxy = '0x0000000000000000000000000000000000000003'
