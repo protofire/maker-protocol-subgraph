@@ -177,6 +177,24 @@ function frob(bytes32 i, address u, address v, address w, int dink, int dart) ex
 
 Creates or updates a Vault
 
+- _CollateralType_.unmanagedVaultCount
+- _CollateralType_.totalCollateral
+- _CollateralType_.debtNormalized
+- _CollateralType_.totalDebt
+- _SystemState_.unmanagedVaultCount
+- _Vault_.collateral
+- _Vault_.collateralType
+- _Vault_.debt
+- _Vault_.handler
+- _Vault_.owner
+- _VaultCollateralChangeLog_
+- _VaultDebtChangeLog_
+- _VaultCreationLog_
+
+The _handleFrob_ receives 4 parameters; _ilk_ (collateralTypeId), _urn_ (vaultId), _dink_ (collateral), _dart_ (debt)
+
+if the Vault exist, we update the Vault summing up the _collateral_ and _debt_ otherwise we create the Vault with default values then we track the unmanaged vault by increasing the _unmanagedVaultCount_ field.
+
 ##### handleFork
 
 ##### handleGrab
