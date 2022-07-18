@@ -183,9 +183,47 @@ The _handleGrab_ functions receives 6 parameters; _i_ (collateralTypeId), _u_ (u
 
 ##### handleHeal
 
+```
+function heal(uint rad)
+```
+
+Create/destroy equal quantities of stablecoin and system debt
+
+The _handleHeal_ function receives 1 parameter; _rad_ (debt amount)
+
+Update the following entities:
+
+- _User_
+- _SystemDebt_
+- _SystemState_
+
 ##### handleSuck
 
+```
+function suck(address u, address v, uint rad)
+```
+
+Mint unbacked stablecoin
+
+Update the following entities:
+
+- _User_
+- _SystemDebt_
+- _SystemState_
+
 ##### handleFold
+
+```
+function fold(bytes32 i, address u, int rate)
+```
+
+Modify the debt multiplier, creating/destroying corresponding debt
+
+Update the following entities:
+
+- _User_
+- _CollateralType_
+- _SystemState_
 
 #### Liaison between the Oracles and Core Contracts (Spot)
 
