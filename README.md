@@ -34,7 +34,14 @@ function init(bytes32 ilk)
 
 Creates new _CollateralType_
 
-The _handleInit_ mapper function receives a _LogNote_ event as parameter. We pick the _collateralTypeId_ from the _arg1_ then we create the _CollateralType_ record with some default values. Also, we track the _collateralType_ quantity by increasing the field _collateralCount_ on _SystemState_.
+Update the following entities:
+
+- _CollateralType_
+- _SystemState_
+
+The _handleInit_ mapper function receives 1 parameter.
+
+We pick the _collateralTypeId_ from the _arg1_ then we create the _CollateralType_ record with some default values. Also, we track the _collateralType_ quantity by increasing the field _collateralCount_ on _SystemState_.
 
 ##### handleFile
 
