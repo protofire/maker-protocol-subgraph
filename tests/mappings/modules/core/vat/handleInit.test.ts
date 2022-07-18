@@ -1,10 +1,9 @@
-import { Bytes, BigInt, Address, ethereum, TypedMap } from '@graphprotocol/graph-ts'
+import { Bytes, TypedMap } from '@graphprotocol/graph-ts'
 import { decimal, integer } from '@protofire/subgraph-toolkit'
 import { test, clearStore } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Vat/Vat'
 import { handleInit } from '../../../../../src/mappings/modules/core/vat'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 test('Vat#handleInit creates initial CollateralType and updates SystemState', () => {
   let sig = tests.helpers.params.getBytes('sig', Bytes.fromUTF8('sig'))
@@ -15,7 +14,6 @@ test('Vat#handleInit creates initial CollateralType and updates SystemState', ()
 
   let event = changetype<LogNote>(tests.helpers.events.getNewEvent([sig, arg1, arg2, arg3, data]))
 
-  mockDebt()
   handleInit(event)
 
   let collateralTypeFields = new TypedMap<string, string>()
@@ -45,10 +43,7 @@ test('Vat#handleInit creates initial CollateralType and updates SystemState', ()
   systemStateFields.set('baseStabilityFee', decimal.ONE.toString())
   systemStateFields.set('savingsRate', decimal.ONE.toString())
   systemStateFields.set('totalDebtCeiling', decimal.ZERO.toString())
-  systemStateFields.set('totalDebt', '0.0000000000000000000000000000000000000000001')
-  systemStateFields.set('block', event.block.number.toString())
-  systemStateFields.set('timestamp', event.block.timestamp.toString())
-  systemStateFields.set('transaction', event.transaction.hash.toHexString())
+  systemStateFields.set('totalDebt', decimal.ZERO.toString())
 
   tests.helpers.asserts.assertMany('SystemState', 'current', systemStateFields)
 

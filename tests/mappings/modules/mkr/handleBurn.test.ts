@@ -5,7 +5,6 @@ import { Burn as BurnEvent } from '../../../../generated/DSToken/DSToken'
 import { users } from '../../../../src/entities'
 import { handleBurn } from '../../../../src/mappings/modules/mkr/dsToken'
 import { tests } from '../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../helpers/mockedFunctions'
 
 function createEvent(guy: Address, wad: BigInt): BurnEvent {
   return changetype<BurnEvent>(
@@ -26,8 +25,6 @@ describe('Mkr#handleBurn', () => {
   })
 
   beforeEach(() => {
-    mockDebt()
-
     systemState = new SystemState('current')
     systemState.totalMkr = BigDecimal.fromString('2500')
     systemState.save()

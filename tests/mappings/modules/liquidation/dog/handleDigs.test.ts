@@ -3,7 +3,6 @@ import { describe, test, assert, clearStore } from 'matchstick-as'
 import { Digs } from '../../../../../generated/Dog/Dog'
 import { handleDigs } from '../../../../../src/mappings/modules/liquidation/dog'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { CollateralType } from '../../../../../generated/schema'
 import { system as systemModule } from '../../../../../src/entities'
 
@@ -29,7 +28,6 @@ describe('Dog#handleDigs', () => {
     collateralType.daiAmountToCoverDebtAndFees = BigDecimal.fromString('20000.0')
     collateralType.save()
 
-    mockDebt()
     let systemState = systemModule.getSystemState(event)
     systemState.totalDaiAmountToCoverDebtAndFees = BigDecimal.fromString('20000.0')
     systemState.save()

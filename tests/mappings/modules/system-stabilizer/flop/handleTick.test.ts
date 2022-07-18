@@ -3,7 +3,6 @@ import { units } from '@protofire/subgraph-toolkit'
 import { test, clearStore, assert, log } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Flop/Flopper'
 import { handleTick } from '../../../../../src/mappings/modules/system-stabilizer/flop'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { auctions, system as systemModule } from '../../../../../src/entities'
 
@@ -35,8 +34,6 @@ test('Flopper#handleTick updates Auction.quantity, Auction.endTimeAt and Auction
   auction.quantity = quantity
   auction.updatedAt = BigInt.fromI32(0)
   auction.save()
-
-  mockDebt()
 
   let system = systemModule.getSystemState(event) // load the vars from the system entity
   system.debtAuctionBidDuration = auctionBidDuration

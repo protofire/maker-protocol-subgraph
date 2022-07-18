@@ -9,7 +9,6 @@ import {
   handleFileVow,
 } from '../../../../../src/mappings/modules/liquidation/dog'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 let ilk = 'test'
 let address = '0x10994f7d520ef08dd877499fb1b052dbde3d4601'
@@ -18,10 +17,6 @@ let radAmount = units.fromRad(BigInt.fromString(amount)).toString() // 100.5
 let wadAmount = units.fromWad(BigInt.fromString(amount)).toString() // 100500000000000000000000000000
 
 describe('Dog#handleFile', () => {
-  beforeAll(() => {
-    mockDebt()
-  })
-
   describe('For event File1 and what = vow', () => {
     test('Updates the dog VowLike value', () => {
       let what = 'vow'

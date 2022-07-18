@@ -3,7 +3,6 @@ import { test, clearStore, assert, describe, beforeAll, afterAll, beforeEach } f
 import { LogNote } from '../../../../../generated/Vow/Vow'
 import { handleFile } from '../../../../../src/mappings/modules/system-stabilizer/vow'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { system as systemModule } from '../../../../../src/entities'
 
 let signature: string
@@ -20,10 +19,6 @@ function createEvent(sig: string, what: string, data: Bytes): LogNote {
 }
 
 describe('Vow#handleFile', () => {
-  beforeAll(() => {
-    mockDebt()
-  })
-
   afterAll(() => {
     clearStore()
   })

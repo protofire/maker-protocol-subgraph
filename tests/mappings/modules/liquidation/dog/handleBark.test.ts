@@ -3,7 +3,6 @@ import { describe, test, assert, clearStore } from 'matchstick-as'
 import { Bark } from '../../../../../generated/Dog/Dog'
 import { handleBark } from '../../../../../src/mappings/modules/liquidation/dog'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { CollateralType } from '../../../../../generated/schema'
 import { system as systemModule } from '../../../../../src/entities'
 
@@ -30,8 +29,6 @@ describe('Dog#handleBark', () => {
     )
 
     event.block.timestamp = BigInt.fromI32(1001)
-
-    mockDebt()
 
     let collateralType = new CollateralType(ilk)
     collateralType.daiAmountToCoverDebtAndFees = BigDecimal.fromString('100.0')

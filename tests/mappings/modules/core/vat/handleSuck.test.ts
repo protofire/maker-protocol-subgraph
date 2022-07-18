@@ -4,7 +4,6 @@ import { User } from '../../../../../generated/schema'
 import { LogNote } from '../../../../../generated/Vat/Vat'
 import { handleSuck } from '../../../../../src/mappings/modules/core/vat'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 function createEvent(u: string, v: string, rad: string): LogNote {
   let sig = tests.helpers.params.getBytes('sig', Bytes.fromHexString('0x1a0b287e'))
@@ -30,7 +29,6 @@ test('Vat#handleSuck', () => {
   user2.totalVaultDai = BigDecimal.fromString('1000')
   user2.save()
 
-  mockDebt()
   handleSuck(event)
 
   assert.fieldEquals('User', v, 'totalVaultDai', '1100.5')

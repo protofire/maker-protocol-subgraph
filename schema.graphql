@@ -442,19 +442,6 @@ type SystemState @entity {
 
   " Per-step multiplicative factor (step) [ray]"
   multiplicatorFactorPerStep: BigDecimal!
-
-  #
-  # Status fields
-  #
-
-  " The latest block in which a system parameters was modified "
-  block: BigInt!
-
-  " The latest timestamp in which a system parameters was modified "
-  timestamp: BigInt!
-
-  " The latest transaction hash in which a system parameters was modified "
-  transaction: Bytes!
 }
 
 interface Auction {

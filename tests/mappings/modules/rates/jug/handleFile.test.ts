@@ -2,7 +2,6 @@ import { Bytes, Address, BigInt } from '@graphprotocol/graph-ts'
 import { test, clearStore, assert, describe, beforeEach } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Jug/Jug'
 import { handleFile } from '../../../../../src/mappings/modules/rates/jug'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { tests } from '../../../../../src/mappings/modules/tests'
 import { collateralTypes } from '../../../../../src/entities/collateralTypes'
 
@@ -50,10 +49,6 @@ function createEventIlk(ilk: string, what: string, data: string): LogNote {
 }
 
 describe('Jug#handleFile', () => {
-  beforeEach(() => {
-    mockDebt()
-  })
-
   describe("When [what] is 'base'", () => {
     test('Updates SystemState.baseStabilityFee', () => {
       let what = 'base'

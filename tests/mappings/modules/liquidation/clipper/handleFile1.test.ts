@@ -5,7 +5,6 @@ import { handleFile1 } from '../../../../../src/mappings/modules/liquidation/cli
 import { BigInt, Bytes } from '@graphprotocol/graph-ts'
 import { SystemState } from '../../../../../generated/schema'
 import { decimal, integer } from '@protofire/subgraph-toolkit'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 function createEvent(what: string, data: BigInt): FileBigIntEvent {
   return changetype<FileBigIntEvent>(
@@ -24,8 +23,6 @@ describe('Clipper#handleFile1', () => {
   })
 
   beforeEach(() => {
-    mockDebt()
-
     systemState = new SystemState('current')
     systemState.saleAuctionStartingPriceFactor = decimal.ONE
     systemState.saleAuctionResetTime = integer.ZERO

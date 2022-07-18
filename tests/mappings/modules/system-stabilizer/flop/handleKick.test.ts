@@ -1,7 +1,6 @@
 import { BigInt, Address } from '@graphprotocol/graph-ts'
 import { test, assert, clearStore, describe } from 'matchstick-as'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { system as systemModule } from '../../../../../src/entities'
 import { Kick } from '../../../../../generated/Flop/Flopper'
 import { handleKick } from '../../../../../src/mappings/modules/system-stabilizer/flop'
@@ -22,7 +21,6 @@ describe('Flopper#handleKick', () => {
     )
     event.block.timestamp = BigInt.fromString('1500')
 
-    mockDebt()
     let system = systemModule.getSystemState(event)
     system.debtAuctionBidDuration = BigInt.fromString('1000')
     system.save()

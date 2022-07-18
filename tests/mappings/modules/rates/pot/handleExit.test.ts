@@ -3,7 +3,6 @@ import { describe, test, assert, clearStore, beforeAll } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Pot/Pot'
 import { handleExit } from '../../../../../src/mappings/modules/rates/pot'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 import { users } from '../../../../../src/entities/users'
 import { system as systemModule } from '../../../../../src/entities/system'
 
@@ -11,7 +10,6 @@ var defaultAmount: string
 
 describe('Pot#handleExit', () => {
   beforeAll(() => {
-    mockDebt()
     defaultAmount = '100500000000000000000' // 100.5
   })
 

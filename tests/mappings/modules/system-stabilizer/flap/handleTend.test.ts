@@ -4,7 +4,6 @@ import { LogNote } from '../../../../../generated/Flap/Flapper'
 import { auctions, system as systemModule } from '../../../../../src/entities'
 import { handleTend } from '../../../../../src/mappings/modules/system-stabilizer/flap'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { mockDebt } from '../../../../helpers/mockedFunctions'
 
 describe('Flapper#handleTend', () => {
   test('updates the highestBidder, bidAmount and the endTimeAt', () => {
@@ -29,7 +28,6 @@ describe('Flapper#handleTend', () => {
     auction.bidAmount = BigInt.fromString(bid)
     auction.save()
 
-    mockDebt()
     let system = systemModule.getSystemState(event)
     system.surplusAuctionBidDuration = defaultTTL
     system.save()
