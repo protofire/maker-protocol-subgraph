@@ -158,6 +158,29 @@ We find the Vaults by using the _ilk_ (collateralTypeId), _src_ (source User) an
 
 ##### handleGrab
 
+```
+function grab(bytes32 i, address u, address v, address w, int dink, int dart)
+```
+
+Liquidates a Vault, create/update the following entities:
+
+- _User_
+- _Vault_
+- _Collateral_
+- _CollateralType_
+- _SystemDebt_
+- _SystemState_
+
+The _handleGrab_ functions receives 6 parameters; _i_ (collateralTypeId), _u_ (urn user), _v_ (liquidator user), _w_ (vow address), _dink_ (collateral), _dart_ (debt)
+
+- Find or create vault and liquidator users
+- Updates the _CollateralType.debtNormalized_ by summing up the _dart_ (debt)
+- Updates the _CollateralType.totalDebt_ by multipling the _dart_ by the _CollateralType.rate_
+- Updates _Vault.collateral_ and _Vault.debt_
+- Updates _Collateral_.amount for liquidator user
+- Updates _SystemDebt.amount_
+- Updates _SystemState.totalSystemDebt_
+
 ##### handleHeal
 
 ##### handleSuck
