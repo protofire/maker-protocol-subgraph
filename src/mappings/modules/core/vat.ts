@@ -252,14 +252,16 @@ export function handleFrob(event: LogNote): void {
       system.unmanagedVaultCount = system.unmanagedVaultCount.plus(integer.ONE)
 
       // Log vault creation
-      let log = new VaultCreationLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
-      log.vault = vault.id
+      let vaultCreationLog = new VaultCreationLog(
+        event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0',
+      )
+      vaultCreationLog.vault = vault.id
 
-      log.block = event.block.number
-      log.timestamp = event.block.timestamp
-      log.transaction = event.transaction.hash
+      vaultCreationLog.block = event.block.number
+      vaultCreationLog.timestamp = event.block.timestamp
+      vaultCreationLog.transaction = event.transaction.hash
 
-      log.save()
+      vaultCreationLog.save()
     } else {
       let previousCollateral = vault.collateral
       let previousDebt = vault.debt
@@ -275,35 +277,39 @@ export function handleFrob(event: LogNote): void {
       vault.updatedAtTransaction = event.transaction.hash
 
       if (!Δcollateral.equals(decimal.ZERO)) {
-        let log = new VaultCollateralChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-1')
-        log.vault = vault.id
-        log.collateralBefore = previousCollateral
-        log.collateralAfter = vault.collateral
-        log.collateralDiff = Δcollateral
+        let vaultCollateralChangeLog = new VaultCollateralChangeLog(
+          event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-1',
+        )
+        vaultCollateralChangeLog.vault = vault.id
+        vaultCollateralChangeLog.collateralBefore = previousCollateral
+        vaultCollateralChangeLog.collateralAfter = vault.collateral
+        vaultCollateralChangeLog.collateralDiff = Δcollateral
 
-        log.block = event.block.number
-        log.timestamp = event.block.timestamp
-        log.transaction = event.transaction.hash
+        vaultCollateralChangeLog.block = event.block.number
+        vaultCollateralChangeLog.timestamp = event.block.timestamp
+        vaultCollateralChangeLog.transaction = event.transaction.hash
 
-        log.save()
+        vaultCollateralChangeLog.save()
       }
 
       if (!Δdebt.equals(decimal.ZERO)) {
-        let log = new VaultDebtChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-2')
-        log.vault = vault.id
-        log.debtBefore = previousDebt
-        log.debtAfter = vault.debt
-        log.debtDiff = Δdebt
+        let vaultDebtChangeLog = new VaultDebtChangeLog(
+          event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-2',
+        )
+        vaultDebtChangeLog.vault = vault.id
+        vaultDebtChangeLog.debtBefore = previousDebt
+        vaultDebtChangeLog.debtAfter = vault.debt
+        vaultDebtChangeLog.debtDiff = Δdebt
 
-        log.block = event.block.number
-        log.timestamp = event.block.timestamp
-        log.transaction = event.transaction.hash
+        vaultDebtChangeLog.block = event.block.number
+        vaultDebtChangeLog.timestamp = event.block.timestamp
+        vaultDebtChangeLog.transaction = event.transaction.hash
 
-        log.save()
+        vaultDebtChangeLog.save()
       }
     }
 
-    // ---  gem[i][v] = sub(gem[i][v], dink);
+    // gem[i][v] = sub(gem[i][v], dink);
     let ownerCollateral = users.getOrCreateUser(v)
     let collateral = collaterals.loadOrCreateCollateral(event, ilk, ownerCollateral.id)
 
@@ -314,18 +320,21 @@ export function handleFrob(event: LogNote): void {
     collateral.updatedAtTransaction = event.transaction.hash
     collateral.save()
 
-    let log = new CollateralChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
-    log.block = event.block.number
-    log.collateral = collateral.id
-    log.collateralAfter = collateral.amount
-    log.collateralBefore = amountBefore
-    log.save()
-    //--- end gem
+    let collateralChangeLog = new CollateralChangeLog(
+      event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0',
+    )
+    collateralChangeLog.block = event.block.number
+    collateralChangeLog.collateral = collateral.id
+    collateralChangeLog.collateralAfter = collateral.amount
+    collateralChangeLog.collateralBefore = amountBefore
+    collateralChangeLog.save()
+    // end gem
 
     // dai[w]    = add(dai[w],    dtab);
     // int dtab = mul(ilk.rate, dart);
     let srcDaiUser = users.getOrCreateUser(w)
     let dtab = collateralType.rate.times(units.fromWad(dart))
+
     srcDaiUser.totalVaultDai = srcDaiUser.totalVaultDai.plus(dtab)
     srcDaiUser.save()
     // end dai

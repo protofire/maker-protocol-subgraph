@@ -1,4 +1,4 @@
-import { Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
+import { Bytes, BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts'
 import { decimal, integer } from '@protofire/subgraph-toolkit'
 import { test, assert, clearStore } from 'matchstick-as'
 import { CollateralType, Vault } from '../../../../../generated/schema'
@@ -15,16 +15,27 @@ import { tests } from '../../../../../src/mappings/modules/tests'
 // when collateralType does not exist
 //   it does nothing
 
-function createEvent(signature: string, collateralTypeId: string, urnId: string, dink: Bytes, dart: Bytes): LogNote {
-  let a = new Bytes(132 + 32 - 9)
-  let b = a.concat(dink) // 9
-  let d = b.concat(dart)
+function createEvent(
+  signature: string,
+  collateralTypeId: string,
+  urnId: string,
+  v: string,
+  w: string,
+  dink: string,
+  dart: string,
+): LogNote {
+  let a = new Bytes(100 + 32 - 20)
+  let b = a.concat(Address.fromHexString(w))
+  let c = b.concat(new Bytes(32 - 9))
+  let d = c.concat(Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString(dink)).reverse()))
+  let e = d.concat(new Bytes(32 - 9))
+  let f = e.concat(Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString(dart)).reverse()))
 
   let sig = tests.helpers.params.getBytes('sig', Bytes.fromHexString(signature))
   let arg1 = tests.helpers.params.getBytes('arg1', Bytes.fromUTF8(collateralTypeId))
   let arg2 = tests.helpers.params.getBytes('arg2', Bytes.fromHexString(urnId))
-  let arg3 = tests.helpers.params.getBytes('arg3', Bytes.fromHexString(urnId))
-  let data = tests.helpers.params.getBytes('data', d)
+  let arg3 = tests.helpers.params.getBytes('arg3', Address.fromHexString(v))
+  let data = tests.helpers.params.getBytes('data', f)
 
   let event = changetype<LogNote>(tests.helpers.events.getNewEvent([sig, arg1, arg2, arg3, data]))
 
@@ -38,15 +49,18 @@ test('Vat#handleFrob: when both collateralType and vault exist, it updates both'
   collateralType.rate = BigDecimal.fromString('1.5')
   collateralType.save()
   let urnId = '0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'
+
+  let v = '0x35d1b3f3d7966a1dfe207aa4514c100000000000'
+  let w = '0x35d1b3f3d7966a1dfe207aa4514c111111111111'
+
   let vaultId = urnId + '-' + collateralTypeId
   let vault = new Vault(vaultId)
   vault.collateral = BigDecimal.fromString('1000.30')
   vault.debt = BigDecimal.fromString('50.5')
   vault.save()
-  let dink = Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString('100500000000000000000')).reverse())
-  let dart = Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString('200500000000000000000')).reverse())
-  let event = createEvent(signature, collateralTypeId, urnId, dink, dart)
-
+  let dink = '100500000000000000000'
+  let dart = '200500000000000000000'
+  let event = createEvent(signature, collateralTypeId, urnId, v, w, dink, dart)
   handleFrob(event)
 
   // test mapper is not creating new entities
@@ -70,6 +84,9 @@ test('Vat#handleFrob: when both collateralType and vault exist, it updates both'
     BigDecimal.fromString('200.5').times(collateralType.rate).toString(),
   )
 
+  assert.fieldEquals('User', w, 'totalVaultDai', '300.75')
+  assert.fieldEquals('Collateral', `${v}-${collateralTypeId}`, 'amount', '-100.5')
+
   clearStore()
 })
 
@@ -80,10 +97,14 @@ test('Vat#handleFrob: when collateralType exist but vault does not exist, it cre
   collateralType.rate = BigDecimal.fromString('1.5')
   collateralType.save()
   let urnId = '0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'
+
+  let v = '0x35d1b3f3d7966a1dfe207aa4514c100000000000'
+  let w = '0x35d1b3f3d7966a1dfe207aa4514c111111111111'
+
   let vaultId = urnId + '-' + collateralTypeId
-  let dink = Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString('100500000000000000000')).reverse())
-  let dart = Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString('200500000000000000000')).reverse())
-  let event = createEvent(signature, collateralTypeId, urnId, dink, dart)
+  let dink = '100500000000000000000'
+  let dart = '200500000000000000000'
+  let event = createEvent(signature, collateralTypeId, urnId, v, w, dink, dart)
 
   handleFrob(event)
 
@@ -118,9 +139,13 @@ test('Vat#handleFrob: when collateralType does not exist, it does nothing', () =
   let signature = '0x1a0b287e'
   let collateralTypeId = 'c1'
   let urnId = '0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'
-  let dink = Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString('100500000000000000000')).reverse())
-  let dart = Bytes.fromUint8Array(Bytes.fromBigInt(BigInt.fromString('200500000000000000000')).reverse())
-  let event = createEvent(signature, collateralTypeId, urnId, dink, dart)
+
+  let v = '0x35d1b3f3d7966a1dfe207aa4514c100000000000'
+  let w = '0x35d1b3f3d7966a1dfe207aa4514c111111111111'
+
+  let dink = '100500000000000000000'
+  let dart = '200500000000000000000'
+  let event = createEvent(signature, collateralTypeId, urnId, v, w, dink, dart)
 
   handleFrob(event)
 
