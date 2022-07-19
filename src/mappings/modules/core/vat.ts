@@ -187,6 +187,7 @@ export function handleFlux(event: LogNote): void {
 }
 
 // Transfer stablecoin between users
+//dai[src] = sub(dai[src], rad);
 export function handleMove(event: LogNote): void {
   let srcAddress = bytes.toAddress(event.params.arg1)
   let dstAddress = bytes.toAddress(event.params.arg2)
@@ -215,17 +216,19 @@ export function handleMove(event: LogNote): void {
 export function handleFrob(event: LogNote): void {
   let ilk = event.params.arg1.toString()
   let urn = bytes.toAddress(event.params.arg2)
+  let v = bytes.toAddress(event.params.arg3)
+  let w = bytes.toAddress(Bytes.fromUint8Array(event.params.data.subarray(100, 132)))
   let dink = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(132, 164)))
   let dart = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(164, 196)))
-  let collateral = CollateralType.load(ilk)
 
-  if (collateral != null) {
+  let collateralType = CollateralType.load(ilk)
+  if (collateralType != null) {
     let system = systemModule.getSystemState(event)
 
     let Δdebt = units.fromWad(dart)
     let Δcollateral = units.fromWad(dink)
 
-    let vault = Vault.load(urn.toHexString() + '-' + collateral.id)
+    let vault = Vault.load(urn.toHexString() + '-' + collateralType.id)
 
     if (vault == null) {
       let owner = users.getOrCreateUser(urn)
@@ -233,8 +236,8 @@ export function handleFrob(event: LogNote): void {
       owner.save()
 
       // Register new unmanaged vault
-      vault = new Vault(urn.toHexString() + '-' + collateral.id)
-      vault.collateralType = collateral.id
+      vault = new Vault(urn.toHexString() + '-' + collateralType.id)
+      vault.collateralType = collateralType.id
       vault.collateral = decimal.ZERO
       vault.debt = decimal.ZERO
       vault.handler = urn
@@ -244,7 +247,7 @@ export function handleFrob(event: LogNote): void {
       vault.openedAtBlock = event.block.number
       vault.openedAtTransaction = event.transaction.hash
 
-      collateral.unmanagedVaultCount = collateral.unmanagedVaultCount.plus(integer.ONE)
+      collateralType.unmanagedVaultCount = collateralType.unmanagedVaultCount.plus(integer.ONE)
 
       system.unmanagedVaultCount = system.unmanagedVaultCount.plus(integer.ONE)
 
@@ -300,21 +303,48 @@ export function handleFrob(event: LogNote): void {
       }
     }
 
-    // Track total collateral
-    collateral.totalCollateral = collateral.totalCollateral.plus(Δcollateral)
+    // ---  gem[i][v] = sub(gem[i][v], dink);
+    let ownerCollateral = users.getOrCreateUser(v)
+    let collateral = collaterals.loadOrCreateCollateral(event, ilk, ownerCollateral.id)
 
-    // Debt normalized should coincide with Ilk.Art
-    collateral.debtNormalized = collateral.debtNormalized.plus(Δdebt)
-
-    // Total debt is Art * rate (like on DAIStats)
-    collateral.totalDebt = collateral.debtNormalized.times(collateral.rate)
-
+    let amountBefore = collateral.amount
+    collateral.amount = collateral.amount.minus(units.fromWad(dink))
     collateral.updatedAt = event.block.timestamp
     collateral.updatedAtBlock = event.block.number
     collateral.updatedAtTransaction = event.transaction.hash
+    collateral.save()
+
+    let log = new CollateralChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
+    log.block = event.block.number
+    log.collateral = collateral.id
+    log.collateralAfter = collateral.amount
+    log.collateralBefore = amountBefore
+    log.save()
+    //--- end gem
+
+    // dai[w]    = add(dai[w],    dtab);
+    // int dtab = mul(ilk.rate, dart);
+    let srcDaiUser = users.getOrCreateUser(w)
+    let dtab = collateralType.rate.times(units.fromWad(dart))
+    srcDaiUser.totalVaultDai = srcDaiUser.totalVaultDai.plus(dtab)
+    srcDaiUser.save()
+    // end dai
+
+    // Track total collateral
+    collateralType.totalCollateral = collateralType.totalCollateral.plus(Δcollateral)
+
+    // Debt normalized should coincide with Ilk.Art
+    collateralType.debtNormalized = collateralType.debtNormalized.plus(Δdebt)
+
+    // Total debt is Art * rate (like on DAIStats)
+    collateralType.totalDebt = collateralType.debtNormalized.times(collateralType.rate)
+
+    collateralType.updatedAt = event.block.timestamp
+    collateralType.updatedAtBlock = event.block.number
+    collateralType.updatedAtTransaction = event.transaction.hash
 
     vault.save()
-    collateral.save()
+    collateralType.save()
     system.save()
   }
 }
