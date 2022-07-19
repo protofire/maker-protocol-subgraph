@@ -395,7 +395,7 @@ dataSources:
         # function kiss(uint rad)
         - event: LogNote(indexed bytes4,indexed address,indexed bytes32,indexed bytes32,bytes)
           topic0: '0x2506855a00000000000000000000000000000000000000000000000000000000'
-          handler: handlekiss
+          handler: handleKiss
 
   #
   # Rates Module
