@@ -234,13 +234,34 @@ Update the following entities:
 
 #### Liaison between the Oracles and Core Contracts (Spot)
 
-> fill me with the description of the contract
+> The Spot liaison between the oracles and the core contracts. It functions as an interface contract and only stores the current ilk list.
 
 ##### handleFile
+Creates/Updates the following entities:
+- _CollateralPrice_
+- _SpotParLog_
+- _CollateralType_
+- _SystemState_
 
+The _handleFile_ mapper function receives a _LogNote_ event as parameter. The handler processes 3 contract functions with the same name _file_ but different arity. We pick _arg2_ as _what_ parameter to separate the logic.
+
+_what_ = "mat": Updates the liquidationRatio of a _CollateralType_
+
+_what_ = "pip": Creates a new CollateralPrice and maps it to the corresponding _CollateralType_
+
+_what_ = "par": Creates the Entity _SpotParLog_
 ##### handlePoke
+Creates/Updates the following entities:
+- _CollateralPrice_
+- _CollateralPriceUpdateLog_
+- _CollateralType_
+
+The _handlePoke_ mapper function receives a _Poke_ event as parameter. This event consists of two parameters: the id of the CollateralType (ilk) and the price (val). It creates the entity _CollateralPrice_. It also updates the price parameter of the _CollateralType_ entity to the newly created _CollateralPrice_ entity.
 
 ##### handleCage
+Create the _LiveChangeLog_ entity.
+
+The _handleCage_ function changes the Liveness of the spot contract. It creates the _LiveChangeLog_ Entity to track the changes.
 
 ### Dai Module:
 
@@ -258,22 +279,60 @@ Update the following entities:
 
 > The Maker Protocol's Collateral Auction House (Liquidation System 2.0)
 
-#### fill me (Clipper)
+#### DAI Auction Module 2.0 (Clipper)
 
-> fill me with the description of the contract
+> The Clipper contract is part of the Liquidation 2.0 Module. It is responsible for creating and managing auctions.
 
 ##### handleFile1
+Updates:
+- _SystemState_
 
+The _handleFile1_ mapper function receives a _FileBigIntEvent_ event as parameter. It updates the _SystemState_ depending on the submitted _what_ parameter in the event. This function updates required parameters by the Clipper contract.
+
+_what_ = "buf": updates _saleAuctionStartingPriceFactor_
+
+_what_ = "tail": updates _saleAuctionResetTime_
+
+_what_ = "cusp": updates _saleAuctionDropPercentage_
+
+_what_ = "chip": updates _saleAuctionDaiToRaisePercentage_
+
+_what_ = "tip": updates _saleAuctionFlatFee_
 ##### handleFile2
+Updates:
+- _SystemState_
+
+The _handleFile2_ mapper function receives a _FileAddressEvent_ event as parameter. It updates the _SystemState_ depending on the submitted _what_ parameter in the event. The clipper contract requires other contracts for various functionalities. This function updates the address for required contracts.
+
+_what_ = "spotter": updates _saleAuctionSpotterContract_
+
+_what_ = "dog": updates _saleAuctionDogContract_
+
+_what_ = "vow": updates _saleAuctionVowContract_
+
+_what_ = "calc": updates _saleAuctionCalcContract_
 
 ##### handleKick
+Creates:
+- _SaleAuction_
 
+The _handleKick_ mapper function receives a _KickEvent_ event as parameter. The contract intiiates an auction by calling the Kick function. Therefore, this function creates the entity _SaleAuction_ with the parameters of the event and sets _isActive_ to true.
 ##### handleTake
+Updates:
+- _SaleAuction_
 
+The _handleTake_ mapper function receives a _TakeEvent_ event as parameter. With this function you can buy collateral from the auction indexed by _id_. If the auction is sold out, it will set _isActive_ to false.
 ##### handleRedo
+Updates:
+- _SaleAuction_
+
+The _handleRedo_ mapperfunction receives a _RedoEvent_ event as parameter. The starting price of an auction will be set to the corresponding parameter in the event.
 
 ##### handleYank
+Updates:
+- _SaleAuction_
 
+The _handleYank_ mapperfunction receives a _YankEvent_ event as parameter. This function will mark an auction as deleted by setting _isActive_ to false and the timestamp to _deletedAt_
 #### fill me (Dog)
 
 > fill me with the description of the contract
