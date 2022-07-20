@@ -613,10 +613,9 @@ type VaultDebtChangeLog implements VaultLog @entity {
   transaction: Bytes!
 }
 
-type VaultSplitChangeLog
-  @entity { # implements VaultLog @entity {
+type VaultSplitChangeLog implements VaultLog @entity {
   id: ID!
-  #vault: Vault!
+  vault: Vault!
   src: Bytes!
   dst: Bytes!
   collateralToMove: BigDecimal!

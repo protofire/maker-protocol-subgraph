@@ -341,6 +341,7 @@ export function handleFork(event: LogNote): void {
     let log = new VaultSplitChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-3')
     log.src = src
     log.dst = dst
+    log.vault = vault1.id
     log.collateralToMove = units.fromWad(dink)
     log.debtToMove = units.fromWad(dart)
     log.block = event.block.number
