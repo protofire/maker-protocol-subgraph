@@ -1,19 +1,10 @@
 import { Bytes, BigInt, BigDecimal, Address } from '@graphprotocol/graph-ts'
 import { decimal, integer } from '@protofire/subgraph-toolkit'
-import { test, assert, clearStore } from 'matchstick-as'
+import { test, assert, clearStore, describe, afterEach, beforeEach } from 'matchstick-as'
 import { CollateralType, Vault } from '../../../../../generated/schema'
 import { LogNote } from '../../../../../generated/Vat/Vat'
 import { handleFrob } from '../../../../../src/mappings/modules/core/vat'
 import { tests } from '../../../../../src/mappings/modules/tests'
-
-// handleFrob
-// when collateralType exist
-//   and vault exist
-//     it updates collateralType and Vault
-//   and vault does not exist
-//     it creates vault and update collateralType
-// when collateralType does not exist
-//   it does nothing
 
 function createEvent(
   signature: string,
@@ -42,114 +33,160 @@ function createEvent(
   return event
 }
 
-test('Vat#handleFrob: when both collateralType and vault exist, it updates both', () => {
-  let signature = '0x1a0b287e'
-  let collateralTypeId = 'c1'
-  let collateralType = new CollateralType(collateralTypeId)
-  collateralType.rate = BigDecimal.fromString('1.5')
-  collateralType.save()
-  let urnId = '0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'
+let signature = '0x1a0b287e'
+let collateralTypeId: string
+let collateralType: CollateralType
+let vaultId: string
+let vault: Vault
+let urnId: string
 
-  let v = '0x35d1b3f3d7966a1dfe207aa4514c100000000000'
-  let w = '0x35d1b3f3d7966a1dfe207aa4514c111111111111'
+describe('Vat#handleFrob', () => {
+  afterEach(() => {
+    clearStore()
+  })
 
-  let vaultId = urnId + '-' + collateralTypeId
-  let vault = new Vault(vaultId)
-  vault.collateral = BigDecimal.fromString('1000.30')
-  vault.debt = BigDecimal.fromString('50.5')
-  vault.save()
-  let dink = '100500000000000000000'
-  let dart = '200500000000000000000'
-  let event = createEvent(signature, collateralTypeId, urnId, v, w, dink, dart)
-  handleFrob(event)
+  describe('when collateralType exist', () => {
+    beforeEach(() => {
+      collateralTypeId = 'c1'
+      collateralType = new CollateralType(collateralTypeId)
+      collateralType.rate = BigDecimal.fromString('1.5')
+      collateralType.save()
+    })
 
-  // test mapper is not creating new entities
-  assert.entityCount('CollateralType', 1)
-  assert.entityCount('Vault', 1)
+    describe('and vault exist', () => {
+      beforeEach(() => {
+        urnId = '0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'
+        vaultId = urnId + '-' + collateralTypeId
+        vault = new Vault(vaultId)
+        vault.collateral = BigDecimal.fromString('1000.30')
+        vault.debt = BigDecimal.fromString('50.5')
+        vault.save()
+      })
 
-  // test Vault updates
-  assert.fieldEquals('Vault', vaultId, 'collateral', vault.collateral.plus(BigDecimal.fromString('100.5')).toString())
-  assert.fieldEquals('Vault', vaultId, 'debt', vault.debt.plus(BigDecimal.fromString('200.5')).toString())
-  assert.fieldEquals('Vault', vaultId, 'updatedAt', event.block.timestamp.toString())
-  assert.fieldEquals('Vault', vaultId, 'updatedAtBlock', event.block.number.toString())
-  assert.fieldEquals('Vault', vaultId, 'updatedAtTransaction', event.transaction.hash.toHexString())
+      test('updates both', () => {
+        let v = '0x35d1b3f3d7966a1dfe207aa4514c100000000000'
+        let w = '0x35d1b3f3d7966a1dfe207aa4514c111111111111'
 
-  // test CollateralType updates
-  assert.fieldEquals('CollateralType', collateralTypeId, 'totalCollateral', BigDecimal.fromString('100.5').toString())
-  assert.fieldEquals('CollateralType', collateralTypeId, 'debtNormalized', BigDecimal.fromString('200.5').toString())
-  assert.fieldEquals(
-    'CollateralType',
-    collateralTypeId,
-    'totalDebt',
-    BigDecimal.fromString('200.5').times(collateralType.rate).toString(),
-  )
+        let dink = '100500000000000000000'
+        let dart = '200500000000000000000'
 
-  assert.fieldEquals('User', w, 'totalVaultDai', '300.75')
-  assert.fieldEquals('Collateral', `${v}-${collateralTypeId}`, 'amount', '-100.5')
+        let collateralId = v.concat('-').concat(collateralTypeId)
 
-  clearStore()
-})
+        let event = createEvent(signature, collateralTypeId, urnId, v, w, dink, dart)
 
-test('Vat#handleFrob: when collateralType exist but vault does not exist, it creates vault and updates collateralType', () => {
-  let signature = '0x1a0b287e'
-  let collateralTypeId = 'c1'
-  let collateralType = new CollateralType(collateralTypeId)
-  collateralType.rate = BigDecimal.fromString('1.5')
-  collateralType.save()
-  let urnId = '0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'
+        handleFrob(event)
 
-  let v = '0x35d1b3f3d7966a1dfe207aa4514c100000000000'
-  let w = '0x35d1b3f3d7966a1dfe207aa4514c111111111111'
+        // test mapper is not creating new entities
+        assert.entityCount('CollateralType', 1)
+        assert.entityCount('Vault', 1)
 
-  let vaultId = urnId + '-' + collateralTypeId
-  let dink = '100500000000000000000'
-  let dart = '200500000000000000000'
-  let event = createEvent(signature, collateralTypeId, urnId, v, w, dink, dart)
+        // test Vault updates
+        assert.fieldEquals(
+          'Vault',
+          vaultId,
+          'collateral',
+          vault.collateral.plus(BigDecimal.fromString('100.5')).toString(),
+        )
+        assert.fieldEquals('Vault', vaultId, 'debt', vault.debt.plus(BigDecimal.fromString('200.5')).toString())
+        assert.fieldEquals('Vault', vaultId, 'updatedAt', event.block.timestamp.toString())
+        assert.fieldEquals('Vault', vaultId, 'updatedAtBlock', event.block.number.toString())
+        assert.fieldEquals('Vault', vaultId, 'updatedAtTransaction', event.transaction.hash.toHexString())
 
-  handleFrob(event)
+        // test CollateralType updates
+        assert.fieldEquals(
+          'CollateralType',
+          collateralTypeId,
+          'totalCollateral',
+          BigDecimal.fromString('100.5').toString(),
+        )
+        assert.fieldEquals(
+          'CollateralType',
+          collateralTypeId,
+          'debtNormalized',
+          BigDecimal.fromString('200.5').toString(),
+        )
+        assert.fieldEquals(
+          'CollateralType',
+          collateralTypeId,
+          'totalDebt',
+          BigDecimal.fromString('200.5')
+            .times(collateralType.rate)
+            .toString(),
+        )
 
-  // test creates user
-  assert.fieldEquals('User', urnId, 'vaultCount', integer.ONE.toString())
+        assert.fieldEquals('User', w, 'totalVaultDai', '300.75')
+        assert.fieldEquals('Collateral', collateralId, 'amount', '-100.5')
+      })
+    })
 
-  // test vault created from collateralType
-  assert.fieldEquals('Vault', vaultId, 'collateralType', collateralTypeId)
-  assert.fieldEquals('Vault', vaultId, 'collateral', decimal.ZERO.toString())
-  assert.fieldEquals('Vault', vaultId, 'debt', decimal.ZERO.toString())
-  assert.fieldEquals('Vault', vaultId, 'owner', urnId)
-  assert.fieldEquals('Vault', vaultId, 'handler', urnId)
-  assert.fieldEquals('Vault', vaultId, 'openedAt', event.block.timestamp.toString())
-  assert.fieldEquals('Vault', vaultId, 'openedAtBlock', event.block.number.toString())
-  assert.fieldEquals('Vault', vaultId, 'openedAtTransaction', event.transaction.hash.toHexString())
+    describe('and vault does not exist', () => {
+      test('creates vault and updates collateralType', () => {
+        urnId = '0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'
+        let v = '0x35d1b3f3d7966a1dfe207aa4514c100000000000'
+        let w = '0x35d1b3f3d7966a1dfe207aa4514c111111111111'
 
-  // test CollateralType updates
-  assert.fieldEquals('CollateralType', collateralTypeId, 'totalCollateral', BigDecimal.fromString('100.5').toString())
-  assert.fieldEquals('CollateralType', collateralTypeId, 'debtNormalized', BigDecimal.fromString('200.5').toString())
-  assert.fieldEquals(
-    'CollateralType',
-    collateralTypeId,
-    'totalDebt',
-    BigDecimal.fromString('200.5').times(collateralType.rate).toString(),
-  )
-  assert.fieldEquals('CollateralType', collateralTypeId, 'unmanagedVaultCount', integer.ONE.toString())
+        vaultId = urnId + '-' + collateralTypeId
+        let dink = '100500000000000000000'
+        let dart = '200500000000000000000'
+        let event = createEvent(signature, collateralTypeId, urnId, v, w, dink, dart)
 
-  clearStore()
-})
+        handleFrob(event)
 
-test('Vat#handleFrob: when collateralType does not exist, it does nothing', () => {
-  let signature = '0x1a0b287e'
-  let collateralTypeId = 'c1'
-  let urnId = '0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'
+        // test creates user
+        assert.fieldEquals('User', urnId, 'vaultCount', integer.ONE.toString())
 
-  let v = '0x35d1b3f3d7966a1dfe207aa4514c100000000000'
-  let w = '0x35d1b3f3d7966a1dfe207aa4514c111111111111'
+        // test vault created from collateralType
+        assert.fieldEquals('Vault', vaultId, 'collateralType', collateralTypeId)
+        assert.fieldEquals('Vault', vaultId, 'collateral', decimal.ZERO.toString())
+        assert.fieldEquals('Vault', vaultId, 'debt', decimal.ZERO.toString())
+        assert.fieldEquals('Vault', vaultId, 'owner', urnId)
+        assert.fieldEquals('Vault', vaultId, 'handler', urnId)
+        assert.fieldEquals('Vault', vaultId, 'openedAt', event.block.timestamp.toString())
+        assert.fieldEquals('Vault', vaultId, 'openedAtBlock', event.block.number.toString())
+        assert.fieldEquals('Vault', vaultId, 'openedAtTransaction', event.transaction.hash.toHexString())
 
-  let dink = '100500000000000000000'
-  let dart = '200500000000000000000'
-  let event = createEvent(signature, collateralTypeId, urnId, v, w, dink, dart)
+        // test CollateralType updates
+        assert.fieldEquals(
+          'CollateralType',
+          collateralTypeId,
+          'totalCollateral',
+          BigDecimal.fromString('100.5').toString(),
+        )
+        assert.fieldEquals(
+          'CollateralType',
+          collateralTypeId,
+          'debtNormalized',
+          BigDecimal.fromString('200.5').toString(),
+        )
+        assert.fieldEquals(
+          'CollateralType',
+          collateralTypeId,
+          'totalDebt',
+          BigDecimal.fromString('200.5')
+            .times(collateralType.rate)
+            .toString(),
+        )
+        assert.fieldEquals('CollateralType', collateralTypeId, 'unmanagedVaultCount', integer.ONE.toString())
+      })
+    })
+  })
 
-  handleFrob(event)
+  describe('when collateralType does not exist', () => {
+    test('does nothing', () => {
+      urnId = '0x35d1b3f3d7966a1dfe207aa4514c12a259a0492b'
 
-  // test nothing is created
-  assert.entityCount('CollateralType', 0)
-  assert.entityCount('Vault', 0)
+      let v = '0x35d1b3f3d7966a1dfe207aa4514c100000000000'
+      let w = '0x35d1b3f3d7966a1dfe207aa4514c111111111111'
+
+      let dink = '100500000000000000000'
+      let dart = '200500000000000000000'
+      let event = createEvent(signature, collateralTypeId, urnId, v, w, dink, dart)
+
+      handleFrob(event)
+
+      // test nothing is created
+      assert.entityCount('CollateralType', 0)
+      assert.entityCount('Vault', 0)
+    })
+  })
 })

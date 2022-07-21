@@ -309,9 +309,8 @@ export function handleFrob(event: LogNote): void {
       }
     }
 
-    // gem[i][v] = sub(gem[i][v], dink);
-    let ownerCollateral = users.getOrCreateUser(v)
-    let collateral = collaterals.loadOrCreateCollateral(event, ilk, ownerCollateral.id)
+    let collateralOwner = users.getOrCreateUser(v)
+    let collateral = collaterals.loadOrCreateCollateral(event, ilk, collateralOwner.id)
 
     let amountBefore = collateral.amount
     collateral.amount = collateral.amount.minus(units.fromWad(dink))
@@ -328,16 +327,12 @@ export function handleFrob(event: LogNote): void {
     collateralChangeLog.collateralAfter = collateral.amount
     collateralChangeLog.collateralBefore = amountBefore
     collateralChangeLog.save()
-    // end gem
 
-    // dai[w]    = add(dai[w],    dtab);
-    // int dtab = mul(ilk.rate, dart);
     let srcDaiUser = users.getOrCreateUser(w)
     let dtab = collateralType.rate.times(units.fromWad(dart))
 
     srcDaiUser.totalVaultDai = srcDaiUser.totalVaultDai.plus(dtab)
     srcDaiUser.save()
-    // end dai
 
     // Track total collateral
     collateralType.totalCollateral = collateralType.totalCollateral.plus(Δcollateral)
@@ -366,8 +361,18 @@ export function handleFork(event: LogNote): void {
   let dink = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(100, 132)))
   let dart = bytes.toSignedInt(Bytes.fromUint8Array(event.params.data.subarray(132, 164)))
 
-  let vault1 = Vault.load(src.toHexString().concat('-').concat(ilk))
-  let vault2 = Vault.load(dst.toHexString().concat('-').concat(ilk))
+  let vault1 = Vault.load(
+    src
+      .toHexString()
+      .concat('-')
+      .concat(ilk),
+  )
+  let vault2 = Vault.load(
+    dst
+      .toHexString()
+      .concat('-')
+      .concat(ilk),
+  )
 
   if (vault1 && vault2) {
     vault1.collateral = vault1.collateral.minus(units.fromWad(dink))
