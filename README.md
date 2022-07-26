@@ -333,23 +333,63 @@ Updates:
 - _SaleAuction_
 
 The _handleYank_ mapperfunction receives a _YankEvent_ event as parameter. This function will mark an auction as deleted by setting _isActive_ to false and the timestamp to _deletedAt_
-#### fill me (Dog)
+#### Liquidation Contract (Dog)
 
-> fill me with the description of the contract
+> In the liquidation contract (the Dog), an auction is started promptly to sell the transferred collateral for DAI in an attempt to cancel out the debt now assigned to the protocol.
 
 ##### handleCage
+Create the _LiveChangeLog_ entity.
+
+The _handleCage_ function changes the Liveness of the spot contract. It creates the _LiveChangeLog_ Entity to track the changes.
 
 ##### handleDigs
+Updates:
+- _SystemState_
+- _CollateralType_
+
+The _handleDigs_ function loads the _SystemState_ Entity and substracts the _rad_ (contract parameter) from the _totalDaiAmountToCoverDebtAndFees_.
+Afterwards, it updates the _Collateraltype_ and subtracts the _rad_ from the _daiAmountToCoverDebtAndFees_.
 
 ##### handleFileVow
+Updates:
+- _SystemState_
+
+The _handleFileVow_ functions receives a _File1_ Event. It updates the address in the parameter _dogVowContract_ when _what_ = "vow".
 
 ##### handleFileHole
+Updates:
+- _SystemState_
+
+The _handleFileHole_ functions receives a _File_ Event. It updates the parameter _maxDaiToCoverAuction_ with the rad value from the submitted _data_.
 
 ##### handleFileChop
+Updates:
+- _CollateralType_
+
+The _handleFileChop_ functions receives a _File2_ Event. It updates the parameters of the entity _CollateralType_ according to the provided _what_ parameter.
+
+_what_ = "chop": Updates the parameter _liquidationPenalty_ with the wad value from the submitted _data_.
+
+_what_ = "hole": Updates the parameter _maxDaiToCoverAuction_ with the rad value from the submitted _data_.
 
 ##### handleFileClip
+Updates:
+- _CollateralType_
 
+The _handleFileClip_ functions receives a _File3_ Event. It updates the _liquidatorAddress_ when _what_ = "clip".
 ##### handleBark
+Updates:
+- _SaleAuction_
+- _CollateralType_
+- _SystemState_
+
+The _handleBark_ functions receives a _Bark_ Event. It liquidates a Vault and start a Dutch auction to sell its collateral for DAI.
+
+_SaleAuction_: Updates the connection to the _Vault_ and _CollateralType_ entity.
+
+_CollateralType_: Adds _liquidationPenalty_ * _due_ to the _daiAmountToCoverDebtAndFees_
+
+_SystemState_: Adds _liquidationPenalty_ * _due_ to the _totalDaiAmountToCoverDebtAndFees_
 
 ### MKR Module:
 
