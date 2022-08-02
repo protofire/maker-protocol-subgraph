@@ -1,5 +1,5 @@
 description: Multi Collateral Dai (MCD)
-specVersion: 0.0.2
+specVersion: 0.0.4
 
 schema:
   file: ./schema.graphql
@@ -259,15 +259,12 @@ dataSources:
 
         - event: File(indexed bytes32,address)
           handler: handleFileVow
-
         - event: File(indexed bytes32,indexed bytes32,address)
-          handler: handleFileHole
-
+          handler: handleFileClip
         - event: File(indexed bytes32,indexed bytes32,uint256)
           handler: handleFileChop
-
         - event: File(indexed bytes32,uint256)
-          handler: handleFileClip
+          handler: handleFileHole
 
   # Debt Auction
   - name: Flop

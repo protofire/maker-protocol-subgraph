@@ -1,7 +1,7 @@
 import { Cage, Digs, File, File1, File2, File3, Bark } from '../../../../generated/Dog/Dog'
 import { LiveChangeLog } from '../../../../generated/schema'
 import { collateralTypes, system as systemModule, saleAuctions } from '../../../entities'
-import { units } from '@protofire/subgraph-toolkit'
+import { units, bytes } from '@protofire/subgraph-toolkit'
 
 export function handleCage(event: Cage): void {
   let log = new LiveChangeLog(event.transaction.hash.toHex() + '-' + event.logIndex.toString() + '-0')
@@ -62,7 +62,7 @@ export function handleFileClip(event: File3): void {
   let ilk = collateralTypes.loadOrCreateCollateralType(event.params.ilk.toString())
 
   if (what == 'clip') {
-    ilk.liquidatorAddress = event.params.clip
+    ilk.liquidatorAddress = bytes.toAddress(event.params.clip)
     ilk.save()
   }
 }
