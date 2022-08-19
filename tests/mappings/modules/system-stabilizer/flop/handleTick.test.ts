@@ -1,6 +1,5 @@
 import { Bytes, BigInt, BigDecimal } from '@graphprotocol/graph-ts'
-import { units } from '@protofire/subgraph-toolkit'
-import { test, clearStore, assert, log } from 'matchstick-as'
+import { test, clearStore, assert } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Flop/Flopper'
 import { handleTick } from '../../../../../src/mappings/modules/system-stabilizer/flop'
 import { tests } from '../../../../../src/mappings/modules/tests'
@@ -19,9 +18,12 @@ function createEvent(id: BigInt): LogNote {
 
 test('Flopper#handleTick updates Auction.quantity, Auction.endTimeAt and Auction.updatedAt', () => {
   let bidId = BigInt.fromString('1')
-  let auctionId = bidId.toString()
 
-  let ONE = units.WAD
+  let auctionId = bidId
+    .toString()
+    .concat('-')
+    .concat('debt')
+
   let auctionBidDuration = BigInt.fromI32(172800) // 2 days | ttl
   let lotSizeIncrease = BigDecimal.fromString('1.5') // 1.50E18 | pad
 

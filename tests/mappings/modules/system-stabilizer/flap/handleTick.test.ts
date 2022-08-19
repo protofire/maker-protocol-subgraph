@@ -20,6 +20,11 @@ function createEvent(id: BigInt): LogNote {
 test('Flapper#handleTick: Updates the end-time of an auction', () => {
   let id = BigInt.fromString('50')
 
+  let auctionId = id
+    .toString()
+    .concat('-')
+    .concat('surplus')
+
   let event = createEvent(id)
 
   let system = systemModule.getSystemState(event)
@@ -27,6 +32,6 @@ test('Flapper#handleTick: Updates the end-time of an auction', () => {
   system.save()
   handleTick(event)
 
-  assert.fieldEquals('SurplusAuction', id.toString(), 'endTimeAt', '1001')
+  assert.fieldEquals('SurplusAuction', auctionId, 'endTimeAt', '1001')
   clearStore()
 })

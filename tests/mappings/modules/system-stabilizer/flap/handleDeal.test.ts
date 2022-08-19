@@ -3,7 +3,7 @@ import { test, clearStore, assert, describe } from 'matchstick-as'
 import { LogNote } from '../../../../../generated/Flap/Flapper'
 import { handleDeal } from '../../../../../src/mappings/modules/system-stabilizer/flap'
 import { tests } from '../../../../../src/mappings/modules/tests'
-import { auctions, system as systemModule } from '../../../../../src/entities'
+import { auctions } from '../../../../../src/entities'
 
 function createEvent(id: BigInt): LogNote {
   let sig = tests.helpers.params.getBytes('sig', Bytes.fromHexString('0xc959c42b'))
@@ -19,7 +19,12 @@ function createEvent(id: BigInt): LogNote {
 describe('Flapper#handleDeal', () => {
   test('Updates Auction.active and Auction.deletedAt ', () => {
     let id = BigInt.fromString('50')
-    let auctionId = id.toString()
+
+    let auctionId = id
+      .toString()
+      .toString()
+      .concat('-')
+      .concat('surplus')
 
     let event = createEvent(id)
 

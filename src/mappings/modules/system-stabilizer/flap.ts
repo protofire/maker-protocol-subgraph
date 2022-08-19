@@ -35,10 +35,13 @@ export function handleCage(event: LogNote): void {
 
 export function handleKick(event: Kick): void {
   let id = event.params.id
+    .toString()
+    .concat('-')
+    .concat('surplus')
   let lot = event.params.lot
   let bid = event.params.bid
 
-  let auction = auctions.loadOrCreateSurplusAuction(id.toString(), event)
+  let auction = auctions.loadOrCreateSurplusAuction(id, event)
   auction.bidAmount = bid
   auction.quantity = lot
   // might be wrong since the smart contract refers to msg.sender
@@ -53,8 +56,12 @@ export function handleKick(event: Kick): void {
 }
 
 export function handleTick(event: LogNote): void {
-  let id = bytes.toUnsignedInt(event.params.arg1)
-  let auction = auctions.loadOrCreateSurplusAuction(id.toString(), event)
+  let id = bytes
+    .toUnsignedInt(event.params.arg1)
+    .toString()
+    .concat('-')
+    .concat('surplus')
+  let auction = auctions.loadOrCreateSurplusAuction(id, event)
 
   let system = systemModule.getSystemState(event)
   if (system.surplusAuctionBidDuration) {
@@ -68,8 +75,12 @@ export function handleTick(event: LogNote): void {
 
 //  claim a winning bid / settles a completed auction
 export function handleDeal(event: LogNote): void {
-  let id = bytes.toUnsignedInt(event.params.arg1)
-  let auction = auctions.loadOrCreateSurplusAuction(id.toString(), event)
+  let id = bytes
+    .toUnsignedInt(event.params.arg1)
+    .toString()
+    .concat('-')
+    .concat('surplus')
+  let auction = auctions.loadOrCreateSurplusAuction(id, event)
 
   //auction to inactive "delete"
   auction.deletedAt = event.block.timestamp
@@ -79,8 +90,12 @@ export function handleDeal(event: LogNote): void {
 }
 
 export function handleTend(event: LogNote): void {
-  let id = bytes.toUnsignedInt(event.params.arg1)
-  let auction = auctions.loadOrCreateSurplusAuction(id.toString(), event)
+  let id = bytes
+    .toUnsignedInt(event.params.arg1)
+    .toString()
+    .concat('-')
+    .concat('surplus')
+  let auction = auctions.loadOrCreateSurplusAuction(id, event)
 
   if (auction.highestBidder.toHexString() !== event.transaction.from.toHexString()) {
     auction.highestBidder = event.transaction.from
@@ -95,9 +110,13 @@ export function handleTend(event: LogNote): void {
 }
 
 export function handleYank(event: LogNote): void {
-  let id = bytes.toUnsignedInt(event.params.arg1)
+  let id = bytes
+    .toUnsignedInt(event.params.arg1)
+    .toString()
+    .concat('-')
+    .concat('surplus')
 
-  let auction = auctions.loadOrCreateSurplusAuction(id.toString(), event)
+  let auction = auctions.loadOrCreateSurplusAuction(id, event)
   auction.active = false
   auction.deletedAt = event.block.timestamp
 

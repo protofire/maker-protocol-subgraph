@@ -19,7 +19,10 @@ function createEvent(id: BigInt): LogNote {
 describe('Flopper#handleDeal', () => {
   test('Updates Auction.active and Auction.deletedAt ', () => {
     let id = BigInt.fromString('50')
-    let auctionId = id.toString()
+    let auctionId = id
+      .toString()
+      .concat('-')
+      .concat('debt')
 
     let event = createEvent(id)
 
