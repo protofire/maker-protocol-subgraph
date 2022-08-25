@@ -20,13 +20,18 @@ function createEvent(id: BigInt): LogNote {
 test('Flapper#handleYank: Sets active to false', () => {
   let id = BigInt.fromString('50')
 
+  let auctionId = id
+    .toString()
+    .concat('-')
+    .concat('surplus')
+
   let event = createEvent(id)
 
   let system = systemModule.getSystemState(event)
   system.save()
   handleYank(event)
 
-  assert.fieldEquals('SurplusAuction', id.toString(), 'active', 'false')
-  assert.fieldEquals('SurplusAuction', id.toString(), 'deletedAt', event.block.timestamp.toString())
+  assert.fieldEquals('SurplusAuction', auctionId, 'active', 'false')
+  assert.fieldEquals('SurplusAuction', auctionId, 'deletedAt', event.block.timestamp.toString())
   clearStore()
 })

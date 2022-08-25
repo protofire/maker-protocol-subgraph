@@ -10,6 +10,9 @@ describe('Flopper#handleDent', () => {
     let signature = '0x5ff3a382'
 
     let id = '50'
+
+    let auctionId = id.concat('-').concat('debt')
+
     let lot = '100000000000000000000'
     let defaultTTL = BigInt.fromString('500')
 
@@ -34,9 +37,9 @@ describe('Flopper#handleDent', () => {
 
     handleDent(event)
 
-    assert.fieldEquals('DebtAuction', auction.id, 'highestBidder', event.transaction.from.toHexString())
-    assert.fieldEquals('DebtAuction', auction.id, 'quantity', lot)
-    assert.fieldEquals('DebtAuction', auction.id, 'endTimeAt', event.block.timestamp.plus(defaultTTL).toString())
+    assert.fieldEquals('DebtAuction', auctionId, 'highestBidder', event.transaction.from.toHexString())
+    assert.fieldEquals('DebtAuction', auctionId, 'quantity', lot)
+    assert.fieldEquals('DebtAuction', auctionId, 'endTimeAt', event.block.timestamp.plus(defaultTTL).toString())
 
     clearStore()
   })

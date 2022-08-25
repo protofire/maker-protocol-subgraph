@@ -8,6 +8,12 @@ import { handleKick } from '../../../../../src/mappings/modules/system-stabilize
 describe('Flopper#handleKick', () => {
   test('creates the entity Auction', () => {
     let id = BigInt.fromString('50')
+
+    let auctionId = id
+      .toString()
+      .concat('-')
+      .concat('debt')
+
     let lot = BigInt.fromString('10000000000000000000000000000000000000000000000000')
     let bid = BigInt.fromString('10')
     let gal = '0x4d95a049d5b0b7d32058cd3f2163015747522e99'
@@ -26,10 +32,10 @@ describe('Flopper#handleKick', () => {
     system.save()
     handleKick(event)
 
-    assert.fieldEquals('DebtAuction', id.toString(), 'quantity', lot.toString())
-    assert.fieldEquals('DebtAuction', id.toString(), 'bidAmount', bid.toString())
-    assert.fieldEquals('DebtAuction', id.toString(), 'highestBidder', gal)
-    assert.fieldEquals('DebtAuction', id.toString(), 'endTimeAt', '2500')
+    assert.fieldEquals('DebtAuction', auctionId, 'quantity', lot.toString())
+    assert.fieldEquals('DebtAuction', auctionId, 'bidAmount', bid.toString())
+    assert.fieldEquals('DebtAuction', auctionId, 'highestBidder', gal)
+    assert.fieldEquals('DebtAuction', auctionId, 'endTimeAt', '2500')
     clearStore()
   })
 })

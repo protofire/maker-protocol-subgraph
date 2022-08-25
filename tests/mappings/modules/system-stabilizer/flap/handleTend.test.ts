@@ -10,6 +10,9 @@ describe('Flapper#handleTend', () => {
     let signature = '0x4712f803'
 
     let id = '50'
+
+    let auctionId = id.concat('-').concat('surplus')
+
     let bid = '100000000000000000000'
     let defaultTTL = BigInt.fromString('500')
 
@@ -23,7 +26,7 @@ describe('Flapper#handleTend', () => {
     )
     event.block.timestamp = BigInt.fromString('250')
 
-    let auction = auctions.loadOrCreateSurplusAuction(id, event)
+    let auction = auctions.loadOrCreateSurplusAuction(auctionId, event)
     auction.highestBidder = Address.fromString('0x4d95a049d5b0b7d32058cd3f2163015747522e99')
     auction.bidAmount = BigInt.fromString(bid)
     auction.save()
