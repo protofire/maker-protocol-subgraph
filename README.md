@@ -427,20 +427,20 @@ _SystemState_: Adds _liquidationPenalty_ * _due_ to the _totalDaiAmountToCoverDe
 
 ##### handleInit
 Updates:
--_CollateralType_
+- _CollateralType_
 
 Fetches the _CollateralType_ according to _arg1_, sets _stabilityFee_ to '1' and _stabilityFeeUpdateAt_ to the timestamp of the block.
 
 ##### handleDrip
 Updates:
--_CollateralType_
+- _CollateralType_
 
 Updates the _stabilityFeeUpdatedAt_ of the CollateralType.
 
 ##### handleFile
 Updates:
--_SystemState_
--_ColllateralType_
+- _SystemState_
+- _ColllateralType_
 
 Updates variables according to the _what_ variable.
 
@@ -456,7 +456,7 @@ what="vow": Updates _SystemState.jugVowContract_ to the Address from _data_.
 
 ##### handleFile
 Updates:
--_SystemState_
+- _SystemState_
 
 Updates the _SystemState_ according to the _what_ variable.
 
@@ -466,30 +466,30 @@ _what_="vow": Updates _SystemState.potVowContract_ with the value from _data_.
 
 ##### handleCage
 Creates:
--_LiveChangeLog_
+- _LiveChangeLog_
 
 Updates:
--_SystemState_
+- _SystemState_
 
 Updates the _SystemState.savingsRate_ to 1 and creates a new _LiveChangeLog_.
 
 ##### handleJoin
 Updates:
--_User_
--_SystemState_
+- _User_
+- _SystemState_
 
 Adds the WDA value _arg1_ to _User.savings_ and _SystemState.totalSavingsInPot_. The Subgraph will update these values according to the result.
 
 ##### handleExit
 Updates:
--_User_
--_SystemState_
+- _User_
+- _SystemState_
 
 Substracts the WDA value _arg1_ from _User.savings_ and _SystemState.totalSavingsInPot_. The Subgraph will update these values according to the result.
 
 ##### handleDrip
 Updates:
--_SystemState_
+- _SystemState_
 
 Binds the Pot contract to get the _chi_ value from the contract. Afterwards, the subgraph will update _SystemState.rateAccumulator_ with the resultvalue and sets _SystemState.lastPotDripAt_ to the timestamp of the block.
 
@@ -503,7 +503,7 @@ Binds the Pot contract to get the _chi_ value from the contract. Afterwards, the
 
 ##### handleFile
 Updates:
--_SystemState_
+- _SystemState_
 
 Updates _SystemState_ according to the _what_ value.
 
@@ -515,38 +515,38 @@ _what_="tau": Updates _surplusAuctionDuration_ to the value from _data_.
 
 ##### handleCage
 Creates:
--_LiveChangeLog_
+- _LiveChangeLog_
 
 Creates the LiveChangeLog event with the required values.
 
 ##### handleKick
 Updates:
--_SystemState_
--_SurplusAuction_
+- _SystemState_
+- _SurplusAuction_
 
 Updates _bidAmount_, _quantity_, _highestBidder_ from the _SurplusAuction_ entities to the values from the event and sets _active_ to true. If _SystemState.surplusAuctionBidDuration_ is set, it will add the block timestamp to this value.
 
 ##### handleTick
 Updates:
--_SurplusAuction_
+- _SurplusAuction_
 
 Sets _SurplusAuction.endTimeAt_ to the timestamp of the block and adds _SystemState.surplusAuctionBidDuration_ to it
 
 ##### handleDeal
 Updates:
--_SurplusAuction_
+- _SurplusAuction_
 
 Sets the _highestBidder_ to the transaction creator.
 
 ##### handleTend
 Updates:
--_SurplusAuction_
+- _SurplusAuction_
 
 Sets the _highestBidder_ to the transaction creator and updates the _bidAmount_ to Int value of _arg2_. 
 
 ##### handleYank
 Updates:
--_SurplusAuction_
+- _SurplusAuction_
 
 Deactivates (_active_=false) the _SurplusAuction_ and sets the _deletedAt_ variable.
 
@@ -556,7 +556,7 @@ Deactivates (_active_=false) the _SurplusAuction_ and sets the _deletedAt_ varia
 
 ##### handleFile
 Updates:
--_SystemSate_
+- _SystemSate_
 
 Updates the _SystemSate_ according to the _what_ value.
 
@@ -570,37 +570,38 @@ _what_="tau": Updates _debtAuctionDuration_ to the value from _data_.
 
 ##### handleCage
 Creates:
--_LiveChangeLog_
+- _LiveChangeLog_
 
 Creates the entity _LiveChangeLog_
 
 ##### handleKick
 Updates:
--_DebtAuction_
+- _DebtAuction_
 
 Receives a _Kick_ event as input. Sets _bidAmount_ to the _bid_ value, _quantity_ to the _lot_ value and _hgihestBidder_ to the _gal_ value from the event. Sets the endTimeAt to the timestamp of the block plus _SystemState.debtAuctionBidDuration_.
 
 
 ##### handleTick
 Updates:
--_DebtAuction_
+- _DebtAuction_
 
 Calculates _SystemState.debtAuctionLotSizeIncrease_ * _auction.quantity_ (lot in the contract), converts the result to WAD and sets it to _DebtAuction.quantity_. Updates _endTimeAt_ to the block timestamp + _SystemState.debtAuctionBidDuration_.
 
 ##### handleDeal
-Updates: _DebtAuction_
+Updates:
+- _DebtAuction_
 
 Deactivates the _DebtAuction_(_active_ = false) and sets the _deletedAt_ variable to the timestamp of the block.
 
 ##### handleDent
 Updates:
--_DebtAuction_
+- _DebtAuction_
 
 Sets the _highestBidder_ to the transaction creator and the _quantity_ to the Int value from _arg2_. Updates _endTimeAt_ to the block timestamp + _SystemState.debtAuctionBidDuration_.
 
 ##### handleYank
 Updates:
--_DebtAuction_
+- _DebtAuction_
 
 Deactivates the _DebtAuction_(_active_ = false) and sets the _deletedAt_ variable to the timestamp of the block.
 
@@ -610,7 +611,7 @@ Deactivates the _DebtAuction_(_active_ = false) and sets the _deletedAt_ variabl
 
 ##### handleFile
 Updates:
--_SystemState_
+- _SystemState_
 
 Sets variables according to the _what_ value from the _LogNote_ event.
 
@@ -630,46 +631,46 @@ _what_="flopper": Updates  _vowFlopperContract_ to the Address from _arg2_.
 
 ##### handleCage
 Creates:
--_LiveChangeLog_
+- _LiveChangeLog_
 
 Creates a _LiveChangeLog_ entity
 
 ##### handleFlog
 Creates:
--_PopDebtQueueLog_
+- _PopDebtQueueLog_
 
 Updates:
--_SystemState_
+- _SystemState_
 
 Binds to the Vow contract to receive the _sin_ value from the _era_ (=_arg1_). It afterwards substracts the RAD value from the result from the _SystemState.systemDebtInQueue_ value. It updates _SystemState.systemDebtInQueue_ with the result from this calculation. The subgraph will then create the _PopDebtQueueLog_ entity.
 
 
 ##### handleFess
 Creates:
--_PushDebtQueueLog_
+- _PushDebtQueueLog_
 
 Updates:
--_SystemState_
+- _SystemState_
 
 Adds _SystemState.systemDebtInQueue_ with the RAD value from _tab(=_arg1) and updates _SystemState.systemDebtInQueue_ with the result.
 
 ##### handleFlap
 Creates:
--_VowFlapLog_
+- _VowFlapLog_
 
 Creates a _VowFlapLog_ entity and sets the _VowFlapLog.surplusAuctionLotSize_ to the value from _SystemState.surplusAuctionLotSize_.
 
 ##### handleFlop
 Creates:
--_VowFlopLog_
+- _VowFlopLog_
 
 Updates:
--_SystemState_
+- _SystemState_
 
 Adds _SystemState.debtOnAuctionTotalAmount_ (=_ash_; if the value is not set it will default to 0) with _SystemState.debtAuctionBidSize_(=_sump_) and sets the result to _SystemState.debtOnAuctionTotalAmount_. The subgraph will create the entity _VowFlopLog_ afterwards.
 
 ##### handleKiss
 Updates:
--_SystemState_
+- _SystemState_
 
 Sets the _SystemState.debtOnAuctionTotalAmount_ to the RAD value from _arg1_ + the current value from _debtOnAuctionTotalAmount_.
