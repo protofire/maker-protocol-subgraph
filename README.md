@@ -423,27 +423,75 @@ _SystemState_: Adds _liquidationPenalty_ * _due_ to the _totalDaiAmountToCoverDe
 
 #### Accumulation of Stability Fees for Collateral Types (Jug)
 
-> fill me with the description of the contract
+> The primary function of the Jug smart contract is to accumulate stability fees for a particular collateral type whenever its _drip()_ method is called.
 
 ##### handleInit
+Updates:
+-_CollateralType_
+
+Fetches the _CollateralType_ according to _arg1_, sets _stabilityFee_ to '1' and _stabilityFeeUpdateAt_ to the timestamp of the block.
 
 ##### handleDrip
+Updates:
+-_CollateralType_
+
+Updates the _stabilityFeeUpdatedAt_ of the CollateralType.
 
 ##### handleFile
+Updates:
+-_SystemState_
+-_ColllateralType_
+
+Updates variables according to the _what_ variable.
+
+what="duty": Updates _CollateralType.stabilityFee_ to the Ray value from _data_.
+
+what="base": Updates _SystemState.baseStabilityFee_ to the Ray value from _data_.
+
+what="vow": Updates _SystemState.jugVowContract_ to the Address from _data_.
 
 #### The Dai Savings Rate (Pot)
 
-> fill me with the description of the contract
+> The Pot is the core of theDai Savings Rate. It allows users to deposit dai and activate the Dai Savings Rate and earning savings on their dai.
 
 ##### handleFile
+Updates:
+-_SystemState_
+
+Updates the _SystemState_ according to the _what_ variable.
+
+_what_="dsr": Updates _SystemState.savingsRate_ with the Ray value from _data_.
+
+_what_="vow": Updates _SystemState.potVowContract_ with the value from _data_.
 
 ##### handleCage
+Creates:
+-_LiveChangeLog_
+
+Updates:
+-_SystemState_
+
+Updates the _SystemState.savingsRate_ to 1 and creates a new _LiveChangeLog_.
 
 ##### handleJoin
+Updates:
+-_User_
+-_SystemState_
+
+Adds the WDA value _arg1_ to _User.savings_ and _SystemState.totalSavingsInPot_. The Subgraph will update these values according to the result.
 
 ##### handleExit
+Updates:
+-_User_
+-_SystemState_
+
+Substracts the WDA value _arg1_ from _User.savings_ and _SystemState.totalSavingsInPot_. The Subgraph will update these values according to the result.
 
 ##### handleDrip
+Updates:
+-_SystemState_
+
+Binds the Pot contract to get the _chi_ value from the contract. Afterwards, the subgraph will update _SystemState.rateAccumulator_ with the resultvalue and sets _SystemState.lastPotDripAt_ to the timestamp of the block.
 
 ### System Stabilizer Module:
 
@@ -451,21 +499,56 @@ _SystemState_: Adds _liquidationPenalty_ * _due_ to the _totalDaiAmountToCoverDe
 
 #### Surplus Auction House (Flapper)
 
-> fill me with the description of the contract
+> Flapper is a Surplus Auction. These auctions are used to auction off a fixed amount of the surplus Dai in the system for MKR. This surplus Dai will come from the Stability Fees that are accumulated from Vaults. In this auction type, bidders compete with increasing amounts of MKR. Once the auction has ended, the Dai auctioned off is sent to the winning bidder. The system then burns the MKR received from the winning bid.
 
 ##### handleFile
+Updates:
+-_SystemState_
+
+Updates _SystemState_ according to the _what_ value.
+
+_what_="beg": Updates _surplusAuctionMinimumBidIncrease_ to the WAD value from _data_.
+
+_what_="ttl": Updates _surplusAuctionBidDuration_ to the value from _data_.
+
+_what_="tau": Updates _surplusAuctionDuration_ to the value from _data_.
 
 ##### handleCage
+Creates:
+-_LiveChangeLog_
+
+Creates the LiveChangeLog event with the required values.
 
 ##### handleKick
+Updates:
+-_SystemState_
+-_SurplusAuction_
+
+Updates _bidAmount_, _quantity_, _highestBidder_ from the _SurplusAuction_ entities to the values from the event and sets _active_ to true. If _SystemState.surplusAuctionBidDuration_ is set, it will add the block timestamp to this value.
 
 ##### handleTick
+Updates:
+-_SurplusAuction_
+
+Sets _SurplusAuction.endTimeAt_ to the timestamp of the block and adds _SystemState.surplusAuctionBidDuration_ to it
 
 ##### handleDeal
+Updates:
+-_SurplusAuction_
+
+Sets the _highestBidder_ to the transaction creator.
 
 ##### handleTend
+Updates:
+-_SurplusAuction_
+
+Sets the _highestBidder_ to the transaction creator and updates the _bidAmount_ to Int value of _arg2_. 
 
 ##### handleYank
+Updates:
+-_SurplusAuction_
+
+Deactivates (_active_=false) the _SurplusAuction_ and sets the _deletedAt_ variable.
 
 #### Debt Auction House (Flopper)
 
