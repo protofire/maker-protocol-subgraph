@@ -552,36 +552,124 @@ Deactivates (_active_=false) the _SurplusAuction_ and sets the _deletedAt_ varia
 
 #### Debt Auction House (Flopper)
 
-> fill me with the description of the contract
+> Debt Auctions are used to recapitalize the system by auctioning off MKR for a fixed amount of DAI. In this process, bidders compete by offering to accept decreasing amounts of MKR for the DAI they will end up paying.
 
 ##### handleFile
+Updates:
+-_SystemSate_
+
+Updates the _SystemSate_ according to the _what_ value.
+
+_what_="beg": Updates _debtAuctionMinimumBidIncrease_ to the WAD value from _data_.
+
+_what_="pad": Updates _debtAuctionLotSizeIncrease_ to the WAD value from _data_.
+
+_what_="ttl": Updates _debtAuctionBidDuration_ to the value from _data_.
+
+_what_="tau": Updates _debtAuctionDuration_ to the value from _data_.
 
 ##### handleCage
+Creates:
+-_LiveChangeLog_
+
+Creates the entity _LiveChangeLog_
 
 ##### handleKick
+Updates:
+-_DebtAuction_
+
+Receives a _Kick_ event as input. Sets _bidAmount_ to the _bid_ value, _quantity_ to the _lot_ value and _hgihestBidder_ to the _gal_ value from the event. Sets the endTimeAt to the timestamp of the block plus _SystemState.debtAuctionBidDuration_.
+
 
 ##### handleTick
+Updates:
+-_DebtAuction_
+
+Calculates _SystemState.debtAuctionLotSizeIncrease_ * _auction.quantity_ (lot in the contract), converts the result to WAD and sets it to _DebtAuction.quantity_. Updates _endTimeAt_ to the block timestamp + _SystemState.debtAuctionBidDuration_.
 
 ##### handleDeal
+Updates: _DebtAuction_
+
+Deactivates the _DebtAuction_(_active_ = false) and sets the _deletedAt_ variable to the timestamp of the block.
 
 ##### handleDent
+Updates:
+-_DebtAuction_
+
+Sets the _highestBidder_ to the transaction creator and the _quantity_ to the Int value from _arg2_. Updates _endTimeAt_ to the block timestamp + _SystemState.debtAuctionBidDuration_.
 
 ##### handleYank
+Updates:
+-_DebtAuction_
+
+Deactivates the _DebtAuction_(_active_ = false) and sets the _deletedAt_ variable to the timestamp of the block.
 
 #### Balance Sheet (Vow)
 
-> fill me with the description of the contract
+> The Vow contract represents the Maker Protocol's balance sheet. In particular, the Vow acts as the recipient of both the system surplus and system debt. Its main functions are to cover deficits via debt (Flop) auctions and discharge surpluses via surplus (Flap) auctions.
 
 ##### handleFile
+Updates:
+-_SystemState_
+
+Sets variables according to the _what_ value from the _LogNote_ event.
+
+_what_="wait": Updates _debtAuctionDelay_ to the value from _data_.
+
+_what_="bump": Updates _surplusAuctionLotSize_ to the RAD value from _data_.
+
+_what_="sump": Updates _debtAuctionBidSize_ to the RAD value from _data_.
+
+_what_="dump": Updates _debtAuctionInitialLotSize_ to the WAD value from _data_.
+
+_what_="hump": Updates _surplusAuctionBuffer_ to the RAD value from _data_.
+
+_what_="flapper": Updates  _vowFlapperContract_ to the Address from _arg2_.
+
+_what_="flopper": Updates  _vowFlopperContract_ to the Address from _arg2_.
 
 ##### handleCage
+Creates:
+-_LiveChangeLog_
 
-##### handleFrog
+Creates a _LiveChangeLog_ entity
+
+##### handleFlog
+Creates:
+-_PopDebtQueueLog_
+
+Updates:
+-_SystemState_
+
+Binds to the Vow contract to receive the _sin_ value from the _era_ (=_arg1_). It afterwards substracts the RAD value from the result from the _SystemState.systemDebtInQueue_ value. It updates _SystemState.systemDebtInQueue_ with the result from this calculation. The subgraph will then create the _PopDebtQueueLog_ entity.
+
 
 ##### handleFess
+Creates:
+-_PushDebtQueueLog_
+
+Updates:
+-_SystemState_
+
+Adds _SystemState.systemDebtInQueue_ with the RAD value from _tab(=_arg1) and updates _SystemState.systemDebtInQueue_ with the result.
 
 ##### handleFlap
+Creates:
+-_VowFlapLog_
+
+Creates a _VowFlapLog_ entity and sets the _VowFlapLog.surplusAuctionLotSize_ to the value from _SystemState.surplusAuctionLotSize_.
 
 ##### handleFlop
+Creates:
+-_VowFlopLog_
+
+Updates:
+-_SystemState_
+
+Adds _SystemState.debtOnAuctionTotalAmount_ (=_ash_; if the value is not set it will default to 0) with _SystemState.debtAuctionBidSize_(=_sump_) and sets the result to _SystemState.debtOnAuctionTotalAmount_. The subgraph will create the entity _VowFlopLog_ afterwards.
 
 ##### handleKiss
+Updates:
+-_SystemState_
+
+Sets the _SystemState.debtOnAuctionTotalAmount_ to the RAD value from _arg1_ + the current value from _debtOnAuctionTotalAmount_.
